@@ -1,0 +1,30 @@
+{
+    "Summary": {
+        "Section" : {
+            "value": {
+                "type": "String",
+                "required": true
+            },
+            "title": {
+                "type": "String",
+                "required": true
+            },
+            "stat": {
+                "type": "Object",
+                "required": false
+            }
+        }
+    },
+    
+  "products": {
+    "New_orders" : 2,
+    "Sales": "N73,156.00",
+    "Customers": 560,
+    "Products_sold": 1200,
+    "Top_Products": {
+        "range": [0, 100],
+        "values": [65, 80, 75]
+    },
+    "Products_in_low_stock": 15
+  }  
+}
