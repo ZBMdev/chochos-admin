@@ -18,7 +18,7 @@ const routes: Array<RouteRecordRaw> = [
 
       {
         path: '/',
-        name: 'Dashboard',
+        name: 'dashboard',
         component: Dashboard,
         meta: {
           title: `Dashboard`,
@@ -36,12 +36,15 @@ const routes: Array<RouteRecordRaw> = [
       },
       {
         path: '/analytics',
-        name: 'Analytics',
-        component: Analytics
+        name: 'analytics',
+        component: Analytics,
+        meta: {
+          title: `Analytics`,
+        }
       },
       {
         path: '/products',
-        name: 'AllProducts',
+        name: 'products',
         component: () => import('../views/products/ProductList.vue'),
         meta: {
           title: `All Products`,
@@ -49,7 +52,7 @@ const routes: Array<RouteRecordRaw> = [
       },
       {
         path: '/products/:id',
-        name: 'EditProduct',
+        name: 'edit-product',
         component: () => import('../views/products/ProductEdit.vue'),
         meta: {
           title: `Edit Product`,
@@ -57,7 +60,7 @@ const routes: Array<RouteRecordRaw> = [
       },
       {
         path: '/products/new',
-        name: 'NewProduct',
+        name: 'new-product',
         component: () => import('../views/products/ProductEdit.vue'),
         meta: {
           title: `New Products`,
@@ -74,7 +77,7 @@ const routes: Array<RouteRecordRaw> = [
 
       {
         path: '/orders',
-        name: 'All Orders',
+        name: 'orders',
         component: () => import('../views/orders/OrderList.vue'),
         meta: {
           title: `All Orders`,
@@ -82,7 +85,7 @@ const routes: Array<RouteRecordRaw> = [
       },
       {
         path: '/orders/:id',
-        name: 'EditOrder',
+        name: 'edit-order',
         component: () => import('../views/orders/OrderEdit.vue'),
         meta: {
           title: `Edit Order`,
@@ -90,37 +93,64 @@ const routes: Array<RouteRecordRaw> = [
       },
       {
         path: '/orders/new',
-        name: 'NewOrder',
+        name: 'new-order',
         component: () => import('../views/orders/OrderEdit.vue'),
         meta: {
           title: `New Order`,
         }
       },
       {
+        path: '/banners',
+        name: 'banners',
+        component: () => import('../views/promotions/Banners.vue'),
+        meta: {
+          title: `Banners`,
+        }
+      },
+      {
         path: '/customers',
-        name: 'Customers',
+        name: 'customers',
         component: () => import('../views/users/Customers.vue'),
         meta: {
           title: `All Customers`,
         }
       },
       {
-        path: '/admin',
-        name: 'Administrators',
-        component: () => import('../views/users/Admin.vue'),
+        path: '/admins',
+        name: 'administrators',
+        component: () => import('../views/users/AdminList.vue'),
         meta: {
           title: `Administrators`,
         }
       },
       {
         path: '/settings',
-        name: 'Settings',
-        component: () => import('../views/settings/Settings.vue')
+        name: 'settings',
+        component: () => import('../views/settings/Settings.vue'),
+        meta: {
+          title: 'Settings', 
+        },
+        children: [
+          {
+            alias: '/settings',
+            name: "payment-method",
+            path: 'payment-method',
+            component: () => import('../views/settings/PaymentMethods.vue'),
+          },
+          {
+            name: "delivery-method",
+            path: 'delivery-method',
+            component: () => import('../views/settings/DeliveryMethods.vue'),
+          },
+        ]
       },
       {
         path: '/profile',
-        name: 'Profile',
-        component: Profile
+        name: 'profile',
+        component: Profile,
+        meta: {
+          title: `Profile`,
+        }
       }
     ]
   },

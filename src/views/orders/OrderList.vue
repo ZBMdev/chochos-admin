@@ -1,40 +1,53 @@
 <template>
   <div class="order-list">
-    <PageHeading title="All Orders" subtitle="nothing yet" />
-    <ProgressSpinner v-if="isLoading" />
+    <PageHeading title="All Orders" />
+    <ProgressSpinner v-if="generalLoading" />
+
     <Card v-else>
       <template #content>
         <DataTable
           ref="dt"
           :value="orders"
-          class="orders"
-          v-model:selection="selectedOrders"
+          class="orders p-datatable-sm"
           dataKey="order_number"
+          v-model:selection="selectedOrders"
+          filterDisplay="orders"
+          :globalFilterFields="['order.code', 'order.name', 'date', 'pending']"
           :paginator="true"
-          :rows="25"
+          :rows="rowstoDisplay"
           :filters="filters"
-          paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
-          :rowsPerPageOptions="[25, 50, 100, 200]"
+          :rowsPerPageOptions="[10, 20, 50, 100, 200]"
           currentPageReportTemplate="Showing {first} to {last} of {totalRecords} orders"
+          paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
           :scrollable="true"
+          :lazy="true"
+          paginatorPosition="both"
+          :totalRecords="totalRecords"
+          :loading="isLoading"
+          @page="onPage($event)"
+          @sort="onSort($event)"
+          :first="firstRecordIndex"
+          :rowHover="true"
           style="width: 100%"
+          @row-click="editOrder($event.data)"
         >
           <template #header>
-            <div class="table-header p-d-flex">
+            <div class="p-d-flex p-jc-between">
               <span class="p-input-icon-left">
-                <i class="pi pi-search" />
+                <!-- <i class="pi pi-search" />
                 <InputText
-                  v-model="filters['global']"
+                  v-model="filterValue"
                   placeholder="Search..."
-                />
+                  @keypress.enter="filterOrders"
+                /> -->
               </span>
               <div class="p-ml-auto">
-                <Button
+                <!-- <Button
                   label="New"
                   icon="pi pi-plus"
                   class="p-button-success p-mr-2"
                   @click="openNew"
-                />
+                /> -->
 
                 <!-- <Button
                   label="Delete"
@@ -47,42 +60,66 @@
             </div>
           </template>
 
-          <Column
+          <template #empty>
+            No orders found.
+          </template>
+          <template #loading>
+            Loading order data. Please wait.
+          </template>
+
+          <!-- <Column
             selectionMode="multiple"
             headerStyle="width: 2.3rem"
             :exportable="false"
-          ></Column>
+          ></Column> -->
           <Column
             field="order_number"
-            headerStyle="min-width: 100px"
+            headerStyle="width: 180px"
             header="Order"
-            :sortable="true"
+            filterMatchMode="contains"
+            ref="name"
           >
             <template #body="slotProps">
-              #{{ slotProps.data.order_number }}
+              #{{ slotProps.data.order_number }} {{ slotProps.data.user?.name }}
             </template>
           </Column>
           <Column
             field="createdAt"
-            headerStyle="min-width: 100px"
+            headerStyle="width: 120px"
             header="Date"
             sortField="created_at"
             filterField="created_at"
-            :sortable="true"
           >
           </Column>
-          <Column field="status" header="Status" headerStyle="min-width: 150px">
+          <Column
+            field="status"
+            header="Status"
+            headerStyle="width: 100px"
+            filterMatchMode="contains"
+            ref="name"
+          >
             <template #body="slotProps">
               <span
                 :class="
                   'order-badge status-' + slotProps.data.status.toLowerCase()
                 "
               >
+                <!-- <i
+                  :class="
+                    statusDecorations[slotProps.data.status].icon + ' p-mr-2'
+                  "
+                ></i> -->
                 {{ slotProps.data.status }}
               </span>
             </template>
           </Column>
-          <Column field="total" header="Total" headerStyle="min-width: 150px">
+          <Column
+            field="total"
+            header="Total"
+            headerStyle="width: 100px"
+            filterMatchMode="contains"
+            ref="name"
+          >
           </Column>
           <Column headerStyle="width: 5rem" :exportable="false">
             <template #body="slotProps">
@@ -168,22 +205,41 @@ import { Options, Vue } from 'vue-class-component';
 import Order from '@/models/Order';
 import OrderService from '@/services/OrderService';
 import { useToast } from 'primevue/usetoast';
+import qs from 'qs';
+import { statusDecorations } from '@/types/orders';
+
+interface OrderLazyParameters {
+  page: number;
+  limit: number;
+  name: string;
+}
 
 @Options({
   components: {},
 })
 export default class OrderList extends Vue {
   orders: Order[] = [];
-  orderDialog = false;
   deleteOrderDialog = false;
   deleteOrdersDialog = false;
   order!: Order;
   selectedOrders: Order[] = [];
-  filters: Record<string, unknown> = {};
+  filterValue = "";
+  filters = {
+    // order_number: "",
+    orderNumber: "",
+    date: "",
+    status: "",
+  };
   submitted = false;
   orderService = new OrderService();
   isLoading = true;
   toast = useToast();
+  totalRecords = 0;
+  firstRecordIndex = 0;
+  lazyParams: Partial<OrderLazyParameters> = {};
+  rowstoDisplay = 10;
+  generalLoading = false;
+  statusDecorations = statusDecorations;
 
   created() {
     // watch the params of the route to fetch the data again
@@ -192,29 +248,77 @@ export default class OrderList extends Vue {
       () => {
         this.getData();
       },
-      // fetch the data when the view is created and the data is
-      // already being observed
       { immediate: true }
     )
   }
 
   getData() {
+    this.generalLoading = true;
     this.isLoading = true;
-    this.orderService.getAllPaginated()
-      .then((data) => {
-        this.orders = data.data.map((order) => new Order(order))
+    this.lazyParams = { page: 1, limit: this.rowstoDisplay }
+    this.loadLazyData();
+  }
+
+
+  /**
+   *  filter event is not triggered in lazy mode instead use the event you prefer on your 
+   * form elements such as input, change, blur to make a remote call by passing the filters 
+   * property to update the displayed data. 
+   */
+
+  // eslint-disable-next-line
+  filterOrders(event: any) {
+    // if (event.keyCode === 13) {
+    this.isLoading = true;
+    if (this.filterValue) {
+      this.lazyParams = { name: this.filterValue, limit: 1000000000000, }
+      this.searchData();
+    }
+    // }
+  }
+
+  loadLazyData() {
+    this.isLoading = true;
+    this.orderService.getAllPaginated(`${qs.stringify(this.lazyParams)}`)
+      .then(data => {
+        this.orders = data.data.map((order) => new Order(order));
+        this.totalRecords = data.total;
+        this.firstRecordIndex = data.current_page > 1 ? data.limit * data.current_page - 1 : 0;
+        this.rowstoDisplay = data.limit;
         this.isLoading = false;
+        this.generalLoading = false;
       });
   }
 
-  editOrder(order: Order) {
-    this.$router.push({ name: "EditOrder", params: { id: order.id } })
+  searchData() {
+    this.isLoading = true;
+    this.orderService.search(`${qs.stringify(this.lazyParams)}`)
+      .then((data) => {
+        if (data) {
+          this.orders = data.data.map((order) => new Order(order));
+          this.totalRecords = data.total;
+          this.firstRecordIndex = 0;
+          this.isLoading = false;
+          this.generalLoading = false;
+        }
+      });
   }
 
-  openNew() {
-    this.order = new Order({});
-    this.submitted = false;
-    this.orderDialog = true;
+  // eslint-disable-next-line
+  onPage(event: any) {
+    // console.log(event);
+    this.lazyParams = { ...event.originalEvent, page: event.page + 1, limit: event.rows } as OrderLazyParameters;
+    this.loadLazyData();
+  }
+
+  // eslint-disable-next-line
+  onSort(event: any) {
+    this.lazyParams = { ...event.originalEvent, page: event.page + 1, limit: event.rows } as OrderLazyParameters;
+    this.loadLazyData();
+  }
+
+  editOrder(order: Order) {
+    this.$router.push({ name: "edit-order", params: { id: order.id } })
   }
 
   confirmDeleteOrder(order: Order) {
@@ -222,57 +326,10 @@ export default class OrderList extends Vue {
     this.deleteOrderDialog = true;
   }
 
-  confirmDeleteSelected() {
-    this.deleteOrdersDialog = true;
-  }
-
-  hideDialog() {
-    this.orderDialog = false;
-    this.submitted = false;
-  }
-
   findIndexById(id: number): number {
     return this.orders.findIndex((order) => order.id === id)
   }
 
-  saveOrder() {
-    this.submitted = true;
-    this.isLoading = true;
-
-    // if (this.order.order_number.trim()) {
-    if (this.order.id) {
-      // udpate
-      this.orderService.put(this.order.id, this.order.toCreateParam())
-        .then((newOrder) => {
-          this.order = new Order(newOrder);
-          this.orders[this.findIndexById(this.order.id)] = this.order;
-          this.isLoading = false;
-          this.toast.add({ severity: 'success', summary: 'Successful', detail: 'Order Updated', life: 3000 });
-        }).catch(() => {
-          this.toast.add({ severity: 'error', summary: 'Error', detail: 'Updating failed', life: 3000 });
-        }).finally(() => {
-          this.isLoading = false
-        });
-    }
-
-    else {
-      //create
-      this.orderService.create(this.order.toCreateParam())
-        .then((newOrder) => {
-          this.order = new Order(newOrder);
-          this.orders.push(this.order);
-          this.toast.add({ severity: 'success', summary: 'Successful', detail: 'Order Created', life: 3000 });
-        }).catch(() => {
-          this.toast.add({ severity: 'error', summary: 'Error', detail: 'Creating failed', life: 3000 });
-        }).finally(() => {
-          this.isLoading = false
-        });
-    }
-
-    this.orderDialog = false;
-    // }
-
-  }
 
   // This may not be usefull until the endpoint to delete multiple order is ready
   // NB: I'm not doint it right we should have an endpoint to delete multiple items
@@ -304,36 +361,17 @@ export default class OrderList extends Vue {
         this.isLoading = false
       })
   }
+
+  // eslint-disable-next-line
+  onFilter(event: any) {
+    if (event.keyCode === 13) {
+      this.isLoading = true;
+      this.lazyParams = { ...this.lazyParams, ...this.filters };
+      this.loadLazyData();
+    }
+  }
 }
 </script>
 
-<style scoped>
-.order-badge.status-delivered {
-  background: #c8e6c9;
-  color: #256029;
-}
-.order-badge.status-processing {
-  background: #feedaf;
-  color: #8a5340;
-}
-.order-badge.status-pending {
-  background: #ffcdd2;
-  color: #c63737;
-}
-.order-badge.status-shipped {
-  background: #dbe6c8;
-  color: #446025;
-}
-.order-badge.status-cancelled {
-  background: #3c3c3c;
-  color: #bababa;
-}
-.order-badge {
-  border-radius: 2px;
-  padding: 0.25em 0.5rem;
-  text-transform: uppercase;
-  font-weight: 700;
-  font-size: 12px;
-  letter-spacing: 0.3px;
-}
+<style>
 </style>

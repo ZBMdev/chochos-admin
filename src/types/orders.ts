@@ -1,10 +1,13 @@
 import { DeliveryMethodData } from "./delivery-method";
 import { PaymentMethodData } from "@/types/payment-method";
+import { CustomerData } from "./customer";
 
 export interface OrderData {
     id: number;
     user_id: number;
-    order_number: string;
+    // order_number: string;
+    orderNumber: string;
+    reference: string;
     total_amount: number;
     amount_paid: number;
     sub_total_amount: number;
@@ -17,10 +20,12 @@ export interface OrderData {
     delivery_date: null;
     created_at: Date;
     updated_at: Date;
-    payment_method: PaymentMethodData;
+    user: CustomerData;
     shipping_address: ShippingAddressData;
+    payment_method: PaymentMethodData;
     delivery_method: DeliveryMethodData;
     order_items: OrderItemData[];
+    status_histories: StatusHistoryData[];
 }
 
 export interface OrderItemData {
@@ -33,6 +38,18 @@ export interface OrderItemData {
     quantity: number;
     image_url: string;
     delivery_date: null;
+    created_at: Date;
+    updated_at: Date;
+}
+
+
+export interface StatusHistoryData {
+    id: number;
+    order_id: number;
+    from_status: string;
+    to_status: string;
+    comment: string;
+    updated_by: number;
     created_at: Date;
     updated_at: Date;
 }
@@ -53,11 +70,56 @@ export interface ShippingAddressData {
     updated_at: Date;
 }
 
+export interface OrderUpdateParam {
+    updated_by: number;
+    status: string;
+    comment: string;
+}
+
 export enum OrderStatus {
     Pending = "pending",
     Processing = "processing",
-    shipped = "shipped",
+    Shipped = "shipped",
     Delivered = "delivered",
+    Declined = "declined",
+}
+
+export const statusDecorations = {
+    [OrderStatus.Pending]: {
+        colors: {
+            light: "#ffcdd2",
+            dark: "#c63737",
+        },
+        icon: "pi pi-ellipsis-h"
+    },
+    [OrderStatus.Processing]: {
+        colors: {
+            light: "#feedaf",
+            dark: "#8a5340",
+        },
+        icon: "pi pi-cog"
+    },
+    [OrderStatus.Shipped]: {
+        colors: {
+            light: "#dbe6c8",
+            dark: "#446025",
+        },
+        icon: "pi pi-send"
+    },
+    [OrderStatus.Delivered]: {
+        colors: {
+            light: "#c8e6c9",
+            dark: "#256029",
+        },
+        icon: "pi pi-check"
+    },
+    [OrderStatus.Declined]: {
+        colors: {
+            light: "#bababa",
+            dark: "#3c3c3c",
+        },
+        icon: "pi pi-times"
+    },
 }
 
 export enum PaymentStatus {

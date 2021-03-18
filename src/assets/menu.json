@@ -46,13 +46,7 @@
 			{
 				"label": "All Orders",
 				"icon": "pi pi-shopping-cart",
-				"to": "/orders",
-				"badge": "2"
-			},
-			{
-				"label": "New Order",
-				"icon": "pi pi-plus-circle",
-				"to": "/orders/new"
+				"to": "/orders"
 			}
 		]
 	},
@@ -65,7 +59,7 @@
 			{
 				"label": "Banners/Ads",
 				"icon": "pi pi-ticket",
-				"to": "/orders/new"
+				"to": "/banners"
 			}
 		]
 	},
@@ -83,7 +77,7 @@
 			{
 				"label": "Administrators",
 				"icon": "pi pi-user",
-				"to": "/admin"
+				"to": "/admins"
 			}
 		]
 	},
