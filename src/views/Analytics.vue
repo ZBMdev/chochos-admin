@@ -1,5 +1,6 @@
 <template>
-  Analytics page
+<h2>Analytics Page</h2>
+<h4>The UI will soon work </h4>
 </template>
 
 <script>
