@@ -7,7 +7,7 @@ import PrimeVue from 'primevue/config'
 import Accordion from 'primevue/accordion';
 import AccordionTab from 'primevue/accordiontab';
 import Button from 'primevue/button';
-// import firebase from 'firebase/app';
+import firebase from 'firebase/app';
 import Password from 'primevue/password';
 
 import Card from 'primevue/card';
@@ -64,7 +64,7 @@ import 'primeflex/primeflex.css';
 // import 'bulma/css/bulma.css';
 //import 'vee-validate';
 
-/* const firebaseConfig = {
+const firebaseConfig = {
     apiKey: "AIzaSyCXEGbACkyMBqTS-pTsfbbW-g1Uskyigng",
     authDomain: "foxygreen-auth.firebaseapp.com",
     projectId: "foxygreen-auth",
@@ -73,7 +73,8 @@ import 'primeflex/primeflex.css';
     appId: "1:1027386971129:web:656035f8cc9cc2171be328"
 };
 
-firebase.initializeApp(firebaseConfig); */
+firebase.initializeApp(firebaseConfig);
+
 
 
 import PageHeading from '@/components/elements/PageHeading.vue';

@@ -1,4 +1,4 @@
-<!-- <template>
+<template>
   <div class="order-list">
     <PageHeading title="All Orders" subtitle="nothing yet" />
     <ProgressSpinner v-if="isLoading" />
@@ -34,7 +34,7 @@
                   icon="pi pi-plus"
                   class="p-button-success p-mr-2"
                   @click="openNew"
-                />-->
+                />
 
                 <!-- <Button
                   label="Delete"
@@ -43,7 +43,7 @@
                   @click="confirmDeleteSelected"
                   :disabled="!selectedOrders || !selectedOrders.length"
                 /> -->
-              <!--</div>
+              </div>
             </div>
           </template>
 
@@ -90,20 +90,20 @@
                 icon="pi pi-pencil"
                 class="p-button-rounded p-button-success p-mr-2"
                 @click="editOrder(slotProps.data)"
-              /> -->
+              />
               <!-- <Button
                 icon="pi pi-trash"
                 class="p-button-rounded p-button-warning"
                 @click="confirmDeleteOrder(slotProps.data)"
               /> -->
-            <!--</template>
+            </template>
           </Column>
         </DataTable>
       </template>
-    </Card>-->
+    </Card>
 
     <!-- This may not be usefull until the endpoints to delete an order is ready -->
-    <!--<Dialog
+    <Dialog
       v-model:visible="deleteOrderDialog"
       :style="{ width: '450px' }"
       header="Confirm"
@@ -130,10 +130,10 @@
           @click="deleteOrder"
         />
       </template>
-    </Dialog>-->
+    </Dialog>
 
     <!-- This may not be usefull until the endpoints to delete multiple orders is ready -->
-    <!-- <Dialog
+    <Dialog
       v-model:visible="deleteOrdersDialog"
       :style="{ width: '450px' }"
       header="Confirm"
@@ -336,17 +336,4 @@ export default class OrderList extends Vue {
   font-size: 12px;
   letter-spacing: 0.3px;
 }
-</style> -->
-<template>
-  <h2>Order List</h2>
-</template>
-
-<script>
-export default {
-
-}
-</script>
-
-<style>
-
 </style>

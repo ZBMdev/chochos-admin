@@ -1,13 +1,14 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 import Home from '../views/Home.vue'
-import Admin from '../views/users/Admins.vue'
+import Admin from '../views/users/Admin.vue'
 import Dashboard from '../views/Dashboard.vue'
+import Analytics from '../views/Analytics.vue'
 import MainLayout from '../components/layouts/MainLayout.vue'
 import AdminList from '../views/users/AdminList.vue'
 import AdminEdit from '../views/users/AdminEdit.vue'
 import Profile from '../views/users/Profile.vue'
 
-const appTitle = "Foxygreen Admin";
+const appTitle = "Chochos Admin";
 
 const routes: Array<RouteRecordRaw> = [
   { 
@@ -16,8 +17,8 @@ const routes: Array<RouteRecordRaw> = [
     children: [
 
       {
-        path: '/dashboard',
-        name: 'dashboard',
+        path: '/',
+        name: 'Dashboard',
         component: Dashboard,
         meta: {
           title: `Dashboard`,
@@ -32,6 +33,11 @@ const routes: Array<RouteRecordRaw> = [
             }
           ]
         }
+      },
+      {
+        path: '/analytics',
+        name: 'Analytics',
+        component: Analytics
       },
       {
         path: '/products',
@@ -101,7 +107,7 @@ const routes: Array<RouteRecordRaw> = [
       {
         path: '/admin',
         name: 'Administrators',
-        component: () => import('../views/users/Admins.vue'),
+        component: () => import('../views/users/Admin.vue'),
         meta: {
           title: `Administrators`,
         }
@@ -111,6 +117,11 @@ const routes: Array<RouteRecordRaw> = [
         name: 'Settings',
         component: () => import('../views/settings/Settings.vue')
       },
+      {
+        path: '/profile',
+        name: 'Profile',
+        component: Profile
+      }
     ]
   },
   {
@@ -160,7 +171,7 @@ router.beforeEach((to, from, next) => {
   if (!nearestWithMeta) return next();
 
   // Turn the meta tag definitions into actual elements in the head.
-  /* nearestWithMeta.meta.metaTags.map((tagDef: Record<string, string>) => {
+  nearestWithMeta.meta.metaTags.map((tagDef: Record<string, string>) => {
     const tag = document.createElement('meta');
 
     Object.keys(tagDef).forEach(key => {
@@ -175,7 +186,7 @@ router.beforeEach((to, from, next) => {
     // Add the meta tags to the document head.
     .forEach((tag: any) => document.head.appendChild(tag));
 
-  next(); */
+  next();
 });
 
 export default router

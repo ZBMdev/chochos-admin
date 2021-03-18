@@ -1,4 +1,4 @@
-<!--<template>
+<template>
   <div class="product-edit">
     <PageHeading
       :title="`${thereIsAnID ? 'Edit' : 'Create'} Product`"
@@ -29,15 +29,15 @@
                   :required="true"
                   v-model="product.description"
                   editorStyle="height: 220px"
-                > -->
-                  <!-- harsh <template #toolbar>
+                >
+                  <!-- <template #toolbar>
                     <span class="ql-formats">
                       <button class="ql-bold"></button>
                       <button class="ql-italic"></button>
                       <button class="ql-underline"></button>
                     </span>
                   </template> -->
-                <!-- </Editor>
+                </Editor>
               </div>
 
               <div class="p-fluid p-grid p-formgrid p-mb-2">
@@ -81,12 +81,12 @@
                   />
                 </div>
               </div>
-            </template>-->
+            </template>
 
-            <!-- harsh <template #footer>
+            <!-- <template #footer>
               
             </template> -->
-          <!-- </Card>
+          </Card>
 
           <Card class="p-fluid p-mb-4">
             <template #title>
@@ -215,8 +215,8 @@
                 @node-select="updateProductCategories"
                 @node-unselect="updateProductCategories"
                 :expandedKeys="expandedKeys"
-              ></Tree>-->
-              <!-- harsh <MultiSelect
+              ></Tree>
+              <!-- <MultiSelect
                 v-model="selectedCategories"
                 :options="categories"
                 optionLabel="name"
@@ -224,7 +224,7 @@
                 placeholder="Select Categories"
                 :filter="true"
               /> -->
-            <!-- </template>
+            </template>
           </Card>
 
           <Card class="p-fluid p-mb-4">
@@ -458,17 +458,4 @@ export default class ProductEdit extends Vue {
 .p-accordion .p-accordion-header .p-accordion-header-link {
   padding: 0.5rem !important;
 }
-</style> -->
-<template>
-  <h2>Product Edit</h2>
-</template>
-
-<script>
-export default {
-
-}
-</script>
-
-<style>
-
 </style>

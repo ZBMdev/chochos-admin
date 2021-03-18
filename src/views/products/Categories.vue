@@ -1,4 +1,4 @@
-<!--<template>
+<template>
   <div class="categories">
     <PageHeading
       title="Categories"
@@ -465,17 +465,4 @@ export default class Categories extends Vue {
   background: #feedaf;
   color: #8a5340;
 }
-</style> -->
-<template>
-  <h2>Categories</h2>
-</template>
-
-<script>
-export default {
-
-}
-</script>
-
-<style>
-
 </style>

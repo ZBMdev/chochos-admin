@@ -29,12 +29,13 @@
     ]
   },
   "include": [
+    "src/**/*.json",
     "src/**/*.ts",
     "src/**/*.tsx",
     "src/**/*.vue",
     "tests/**/*.ts",
     "tests/**/*.tsx"
-  ],
+, "src/router/index.js", "src/main.js", "src/store/index.js", "src/store/snackbar.js"  ],
   "exclude": [
     "node_modules"
   ]

@@ -1,4 +1,4 @@
-<!-- <template>
+<template>
   <div class="product-list">
     <PageHeading title="All Products" subtitle="A list of all your products" />
     <ProgressSpinner v-if="loading" />
@@ -100,13 +100,13 @@
                 icon="pi pi-pencil"
                 class="p-button-rounded p-button-success p-mr-2"
                 @click="$router.push('/products/' + slotProps.data.id)"
-              /> -->
-              <!-- harsh <Button
+              />
+              <!-- <Button
             icon="pi pi-trash"
             class="p-button-rounded p-button-warning"
             @click="confirmDeleteProduct(slotProps.data)"
           /> -->
-          <!--  </template>
+            </template>
           </Column>
           <template #footer>
             In total there are {{ products ? products.length : 0 }} products.
@@ -266,17 +266,4 @@ export default class ProductList extends Vue {
   font-size: 12px;
   letter-spacing: 0.3px;
 }
-</style> -->
-<template>
-  <h2>Product List</h2>
-</template>
-
-<script>
-export default {
-
-}
-</script>
-
-<style>
-
 </style>

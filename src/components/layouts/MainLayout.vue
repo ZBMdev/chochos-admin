@@ -9,7 +9,7 @@
           src="https://notion-emojis.s3-us-west-2.amazonaws.com/v0/svg-twitter/1f96c.svg"
           alt="🥬"
         />
-        <div class="ml-2">Foxygreen</div>
+        <div class="ml-2">Chochos-List</div>
       </div>
       <Navbar @click="closeSideBar" />
     </Sidebar>
@@ -29,7 +29,7 @@
             src="https://notion-emojis.s3-us-west-2.amazonaws.com/v0/svg-twitter/1f96c.svg"
             alt="🥬"
           />
-          <div class="ml-2">Foxygreen</div>
+          <div class="ml-2">Chochos-List</div>
         </div>
         <div class="p-ml-auto p-ai-center p-d-flex">
           <Menu
@@ -57,16 +57,7 @@
               label="B"
               shape="circle"
             />
-            <!-- <p class="p-text-bold p-mr-2">Pelumi Okeowo</p> -->
-            <!-- <i class="pi pi-angle-down"></i> -->
           </Button>
-          <!-- <Button
-            class="p-button-text p-button-secondary notifications"
-            icon="pi pi-bell"
-            aria-haspopup="true"
-            aria-controls="notification_menu"
-            @click="toggleNotifictionMenu"
-          /> -->
         </div>
       </div>
     </div>
@@ -119,7 +110,7 @@ export default class MainLayout extends Vue {
         {
           label: 'Profile',
           icon: 'pi pi-pw pi-cog',
-          to: '/',
+          to: '/profile',
         },
         {
           separator: true,
@@ -140,7 +131,7 @@ export default class MainLayout extends Vue {
       {
         label: 'Profile',
         icon: 'pi pi-pw pi-cog',
-        to: '/',
+        to: '/profile',
       },
       {
         separator: true,
@@ -179,19 +170,6 @@ export default class MainLayout extends Vue {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (this.itemRefs[1] as any).toggle(event);
   }
-
-  /*
-  toggleUserMenu(event: unknown) {
-    // @ts-nocheck
-    this.$refs.usermenu.toggle(event)
-  }
-
-  toggleNofitifactionMenu(event: unknown) {
-    // @ts-nocheck
-    this.$refs.notificationmenu.toggle(event);
-  }
-  */
-
 
 }
 </script>
