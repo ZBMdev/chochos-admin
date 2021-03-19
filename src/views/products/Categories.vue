@@ -1,23 +1,22 @@
 <template>
   <div class="categories">
-    <PageHeading
-      title="Categories"
-      subtitle="create edit, delete your categories"
-    />
+    <PageHeading title="Categories" />
     <ProgressSpinner v-if="isLoading" />
     <Card v-else>
       <template #content>
         <DataTable
           ref="dt"
           :value="categories"
-          class="p-datatable-responsive"
+          class="p-datatable-responsive  p-datatable-sm"
           v-model:selection="selectedCategories"
           dataKey="id"
           :paginator="true"
-          :rows="25"
+          :rows="10"
           :filters="filters"
+          :rowHover="true"
+          @row-click="editCategory($event.data)"
           paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
-          :rowsPerPageOptions="[25, 50, 100, 200]"
+          :rowsPerPageOptions="[10, 20, 50, 100, 200]"
           currentPageReportTemplate="Showing {first} to {last} of {totalRecords} categories"
         >
           <template #header>
@@ -31,6 +30,7 @@
               </span>
               <div class="p-ml-auto">
                 <Button
+                  v-if="can(auth.ResourceAction.Create)"
                   label="New"
                   icon="pi pi-plus"
                   class="p-button-success p-mr-2"
@@ -38,6 +38,7 @@
                 />
 
                 <Button
+                  v-if="can(auth.ResourceAction.Delete)"
                   label="Delete"
                   icon="pi pi-trash"
                   class="p-button-danger"
@@ -72,10 +73,12 @@
           <Column header="Description">
             <template #body="slotProps">
               <span class="p-column-title">Description</span>
-              <span v-html="slotProps.data.description"></span>
+              <span
+                v-html="`${slotProps.data.description.substr(0, 20)}...`"
+              ></span>
             </template>
           </Column>
-          <Column header="Status">
+          <Column sortField="is_activated" header="Status" :sortable="true">
             <template #body="slotProps">
               <span class="p-column-title">Status</span>
               <span>
@@ -88,16 +91,26 @@
                 <span v-else class="categories-badge status-inactive">
                   InActive
                 </span>
-                <span
-                  v-if="slotProps.data.is_featured"
-                  class="categories-badge status-featured"
-                >
-                  Featured
-                </span>
               </span>
             </template>
           </Column>
-          <Column header="Count" headerStyle="width: 5.5rem">
+          <Column sortField="is_featured" header="Featured" :sortable="true">
+            <template #body="slotProps">
+              <span class="p-column-title">Featured</span>
+              <Rating
+                :modelValue="Number(slotProps.data.is_featured)"
+                :stars="1"
+                :readonly="true"
+                :cancel="false"
+              />
+            </template>
+          </Column>
+          <Column
+            sortField="products.length"
+            header="Count"
+            headerStyle="width: 5.5rem"
+            :sortable="true"
+          >
             <template #body="slotProps">
               <span class="p-column-title">Count</span>
               <span class="">
@@ -108,11 +121,13 @@
           <Column :exportable="false">
             <template #body="slotProps">
               <Button
+                v-if="can(auth.ResourceAction.Update)"
                 icon="pi pi-pencil"
                 class="p-button-rounded p-button-success p-mr-2"
                 @click="editCategory(slotProps.data)"
               />
               <Button
+                v-if="can(auth.ResourceAction.Delete)"
                 icon="pi pi-trash"
                 class="p-button-rounded p-button-warning"
                 @click="confirmDeleteCategory(slotProps.data)"
@@ -129,98 +144,12 @@
       :modal="true"
       class="p-fluid"
     >
-      <div class="p-field">
-        <label for="name">Category Image</label>
-        <img
-          :src="category.imageURL"
-          :alt="category.name"
-          class="category-image"
-          v-if="category.imageURL"
-        />
-        <FileUpload
-          v-else
-          mode="basic"
-          name="images[]"
-          url="./upload"
-          :multiple="true"
-          :auto="true"
-          accept="image/*"
-          :maxFileSize="2000"
-        >
-          <template #empty>
-            <p>Drag and drop files to here to upload.</p>
-          </template>
-        </FileUpload>
-      </div>
-      <div class="p-field">
-        <label for="name">Name</label>
-        <InputText
-          id="name"
-          v-model.trim="category.name"
-          required="true"
-          autofocus
-          :class="{ 'p-invalid': submitted && !category.name }"
-        />
-        <small class="p-invalid" v-if="submitted && !category.name"
-          >Name is required.</small
-        >
-      </div>
-      <div class="p-field">
-        <label for="description">Description</label>
-        <Textarea
-          id="description"
-          v-model="category.description"
-          required="true"
-          rows="3"
-          cols="20"
-        />
-      </div>
-
-      <div class="p-field">
-        <label class="p-mb-3">Parent Category</label>
-        <Dropdown
-          :options="categories.filter(cat => cat.id !== category.id)"
-          v-model="parentCategory"
-          optionLabel="name"
-          optionValue="id"
-          placeholder="Select Category"
-          :filter="true"
-        />
-      </div>
-      <div class="p-d-flex p-fluid">
-        <div class="p-col p-d-flex p-field">
-          <label for="is_activated">
-            <InputSwitch
-              id="is_activated"
-              class="p-mr-2"
-              v-model="category.is_activated"
-            />Activated</label
-          >
-        </div>
-        <div class="p-col p-d-flex p-field">
-          <label for="is_featured">
-            <InputSwitch
-              id="is_featured"
-              class="p-mr-2"
-              v-model="category.is_featured"
-            />Featured</label
-          >
-        </div>
-      </div>
-      <template #footer>
-        <Button
-          label="Cancel"
-          icon="pi pi-times"
-          class="p-button-text"
-          @click="hideDialog"
-        />
-        <Button
-          label="Save"
-          icon="pi pi-check"
-          class="p-button-text"
-          @click="saveCategory"
-        />
-      </template>
+      <CategoryEdit
+        :category="category"
+        :categories="categories.filter(cat => cat.id !== category.id)"
+        @updated="afterUpdateCategory"
+        @created="afterCreateCategory"
+      />
     </Dialog>
 
     <Dialog
@@ -285,11 +214,17 @@
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component';
 import Category from '@/models/Category';
+import { CategoryData } from '@/types/category';
 import CategoryService from '@/services/CategoryService';
 import { useToast } from 'primevue/usetoast';
+import Rating from 'primevue/rating';
+import BombsightService from '@/services/BombsightService';
+import CategoryEdit from "@/components/products/CategoryEdit.vue";
+// import { useAuth } from '@/utils/users'
+// import { ResourceAction } from '@/types/roles'
 
 @Options({
-  components: {},
+  components: { Rating, CategoryEdit },
 })
 export default class Categories extends Vue {
   categories: Category[] = [];
@@ -303,19 +238,24 @@ export default class Categories extends Vue {
   categoryService = new CategoryService();
   isLoading = true;
   toast = useToast();
+  file: File & { objectURL: string } | undefined = undefined;
+  imageService = new BombsightService();
+  // auth = useAuth();
+
 
   created() {
-    // watch the params of the route to fetch the data again
     this.$watch(
       () => this.$route.params,
       () => {
         this.getData();
       },
-      // fetch the data when the view is created and the data is
-      // already being observed
       { immediate: true }
     )
   }
+
+  /* can(action: ResourceAction) {
+    return this.auth.can(action, this.auth.ResourceModule.Category)
+  } */
 
   getData() {
     this.isLoading = true;
@@ -326,7 +266,14 @@ export default class Categories extends Vue {
       });
   }
 
+  afterUpdateCategory(justUpdated: CategoryData) {
+    this.categories[this.findIndexById(justUpdated.id)] = new Category(justUpdated);
+  }
 
+  afterCreateCategory(justUpdated: CategoryData) {
+    this.categories.push(new Category(justUpdated));
+    this.categoryDialog = false;
+  }
 
   get parentCategory() {
     const parent = this.categories.find((cat) => cat.id === this.category.parent_id);
@@ -340,6 +287,9 @@ export default class Categories extends Vue {
   editCategory(category: Category) {
     this.category = category;
     this.categoryDialog = true;
+  }
+  onUpload() {
+    this.toast.add({ severity: 'info', summary: 'Success', detail: 'File Uploaded', life: 3000 });
   }
 
   openNew() {
@@ -364,45 +314,6 @@ export default class Categories extends Vue {
 
   findIndexById(id: number): number {
     return this.categories.findIndex((cat) => cat.id === id)
-  }
-
-  saveCategory() {
-    this.submitted = true;
-    this.isLoading = true;
-
-    if (this.category.name.trim()) {
-      if (this.category.id) {
-        // udpate
-        this.categoryService.put(this.category.id, this.category.toCreateParam())
-          .then((newCategory) => {
-            this.category = new Category(newCategory);
-            this.categories[this.findIndexById(this.category.id)] = this.category;
-            this.isLoading = false;
-            this.toast.add({ severity: 'success', summary: 'Successful', detail: 'Category Updated', life: 3000 });
-          }).catch(() => {
-            this.toast.add({ severity: 'error', summary: 'Error', detail: 'Updating failed', life: 3000 });
-          }).finally(() => {
-            this.isLoading = false
-          });
-      }
-
-      else {
-        //create
-        this.categoryService.create(this.category.toCreateParam())
-          .then((newCategory) => {
-            this.category = new Category(newCategory);
-            this.categories.push(this.category);
-            this.toast.add({ severity: 'success', summary: 'Successful', detail: 'Category Created', life: 3000 });
-          }).catch(() => {
-            this.toast.add({ severity: 'error', summary: 'Error', detail: 'Creating failed', life: 3000 });
-          }).finally(() => {
-            this.isLoading = false
-          });
-      }
-
-      this.categoryDialog = false;
-    }
-
   }
 
   deleteSelectedCategories() {
@@ -437,11 +348,11 @@ export default class Categories extends Vue {
 
 <style scoped>
 .categories-image {
-  width: 5rem;
-  height: 4rem;
+  width: 50px;
+  height: 3rem;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
   object-fit: cover;
   object-position: center;
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
 }
 
 .categories-badge {

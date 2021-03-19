@@ -1,18 +1,4 @@
 <template>
-  <div class="p-field fluid">
-    <SelectButton
-      v-model="productDuration"
-      :options="timeOptions"
-      optionLabel="name"
-      dataKey="value"
-      >
-      <template #option="slotProps">
-        <div class="time-option">
-          <div>{{ slotProps.option.name }}</div>
-        </div>
-      </template>
-    </SelectButton>
-  </div>
   <div class="p-grid">
     <div class="p-col-12 p-md-6">
       <Card>
@@ -68,15 +54,11 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import Chart from 'primevue/chart'
-// import FancyCard from '@/components/dashboard/FancyCard.vue'
-import SelectButton from 'primevue/selectbutton';
-// import ProductReviews from '@/views/products/ProductReviews.vue'
 import { DashboardSummary, TimeSummary } from '@/types/dashboard';
 import DashboardService from '@/services/DashboardService';
-// import OrderTotal from '@/views/orders/OrderTotal.vue'
 
 export default defineComponent({
-  components: { Chart, SelectButton },
+  components: { Chart },
   name: 'Analytics',
   mounted() {
     this.summaryLoading = true;

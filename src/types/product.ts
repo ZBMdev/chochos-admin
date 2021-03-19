@@ -9,8 +9,16 @@ export interface ImageData {
     created_on: Date | null;
 }
 
+export interface ProductImageUpdateParam {
+    urls: string[];
+}
+
+
+
 
 export interface ProductData {
+    // eslint-disable-next-line
+    BannerProduct?: any;
     id: number;
     name: string;
     description: string;

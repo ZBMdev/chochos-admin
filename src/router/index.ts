@@ -1,11 +1,7 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
-import Home from '../views/Home.vue'
-import Admin from '../views/users/Admin.vue'
 import Dashboard from '../views/Dashboard.vue'
 import Analytics from '../views/Analytics.vue'
 import MainLayout from '../components/layouts/MainLayout.vue'
-import AdminList from '../views/users/AdminList.vue'
-import AdminEdit from '../views/users/AdminEdit.vue'
 import Profile from '../views/users/Profile.vue'
 
 const appTitle = "Chochos Admin";
@@ -74,7 +70,6 @@ const routes: Array<RouteRecordRaw> = [
           title: `Categories`,
         }
       },
-
       {
         path: '/orders',
         name: 'orders',
@@ -98,7 +93,7 @@ const routes: Array<RouteRecordRaw> = [
         meta: {
           title: `New Order`,
         }
-      },
+      },/*
       {
         path: '/banners',
         name: 'banners',
@@ -106,13 +101,29 @@ const routes: Array<RouteRecordRaw> = [
         meta: {
           title: `Banners`,
         }
-      },
+      }, */
       {
         path: '/customers',
         name: 'customers',
         component: () => import('../views/users/Customers.vue'),
         meta: {
           title: `All Customers`,
+        }
+      },
+      {
+        path: '/artisans',
+        name: 'artisans',
+        component: () => import('../views/users/Artisans.vue'),
+        meta: {
+          title: `All Artisans`,
+        }
+      },
+      {
+        path: '/vendors',
+        name: 'vendors',
+        component: () => import('../views/users/Vendors.vue'),
+        meta: {
+          title: `All Vendors`,
         }
       },
       {

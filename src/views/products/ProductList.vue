@@ -1,23 +1,31 @@
 <template>
   <div class="product-list">
-    <PageHeading title="All Products" subtitle="A list of all your products" />
-    <ProgressSpinner v-if="loading" />
+    <PageHeading
+      title="All Products"
+      :subtitle="`${totalRecords} products in total`"
+    />
+    <ProgressSpinner v-if="generalLoading" />
 
     <Card v-else>
       <template #content>
         <DataTable
           dataKey="id"
-          class="p-datatable-responsive"
+          class="p-datatable-responsive p-datatable-sm"
           :value="products"
           :paginator="true"
-          :rows="25"
-          paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
-          :rowsPerPageOptions="[25, 50, 100, 200]"
+          :rows="rowstoDisplay"
+          :rowsPerPageOptions="[10, 20, 50, 100, 200]"
           currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
+          paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
           :lazy="true"
+          paginatorPosition="both"
           :totalRecords="totalRecords"
           :loading="loading"
           @page="onPage($event)"
+          @sort="onSort($event)"
+          :filters="filters"
+          :first="firstRecordIndex"
+          :rowHover="true"
         >
           <template #header>
             <div class="table-header">
@@ -27,7 +35,7 @@
                 <InputText
                   v-model="filterValue"
                   placeholder="Search products"
-                  @input="filterProducts"
+                  @keypress.enter="filterProducts"
                 />
               </span>
             </div>
@@ -38,41 +46,57 @@
           <template #loading>
             Loading products data. Please wait.
           </template>
-          <Column field="name" header="Name" :sortable="true">
+          <Column
+            field="name"
+            header="Name"
+            filterMatchMode="contains"
+            ref="name"
+            headerStyle="width:14rem;"
+          >
             <template #body="slotProps">
               <span class="p-column-title">Name</span>
               {{ slotProps.data.name }}
             </template>
           </Column>
-          <Column header="Image">
+          <Column header="Image" headerStyle="width:4rem;">
             <template #body="slotProps">
               <span class="p-column-title">Image</span>
               <img
-                :src="'https://picsum.photos/300/220'"
+                :src="slotProps.data.mainImage"
                 :alt="slotProps.data.name"
                 class="product-image"
               />
             </template>
           </Column>
           <Column
+            ref="price"
             field="price"
             header="Price"
-            filterField="product.price"
+            filterField="price"
             filterMatchMode="contains"
-            :sortable="true"
           >
             <template #body="slotProps">
               <span class="p-column-title">Price</span>
               {{ formatCurrency(slotProps.data.price) }}
             </template>
           </Column>
-          <Column field="category" header="Category" :sortable="true">
+          <Column
+            field="categories"
+            header="Category"
+            filterField="categories"
+            filterMatchMode="contains"
+          >
             <template #body="slotProps">
               <span class="p-column-title">Categories</span>
               {{ slotProps.data.categoriesNames }}
             </template>
           </Column>
-          <Column field="rating" header="Reviews" :sortable="true">
+          <Column
+            field="rating"
+            header="Reviews"
+            filterField="rating"
+            filterMatchMode="contains"
+          >
             <template #body="slotProps">
               <span class="p-column-title">Reviews</span>
               <Rating
@@ -82,7 +106,11 @@
               />
             </template>
           </Column>
-          <Column header="Status" :sortable="true">
+          <Column
+            header="Status"
+            filterField="quantity"
+            filterMatchMode="contains"
+          >
             <template #body="slotProps">
               <span class="p-column-title">Status</span>
               <span
@@ -94,7 +122,8 @@
               >
             </template>
           </Column>
-          <Column :exportable="false">
+          <Column :exportable="false" headerStyle="width:4rem;"
+            >>
             <template #body="slotProps">
               <Button
                 icon="pi pi-pencil"
@@ -108,9 +137,6 @@
           /> -->
             </template>
           </Column>
-          <template #footer>
-            In total there are {{ products ? products.length : 0 }} products.
-          </template>
         </DataTable>
       </template>
     </Card>
@@ -120,26 +146,43 @@
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component';
 import Product from '@/models/Product'
-import Paginator from 'primevue/paginator';
-// import DataTable from 'primevue/datatable';
-// import Column from 'primevue/column';
-import ColumnGroup from 'primevue/columngroup';
 import Rating from 'primevue/rating';
 import ProductService from '@/services/ProductService';
 import { StockStatus } from '@/types/product';
+import qs from 'qs';
+
+interface ProductLazyParameters {
+  page: number;
+  limit: number;
+  name: string;
+  maxPrice: string;
+  minPrice: string;
+  rating: number;
+  discount: number;
+  isPublished: boolean;
+}
 
 @Options<ProductList>({
-  components: { Paginator, Rating, ColumnGroup },
+  components: { Rating },
 })
 export default class ProductList extends Vue {
   products: Product[] = [];
   selectedProducts: Product[] = [];
   filterValue = '';
   loading = false;
+  generalLoading = false;
   totalRecords = 0;
-  datasource: Product[] = [];
-  productService: ProductService = new ProductService();
+  service: ProductService = new ProductService();
   statuses = [StockStatus.INSTOCK, StockStatus.LOWSTOCK, StockStatus.OUTOFSTOCK];
+  filters = {
+    name: "",
+    price: undefined,
+    rating: undefined,
+    status: "",
+  };
+  lazyParams: Partial<ProductLazyParameters> = {};
+  firstRecordIndex = 0;
+  rowstoDisplay = 10;
 
   created() {
     // watch the params of the route to fetch the data again
@@ -155,29 +198,10 @@ export default class ProductList extends Vue {
   }
 
   getData() {
+    this.generalLoading = true
     this.loading = true;
-    this.productService.getAll().then(data => {
-      this.datasource = data ? data.map((prod) => new Product(prod)) : [];
-      this.totalRecords = data ? data.length : 0;
-      this.products = this.datasource.slice(0, 10);
-      this.loading = false;
-    }).catch((e) => {
-      console.log(e);
-    });
-  }
-
-  // eslint-disable-next-line
-  onPage(event: any) {
-    //event.page: New page number
-    //event.first: Index of first record
-    //event.rows: Number of rows to display in new page
-    //event.pageCount: Total number of pages
-    this.loading = true;
-
-    setTimeout(() => {
-      this.products = this.datasource.slice(event.first, event.first + event.rows);
-      this.loading = false;
-    }, 100);
+    this.lazyParams = { page: 1, limit: this.rowstoDisplay }
+    this.loadLazyData();
   }
 
   formatCurrency(value: number) {
@@ -191,15 +215,64 @@ export default class ProductList extends Vue {
    */
   // eslint-disable-next-line
   filterProducts(event: any) {
+    // if (event.keyCode === 13) {
     this.loading = true;
-    if (event.target.value) {
-      this.products = this.datasource.filter((product) => {
-        return product.name.toLowerCase().includes(event.target.value.toLowerCase());
-      })
-    } else {
-      this.products = this.datasource.slice(0, 10);
+    if (this.filterValue) {
+      this.lazyParams = { name: this.filterValue, limit: 1000000000000, }
+      this.searchData();
     }
-    this.loading = false;
+    // }
+  }
+
+  searchData() {
+    this.loading = true;
+    this.service.search(`${qs.stringify(this.lazyParams)}`)
+      .then(data => {
+        this.products = data.data.map((prod) => new Product(prod));
+        this.totalRecords = data.total;
+        this.firstRecordIndex = 0;
+        this.loading = false;
+        this.generalLoading = false;
+      });
+  }
+
+  loadLazyData() {
+    this.loading = true;
+    this.service.getAllPaginated(`${qs.stringify(this.lazyParams)}`)
+      .then(data => {
+        this.products = data.data.map((prod) => new Product(prod));
+        this.totalRecords = data.total;
+        this.firstRecordIndex = data.current_page > 1 ? data.limit * data.current_page - 1 : 0;
+        this.rowstoDisplay = data.limit;
+        this.loading = false;
+        this.generalLoading = false;
+      });
+  }
+
+  // eslint-disable-next-line
+  onPage(event: any) {
+    //event.page: New page number
+    //event.first: Index of first record
+    //event.rows: Number of rows to display in new page
+    //event.pageCount: Total number of pages
+    // console.log(event);
+    this.lazyParams = { ...event.originalEvent, page: event.page + 1, limit: event.rows } as ProductLazyParameters;
+    this.loadLazyData();
+  }
+
+  // eslint-disable-next-line
+  onSort(event: any) {
+    this.lazyParams = { ...event.originalEvent, page: event.page + 1, limit: event.rows } as ProductLazyParameters;
+    this.loadLazyData();
+  }
+
+  // eslint-disable-next-line
+  onFilter(event: any) {
+    if (event.keyCode === 13) {
+      this.loading = true;
+      this.lazyParams = { ...this.lazyParams, ...this.filters, maxPrice: this.filters.price, minPrice: this.filters.price };
+      this.loadLazyData();
+    }
   }
 
 }
@@ -213,8 +286,11 @@ export default class ProductList extends Vue {
 }
 
 .product-image {
-  width: 100px;
+  width: 50px;
+  height: 3rem;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+  object-fit: cover;
+  object-position: center;
 }
 .p-datatable-responsive-demo .p-datatable-tbody > tr > td .p-column-title {
   display: none;

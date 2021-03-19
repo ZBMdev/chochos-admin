@@ -1,5 +1,5 @@
 <template>
-  Product Edit
+  Vendors Page
 </template>
 
 <script>

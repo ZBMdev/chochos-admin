@@ -226,7 +226,6 @@ export default class OrderList extends Vue {
   filterValue = "";
   filters = {
     // order_number: "",
-    orderNumber: "",
     date: "",
     status: "",
   };

@@ -1,44 +1,64 @@
+// import { RoleData } from "./roles";
+
 export interface LoginData {
-    token:   string;
-    admin:   AdminData;
+    token: string;
+    admin: AdminData;
     message: string;
+    devMessage?: string;
 }
 
 export interface AdminData {
-    id:              number;
-    name:            string;
-    email:           string;
-    username:        string;
-    login_type:      string;
-    push_token:      string;
+    id: number;
+    name: string;
+    email: string;
+    username: string;
+    login_type: string;
+    push_token: string;
     last_login_date: Date;
-    activated:       boolean;
-    updated_at:      Date;
-    created_at:      Date;
+    activated: boolean;
+    role_id: number;
+    // role: RoleData;
+    updated_at: Date;
+    created_at: Date;
 }
+
 export interface AdminCreateParam{
     name:            string;
     email:           string;
     username:        string;
     password:        string;
+    role_id:        number;
 }
 
-export interface AdminLoginParam{
-    email:           string;
-    password:        string;
+export interface AdminUpdateParam{
+    id?: number
+    activated?: boolean;
+    name: string;
+    username: string;
+    push_token: string;
+    role_id?:        number;
 }
 
-export interface AdminImageData {
-    id: number;
-    url: string;
-    associate_model_id: number;
-    associate_model_name: string;
-    updated_on: Date | null;
-    created_on: Date | null;
+export interface AdminLoginParam {
+    email: string;
+    password: string;
+}
+export interface AdminInitResetPassParam {
+    email: string;
+}
+
+export interface AdminResetPassParam {
+    email: string;
+    new_password: string;
+    confirm_password: string;
+    otp: string;
 }
 
 
-
-
-
+export interface AdminChangePassword{
+    email: string;
+    old_password: string;
+    new_password: string;
+    confirm_password: string;
+}
 

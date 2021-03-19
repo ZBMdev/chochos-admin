@@ -1,5 +1,5 @@
 <template>
-  Product Edit
+  Artisan page
 </template>
 
 <script>

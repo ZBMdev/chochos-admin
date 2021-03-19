@@ -1,7 +1,8 @@
 /* eslint-disable */
 
+import { BombsightImage } from '@/types/bombsight';
 import { CategoryData } from '@/types/category';
-import { ImageData, ProductCreateParam, ProductData, StockStatus } from '@/types/product'
+import { ImageData, ProductCreateParam, ProductData, ProductImageUpdateParam, StockStatus } from '@/types/product'
 // eslint-disable-next-line
 // @ts-ignore
 import { format } from "timeago.js";
@@ -106,6 +107,19 @@ export default class Product extends Model {
         }).join(", ")
     }
 
+    get mainImage() {
+        return this.images[0] ? this.images[0].url : require("@/assets/images/default-placeholder-image.png");
+    }
+
+    get imageUrls() {
+        return Product.toImageUrls(this.images);
+    }
+
+    static toImageUrls(images: (ImageData | BombsightImage)[]): ProductImageUpdateParam {
+        const imageUrls = images.map((image) => image.url);
+        return { urls: imageUrls };
+    }
+
     toCreateParam() {
         return {
             name: this.name,
@@ -119,7 +133,7 @@ export default class Product extends Model {
             tags: this.tags,
             is_published: this.is_published,
             published_at: this.published_at,
-            categories: this.categories.map((cat) => cat.toCreateParam()),
+            categories: this.categories,
         } as ProductCreateParam;
     }
 

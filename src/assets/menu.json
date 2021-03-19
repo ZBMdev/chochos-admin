@@ -75,6 +75,16 @@
 				"to": "/customers"
 			},
 			{
+				"label": "Artisans",
+				"icon": "pi pi-users",
+				"to": "/artisans"
+			},
+			{
+				"label": "Vendors",
+				"icon": "pi pi-users",
+				"to": "/vendors"
+			},
+			{
 				"label": "Administrators",
 				"icon": "pi pi-user",
 				"to": "/admins"

@@ -1,74 +1,51 @@
 <template>
   <div class="payment-methods">
     <PageHeading title="Settings" subtitle="" />
-    <ProgressSpinner v-if="isLoading" />
-    <div v-else class="">
-      <TabView>
-        <TabPanel>
-          <template #header>
-            <i class="pi pi-cog"></i>
-            <span class="p-ml-2">General</span>
+
+    <div class="p-grid">
+      <div class="p-col-12 p-md-3">
+        <Menu style="height: 100%;width: 100%;" :model="items" />
+      </div>
+      <div class="p-col-12 p-md-9 p-gutters-1">
+        <Card>
+          <template #content>
+            <router-view />
           </template>
-          Content III
-        </TabPanel>
-        <TabPanel>
-          <template #header>
-            <i class="pi pi-wallet"></i>
-            <span class="p-ml-2">Payment Methods</span>
-          </template>
-          <PaymentMethods />
-        </TabPanel>
-        <TabPanel>
-          <template #header>
-            <i class="pi pi-inbox"></i>
-            <span class="p-ml-2">Delivery Methods</span>
-          </template>
-          <DeliveryMethods />
-        </TabPanel>
-      </TabView>
+        </Card>
+      </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component';
-import MainLayout from '@/components/layouts/MainLayout.vue';
-import PaymentMethods from '@/components/settings/PaymentMethods.vue';
-import DeliveryMethods from '@/components/settings/DeliveryMethods.vue';
-import { useToast } from 'primevue/usetoast';
+// import PaymentMethods from '@/components/settings/PaymentMethods.vue';
+// import DeliveryMethods from '@/components/settings/DeliveryMethods.vue';
+// import Roles from '@/components/settings/Roles.vue';
+import Menu from 'primevue/menu';
+import { MenuItem } from '@/types/elements';
 
 @Options({
-  components: { MainLayout, PaymentMethods, DeliveryMethods },
+  components: {  Menu },
 })
 export default class Settings extends Vue {
-  isLoading = false;
-
-  toast = useToast();
-
-  created() {
-    // watch the params of the route to fetch the data again
-    this.$watch(
-      () => this.$route.params,
-      () => {
-        this.getData();
-      },
-      // fetch the data when the view is created and the data is
-      // already being observed
-      { immediate: true }
-    )
-  }
-
-  getData() {
-    // this.isLoading = true;
-    // new PaymentMethodService("/payment-methods").getAll()
-    //   .then((data) => {
-    //     this.paymentMethods = data.map((cat) => new PaymentMethod(cat))
-    //     this.isLoading = false;
-    //   }).catch((e) => {
-    //     this.toast.add({ severity: "error", summary: "There was an error fetching the payment methods", detail: "Please check your internet connection and refresh the page" })
-    //     console.log(e);
-    //   });
-  }
+  items: Partial<MenuItem>[] = [
+    {
+      label: 'Roles',
+      icon: 'pi pi-cog',
+      to: '/settings/roles',
+    },
+    {
+      label: 'Payment Method',
+      icon: 'pi pi-wallet',
+      to: '/settings/payment-method',
+    },
+    {
+      label: 'Delivery Method',
+      icon: 'pi pi-inbox',
+      to: '/settings/delivery-method'
+    }
+  ]
 }
 </script>
 
