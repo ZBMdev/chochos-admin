@@ -54,16 +54,6 @@
 		"separator": true
 	},
 	{
-		"label": "Promotions",
-		"items": [
-			{
-				"label": "Banners/Ads",
-				"icon": "pi pi-ticket",
-				"to": "/banners"
-			}
-		]
-	},
-	{
 		"separator": true
 	},
 	{
