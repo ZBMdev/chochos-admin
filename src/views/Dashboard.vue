@@ -39,6 +39,26 @@
         </div>
         <div class="p-col-12 p-md-4">
           <FancyCard
+            class="fancy-card-3"
+            title="Artisans"
+            :loading="summaryLoading"
+            :value="`${summary.artisans}`"
+            :action="() => $router.push({ name: 'customers' })"
+            :stat="{}"
+          />
+        </div>
+        <div class="p-col-12 p-md-4">
+          <FancyCard
+            class="fancy-card-3"
+            title="Vendors"
+            :loading="summaryLoading"
+            :value="`${summary.vendors}`"
+            :action="() => $router.push({ name: 'customers' })"
+            :stat="{}"
+          />
+        </div>
+        <div class="p-col-12 p-md-4">
+          <FancyCard
             class="fancy-card-4"
             title="Products sold"
             :loading="summaryLoading"
@@ -65,7 +85,7 @@
       <div class="p-col-12 p-md-6">
         <Card>
           <template #title>
-            Top Products
+            Top Orders
           </template>
           <template #content>
             <Chart

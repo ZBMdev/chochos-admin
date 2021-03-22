@@ -2,6 +2,8 @@ export interface DashboardSummary {
     newOrders:       number;
     sales:           number;
     customers:       number;
+    artisans:        number;
+    vendors:         number;
     productSold:     number;
     lowStockProduct: number;
     product1:        number;

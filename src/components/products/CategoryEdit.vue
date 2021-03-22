@@ -1,4 +1,4 @@
-<!-- <template>
+<template>
   <div class="p-fluid">
     <div class="p-fluid p-formgrid p-grid">
       <div class="p-field p-col-12 p-md-6">
@@ -136,6 +136,7 @@ import BombsightService from '@/services/BombsightService';
 import CategoryService from '@/services/CategoryService';
 import { useToast } from 'primevue/usetoast';
 import { CategoryCreateParam, CategoryData } from '@/types/category';
+/* eslint-disable */
 
 export default defineComponent({
   props: {
@@ -240,18 +241,4 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-</style> -->
-
-<template>
-  Category Edit
-</template>
-
-<script>
-export default {
-
-}
-</script>
-
-<style>
-
 </style>

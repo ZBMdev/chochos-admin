@@ -69,8 +69,10 @@ export default defineComponent({
       const histories: StatusHistoryData[] = [
         {
           id: -1,
-          // to_status: this.order.status_histories[0].from_status,
-          // created_at: this.order.created_at
+          /* eslint-disable-next-line */
+          to_status: this.order.status_histories[0].from_status,
+          /* eslint-disable-next-line */
+          created_at: this.order.created_at
         },
         ...this.order.status_histories,
       ]

@@ -41,8 +41,18 @@
 		"separator": true
 	},
 	{
-		"label": "Orders",
+		"label": "Transactions",
 		"items": [
+			{
+				"label": "Job Requests",
+				"icon": "pi pi-shopping-cart",
+				"to": "/job-requests"
+			},
+			{
+				"label": "Jobs Delivered",
+				"icon": "pi pi-shopping-cart",
+				"to": "/job-requests"
+			},
 			{
 				"label": "All Orders",
 				"icon": "pi pi-shopping-cart",
