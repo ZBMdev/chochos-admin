@@ -1,38 +1,24 @@
 <template>
   <div class="adminList">
-    <PageHeading title="Administrators" />
+    <PageHeading title="Top Vendors" />
 
     <Card>
       <template #content>
         <DataTable
           class="p-datatable-sm"
           dataKey="id"
-          :value="admins"
+          :value="vendors"
           :loading="loading"
           :scrollable="true"
           style="width: 100%"
         >
-          <template #header>
-            <div class="p-d-flex p-jc-end">
-              <Button
-                class="s"
-                label="New Admin"
-                icon="pi pi-plus"
-                @click="displayCreateForm = true"
-              />
-            </div>
-          </template>
+         
           <!-- 
           scrollHeight="flex"
           scrollDirection="both"-->
           <Column field="name" headerStyle="width: 3rem;">
-            <template #body="{data}">
-              <Avatar
-                :label="data.name.charAt(0)"
-                class="p-mr-2"
-                style="background-color:#c8e6c9;color:#256029"
-                shape="circle"
-              />
+            <template #body="slotProps">
+              <img :src="slotProps.vendor.image" :alt="slotProps.vendor.image">
             </template>
           </Column>
           <Column
@@ -41,38 +27,15 @@
             headerStyle="width: 200px;"
           ></Column>
           <Column
-            field="email"
-            header="Email"
-            headerStyle="width: 250px;"
-          ></Column>
-          <Column
             field="role.name"
-            header="Role"
+            header="Products"
             headerStyle="width: 150px;"
           ></Column>
           <Column
-            field="username"
-            header="Username"
-            headerStyle="width: 150px;"
+            field="sales"
+            header="Quantity Sold"
+            headerStyle="width: 200px;"
           ></Column>
-          <Column field="activated" header="Status" headerStyle="width: 100px;">
-            <template #body="slotProps">
-              <span v-if="slotProps.data.activated" class="item-activated">
-                active
-              </span>
-              <span v-else class="item-deactivated"> inactive </span>
-            </template>
-          </Column>
-          <Column headerStyle="width: 100px;">
-            <template #body="{data}">
-              <Button icon="pi pi-pencil" @click="editAdmin(data)" />
-              <!-- <Button
-                icon="pi pi-trash"
-                class="p-button-warning"
-                @click="confrimDelete(data)"
-              /> -->
-            </template>
-          </Column>
         </DataTable>
       </template>
     </Card>

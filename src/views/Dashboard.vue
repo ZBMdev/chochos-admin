@@ -19,10 +19,70 @@
         </div>
         <div class="p-col-12 p-md-4">
           <FancyCard
-            class="fancy-card-2"
-            title="Sales"
+            class="fancy-card-1"
+            title="Orders Completed"
             :loading="summaryLoading"
-            :value="`&#8358; ${summary.sales}`"
+            :value="`${summary.ordersCompleted}`"
+            :action="() => $router.push({ name: 'orders' })"
+            :stat="{}"
+          />
+        </div>
+        <div class="p-col-12 p-md-4">
+          <FancyCard
+            class="fancy-card-2"
+            title="Transactions"
+            :loading="summaryLoading"
+            :value="`&#8358; ${summary.transactions}`"
+            :action="() => {}"
+            :stat="{}"
+          />
+        </div>
+        <div class="p-col-12 p-md-4">
+          <FancyCard
+            class="fancy-card-4"
+            title="Products Uploaded"
+            :loading="summaryLoading"
+            :value="`${summary.uploadedProducts}`"
+            :action="() => {}"
+            :stat="{}"
+          />
+        </div>      
+        <div class="p-col-12 p-md-4">
+          <FancyCard
+            class="fancy-card-4"
+            title="Products sold"
+            :loading="summaryLoading"
+            :value="`${summary.soldProducts}`"
+            :action="() => {}"
+            :stat="{}"
+          />
+        </div>
+        <div class="p-col-12 p-md-4">
+          <FancyCard
+            class="fancy-card-1"
+            title="Products in low stock"
+            :loading="summaryLoading"
+            :value="`${summary.lowStockProduct}`"
+            :action="() => {}"
+            :stat="undefined"
+          />
+        </div>
+        <div class="p-col-12 p-md-4">
+          <FancyCard
+            class="fancy-card-4"
+            title="Jobs"
+            :loading="summaryLoading"
+            :value="`${summary.jobs}`"
+            :action="() => {}"
+            :stat="{}"
+          />
+        </div>
+        <div class="p-col-12 p-md-4">
+          <FancyCard
+            class="fancy-card-4"
+            title="Jobs Requested"
+            :loading="summaryLoading"
+            :value="`${summary.requestedJobs}`"
             :action="() => {}"
             :stat="{}"
           />
@@ -60,21 +120,11 @@
         <div class="p-col-12 p-md-4">
           <FancyCard
             class="fancy-card-4"
-            title="Products sold"
+            title="Monthly Earnings"
             :loading="summaryLoading"
-            :value="`${summary.productSold}`"
+            :value="`&#8358; ${summary.monthlyEarning}`"
             :action="() => {}"
             :stat="{}"
-          />
-        </div>
-        <div class="p-col-12 p-md-4">
-          <FancyCard
-            class="fancy-card-1"
-            title="Products in low stock"
-            :loading="summaryLoading"
-            :value="`${summary.lowStockProduct}`"
-            :action="() => {}"
-            :stat="undefined"
           />
         </div>
       </div>
@@ -83,39 +133,10 @@
     <!-- Others -->
     <div class="p-grid">
       <div class="p-col-12 p-md-6">
-        <Card>
-          <template #title>
-            Top Orders
-          </template>
-          <template #content>
-            <Chart
-              type="pie"
-              :data="chartData"
-              :loading="summaryLoading"
-              :value="chartData.datasets.data"
-              :action="() => {}"
-              :stat="{}"
-            />
-          </template>
-        </Card>
+        <Artisans />
       </div>
       <div class="p-col-12 p-md-6">
-        <Card>
-          <template #title>
-            Overview Today
-          </template>
-          <template #content>
-            <Chart
-              type="line"
-              :data="multiAxisData"
-              :options="multiAxisOptions"
-              :loading="timeLoading"
-              :value="`${time.hourly}`"
-              :action="() => {}"
-              :stat="{}"
-            />
-          </template>
-        </Card>
+        <Vendors />
       </div>
     </div>
   </div>
@@ -124,12 +145,14 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import FancyCard from '@/components/dashboard/FancyCard.vue'
-import Chart from 'primevue/chart'
+// import Chart from 'primevue/chart'
 import { DashboardSummary, TimeSummary } from '@/types/dashboard';
 import DashboardService from '@/services/DashboardService';
+import Artisans from '@/views/users/ArtisanList.vue'
+import Vendors from '@/views/users/VendorList.vue'
 
 export default defineComponent({
-  components: { FancyCard, Chart },
+  components: { FancyCard, Artisans, Vendors },
   name: "Dashboard",
   
   mounted() {

@@ -45,12 +45,12 @@
 		"items": [
 			{
 				"label": "Job Requests",
-				"icon": "pi pi-shopping-cart",
+				"icon": "pi pi-briefcase",
 				"to": "/job-requests"
 			},
 			{
 				"label": "Jobs Delivered",
-				"icon": "pi pi-shopping-cart",
+				"icon": "pi pi-briefcase",
 				"to": "/job-requests"
 			},
 			{
