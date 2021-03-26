@@ -5,8 +5,7 @@ import { CustomerData } from "./customer";
 export interface OrderData {
     id: number;
     user_id: number;
-    // order_number: string;
-    orderNumber: string;
+    order_number: string;
     reference: string;
     total_amount: number;
     amount_paid: number;
@@ -26,6 +25,7 @@ export interface OrderData {
     delivery_method: DeliveryMethodData;
     order_items: OrderItemData[];
     status_histories: StatusHistoryData[];
+    payment: PaymentData;
 }
 
 export interface OrderItemData {
@@ -124,6 +124,42 @@ export const statusDecorations = {
 
 export enum PaymentStatus {
     Pending = "pending",
-    Confirming = "confirming",
+    AwaitingConfirmation = "awaiting_confirmation",
     Confirmed = "confirmed",
+    Declined = "declined",
+}
+
+export enum PaymentType {
+    Card = "card",
+    BankTransfer = "transfer",
+}
+
+export interface PaymentData {
+    id:                  number;
+    user_id:             number;
+    type:                PaymentType;
+    to_be_paid:          number;
+    amount_paid:         number;
+    transaction_charges: number;
+    reference:           string;
+    status:              PaymentStatus;
+    created_at:          Date;
+    updated_at:          Date;
+    payment_logs:        PaymentLog[];
+}
+
+export interface PaymentUpdateParam {
+    amount_paid: number;
+    status:      string;
+    type:        string;
+}
+
+
+export interface PaymentLog {
+    id:          number;
+    payment_id:  number;
+    title:       string;
+    description: string;
+    created_at:  Date;
+    updated_at:  Date;
 }
