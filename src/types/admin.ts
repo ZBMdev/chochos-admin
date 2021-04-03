@@ -54,7 +54,6 @@ export interface AdminResetPassParam {
     otp: string;
 }
 
-
 export interface AdminChangePassword{
     email: string;
     old_password: string;
@@ -62,3 +61,22 @@ export interface AdminChangePassword{
     confirm_password: string;
 }
 
+export interface RegisterObject{
+    email:	string;
+    password:	string;
+    firstName:	string;
+    lastName:	string;
+    fullName:	string;
+    username:	string;
+    userCategory:	number;
+}
+
+export interface LoginObject {
+    email: string;
+    password: string;
+}
+
+export interface ResetPasswordObject {
+    email: string;
+    password: string;
+}

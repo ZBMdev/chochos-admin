@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <div class="categories">
     <PageHeading title="Categories" />
     <ProgressSpinner v-if="isLoading" />
@@ -259,7 +259,7 @@ export default class Categories extends Vue {
 
   getData() {
     this.isLoading = true;
-    this.categoryService.getWithProducts()
+    this.categoryService.getAllCategories()
       .then((data) => {
         this.categories = data.map((cat) => new Category(cat))
         this.isLoading = false;
@@ -375,5 +375,266 @@ export default class Categories extends Vue {
 .categories-badge.status-inactive {
   background: #feedaf;
   color: #8a5340;
+}
+</style> -->
+
+<template>
+  <div>
+    <PageHeading
+      title="Products Category"
+      :subtitle="`${totalRecords} products in total`"
+    />
+    <ProgressSpinner v-if="isLoading" />
+    <Card v-else>
+      <template #content>
+        <DataTable
+         :value="products"
+        >
+        <Column
+            field="name"
+            headerStyle="width: 250px"
+            header="Product"
+            :sortable="true"
+            filterMode="contains"
+          >
+            <template #filter>
+              <InputText
+                type="text"
+                v-model="filters['name']"
+                class="p-column-filter"
+                placeholder="Search by name"
+              />
+            </template>
+            <template #body="slotProps">
+              {{ slotProps.data.name }}
+            </template>
+          </Column>
+          <Column
+            header="Image"
+            headerStyle="width:4rem;">
+            <template #body="slotProps">
+              <span class="p-column-title">Image</span>
+              <img
+                :src="slotProps.data.mainImage"
+                :alt="slotProps.data.name"
+                class="product-image"
+              />
+            </template>
+          </Column>
+          <Column
+            ref="price"
+            field="unitPrice"
+            header="Price"
+            filterField="price"
+            filterMatchMode="contains"
+          >
+            <template #body="slotProps">
+              <span class="p-column-title">Price</span>
+              {{ formatCurrency(slotProps.data.unitPrice) }}
+            </template>
+          </Column>
+          <Column
+            field="categories"
+            header="Category"
+            filterField="categories"
+            filterMatchMode="contains"
+          >
+            <template #body="slotProps">
+              <span class="p-column-title">Categories</span>
+              {{ slotProps.data.categoriesNames }}
+            </template>
+          </Column>
+          <Column
+            field="rating"
+            header="Reviews"
+            filterField="rating"
+            filterMatchMode="contains"
+          >
+            <template #body="slotProps">
+              <span class="p-column-title">Reviews</span>
+              <Rating
+                :modelValue="slotProps.data.rating"
+                :readonly="true"
+                :cancel="false"
+              />
+            </template>
+          </Column>
+          <Column
+            header="Status"
+            filterField="quantity"
+            filterMatchMode="contains"
+          >
+            <template #body="slotProps">
+              <span class="p-column-title">Status</span>
+              <span
+                :class="
+                  'product-badge status-' +
+                    slotProps.data.stockAvailability.toLowerCase()
+                "
+                >{{ slotProps.data.stockAvailability }}</span
+              >
+            </template>
+          </Column>
+          
+        </DataTable>
+      </template>
+    </Card>
+  </div>
+</template>
+
+
+<script lang="ts">
+import { Options, Vue } from 'vue-class-component';
+import Category from '@/models/Category'
+import Rating from 'primevue/rating';
+import CategoryService from '@/services/CategoryService';
+import { CategoryData } from '@/types/category'
+import qs from 'qs';
+
+interface CategoriesLazyParameters {
+  page:       number;
+  pageSize:   number;
+  limit:      number;
+  items:      CategoryData[];
+  totalCount: number;
+}
+
+export default class ProductList extends Vue {
+  categories: Category[] = [];
+  selectedCategories: Category[] = [];
+  filterValue = '';
+  loading = false;
+  generalLoading = false;
+  totalRecords = 0;
+  service: CategoryService = new CategoryService();
+  filters = {
+    name: "",
+    price: undefined,
+    rating: undefined,
+    status: "",
+  };
+  lazyParams: Partial<CategoriesLazyParameters> = {};
+  firstRecordIndex = 0;
+  rowstoDisplay = 10;
+
+  created() {
+    // watch the params of the route to fetch the data again
+    this.$watch(
+      () => this.$route.params,
+      () => {
+        this.getData();
+      },
+      // fetch the data when the view is created and the data is
+      // already being observed
+      { immediate: true }
+    )
+  }
+
+  getData() {
+    this.generalLoading = true
+    this.loading = true;
+    this.lazyParams = { page: 1, limit: this.rowstoDisplay }
+    this.loadLazyData();
+  }
+
+  formatCurrency(value: number) {
+    return value.toLocaleString('en-NG', { style: 'currency', currency: 'NGN' });
+  }
+
+  loadLazyData() {
+    this.loading = true;
+    this.service.getAllPaginated(`${qs.stringify(this.lazyParams)}`)
+      .then(data => {
+        this.categories = data.items.map((prod) => new Category(prod));
+        this.totalRecords = data.totalCount;
+        this.firstRecordIndex = data.page > 1 ? data.pageSize * data.page - 1 : 0;
+        this.rowstoDisplay = data.pageSize;
+        this.loading = false;
+        this.generalLoading = false;
+      });
+  }
+
+  // eslint-disable-next-line
+  onPage(event: any) {
+    //event.page: New page number
+    //event.first: Index of first record
+    //event.rows: Number of rows to display in new page
+    //event.pageCount: Total number of pages
+    // console.log(event);
+    this.lazyParams = { ...event.originalEvent, page: event.page + 1, limit: event.rows } as CategoriesLazyParameters;
+    this.loadLazyData();
+  }
+
+  // eslint-disable-next-line
+  onSort(event: any) {
+    this.lazyParams = { ...event.originalEvent, page: event.page + 1, limit: event.rows } as CategoriesLazyParameters;
+    this.loadLazyData();
+  }
+}
+</script>
+
+<style scoped>
+.table-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.product-image {
+  width: 50px;
+  height: 3rem;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+  object-fit: cover;
+  object-position: center;
+}
+.p-datatable-responsive-demo .p-datatable-tbody > tr > td .p-column-title {
+  display: none;
+}
+
+@media screen and (max-width: 40em) {
+  .p-datatable.p-datatable-responsive-demo .p-datatable-thead > tr > th,
+  .p-datatable.p-datatable-responsive-demo .p-datatable-tfoot > tr > td {
+    display: none !important;
+  }
+  .p-datatable.p-datatable-responsive-demo .p-datatable-tbody > tr > td {
+    text-align: left;
+    display: block;
+    border: 0 none !important;
+    width: 100% !important;
+    float: left;
+    clear: left;
+  }
+  .p-datatable.p-datatable-responsive-demo
+    .p-datatable-tbody
+    > tr
+    > td
+    .p-column-title {
+    padding: 0.4rem;
+    min-width: 30%;
+    display: inline-block;
+    margin: -0.4em 1em -0.4em -0.4rem;
+    font-weight: bold;
+  }
+}
+
+.product-badge.status-instock {
+  background: #c8e6c9;
+  color: #256029;
+}
+.product-badge.status-lowstock {
+  background: #feedaf;
+  color: #8a5340;
+}
+.product-badge.status-outofstock {
+  background: #ffcdd2;
+  color: #c63737;
+}
+.product-badge {
+  border-radius: 2px;
+  padding: 0.25em 0.5rem;
+  text-transform: uppercase;
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 0.3px;
 }
 </style>

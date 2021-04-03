@@ -6,9 +6,20 @@
         The page <b>{{ $route.fullPath }}</b> doesn't exist
       </p>
 
-      <router-link to="/">
-        <i class="pi pi-arrow-left"></i> Go Home
-      </router-link>
+      <div class="p-d-flex p-jc-center">
+        <Button
+          icon="pi pi-arrow-left"
+          label="Go Back"
+          class="p-button-text"
+          @click="$router.go(-2)"
+        />
+        <Button
+          icon="pi pi-home"
+          label="Go Home"
+          class="p-button-text"
+          @click="$router.push('/')"
+        />
+      </div>
     </div>
   </div>
 </template>

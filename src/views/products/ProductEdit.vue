@@ -141,7 +141,7 @@
                 <Chips
                   class="product-colors"
                   id="colors"
-                  v-model="product.colorsList"
+                  v-model="product.coloursList"
                   separator=","
                 />
                 <small id="colors-help">Separate by comma</small>
@@ -345,7 +345,7 @@ import SpecificationCard from '@/components/products/SpecificationCard.vue';
 import { useToast } from 'primevue/usetoast';
 import ProductService from '@/services/ProductService';
 import Category from '@/models/Category';
-import CategoryService from '@/services/CategoryService';
+// import CategoryService from '@/services/CategoryService';
 // import { ProductCreateParam } from '@/types/product';
 import { TreeNode, SelectedCheckbox } from '@/types/category';
 import BombsightService from '@/services/BombsightService';
@@ -361,7 +361,7 @@ export default class ProductEdit extends Vue {
   selectedCategories: SelectedCheckbox = {};
   toast = useToast();
   productService: ProductService = new ProductService();
-  categoryService: CategoryService = new CategoryService();
+ //  categoryService: CategoryService = new CategoryService();
   isLoading = false;
   expandedKeys: Record<number, boolean> = {};
   deleteProductDialog = false;
@@ -369,9 +369,9 @@ export default class ProductEdit extends Vue {
   imageService = new BombsightService();
   imageLoading = false;
 
-  updateProductCategories() {
+  /* updateProductCategories() {
     this.product.categories = Category.fromSelectedKeys(this.selectedCategories, this.categories)
-  }
+  } */
 
   created() {
     // watch the params of the route to fetch the data again
@@ -380,9 +380,9 @@ export default class ProductEdit extends Vue {
       () => {
         if (this.thereIsAnID) {
           this.getData();
-        } else {
+        } /*else {
           this.getCategories();
-        }
+        } */
       },
       // fetch the data when the view is created and the data is
       // already being observed
@@ -396,7 +396,7 @@ export default class ProductEdit extends Vue {
 
   getData() {
     this.getProducts();
-    this.getCategories();
+    // this.getCategories();
   }
 
   // eslint-disable-next-line
@@ -420,7 +420,7 @@ export default class ProductEdit extends Vue {
       console.log(formData.getAll("files"));
 
       const images = await this.imageService.uploadMultiple(formData);
-      return this.syncProductImage(Product.toImageUrls([...images, ...this.product.images]));
+      return this.syncProductImage(Product.toImageUrls([...images, ...this.product.productImages]));
     }
   }
 
@@ -445,14 +445,14 @@ export default class ProductEdit extends Vue {
     this.product = reactive(value) as Product;
   }
 
-  getCategories() {
+  /* getCategories() {
     this.categoryService.getAll()
       .then((categoryData) => {
         this.categories = categoryData.map((cat) => new Category(cat).toTreeNode());
         this.selectedCategories = Category.toSelectedKeys(this.product.categories.map((cat) => cat.toTreeNode()))
         this.expandAll();
       });
-  }
+  } */
 
   expandAll() {
     for (const node of this.categories) {
@@ -469,22 +469,6 @@ export default class ProductEdit extends Vue {
         this.expandNode(child);
       }
     }
-  }
-
-  publishProduct() {
-    // eslint-disable-next-line @typescript-eslint/camelcase
-    this.saveProduct({ ...this.product.toCreateParam(), is_published: true })
-      .then(() => {
-        this.toast.add({ severity: 'info', detail: 'Product published', life: 3000 });
-      });
-  }
-
-  unPublishProduct() {
-    // eslint-disable-next-line @typescript-eslint/camelcase
-    this.saveProduct({ ...this.product.toCreateParam(), is_published: false })
-      .then(() => {
-        this.toast.add({ severity: 'info', detail: 'Product unpublished', life: 3000 });
-      });
   }
 
   saveProduct(param = this.product.toCreateParam()) {
@@ -515,8 +499,8 @@ export default class ProductEdit extends Vue {
 
   deleteProductImage(imageId: number) {
     this.imageLoading = true;
-    console.log(this.product.images, imageId);
-    const images = [...this.product.images]
+    console.log(this.product.productImages, imageId);
+    const images = [...this.product.productImages]
     const imageIndex = images.findIndex((image) => image.id === imageId);
     images.splice(imageIndex, 1);
     if (images.length > 0) {

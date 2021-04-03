@@ -2,57 +2,11 @@ import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 import Dashboard from '../views/Dashboard.vue'
 import Analytics from '../views/Analytics.vue'
 import MainLayout from '../components/layouts/MainLayout.vue'
-import OtherLayout from '../components/layouts/OtherLayout.vue'
 import Profile from '../views/users/Profile.vue'
 
 const appTitle = "Chochos Admin";
 
 const routes: Array<RouteRecordRaw> = [
-  {
-    path: '/about',
-    name: 'about',
-    component: () => import('../views/About.vue'),
-    meta: {
-      noAuth: true,
-    }
-  },
-  {
-    path: '/auth',
-    component: OtherLayout,
-    children: [
-      // route will become /auth/login if we remove the '/' at the begining of each path
-      {
-        path: '/login',
-        name: 'login',
-        component: () => import('../views/auth/Login.vue'),
-        meta: {
-          title: "Sign in",
-          noAuth: true,
-          guestOnly: true,
-        }
-      },
-      {
-        path: '/reset-password/init',
-        name: 'init-reset-password',
-        component: () => import('../views/auth/InitResetPassword.vue'),
-        meta: {
-          title: "Request password reset",
-          noAuth: true,
-          guestOnly: true,
-        }
-      },
-      {
-        path: '/reset-password',
-        name: 'reset-password',
-        component: () => import('../views/auth/ResetPassword.vue'),
-        meta: {
-          title: "Reset",
-          noAuth: true,
-          guestOnly: true,
-        }
-      },
-    ]
-  },
   { 
     path: '/',
     component: MainLayout,
@@ -114,6 +68,30 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import('../views/products/Categories.vue'),
         meta: {
           title: `Categories`,
+        }
+      },
+      {
+        path: '/jobs',
+        name: 'jobs',
+        component: () => import('../views/jobs/Jobs.vue'),
+        meta: {
+          title: `All Products`,
+        }
+      },
+      {
+        path: '/job-requests',
+        name: 'jobRequests',
+        component: () => import('../views/jobs/JobRequests.vue'),
+        meta: {
+          title: `Job Requests`,
+        }
+      },
+      {
+        path: '/jobs-delivered',
+        name: 'jobsDelivered',
+        component: () => import('../views/jobs/JobsDelivered.vue'),
+        meta: {
+          title: `Jobs Delivered`,
         }
       },
       {
@@ -210,14 +188,6 @@ const routes: Array<RouteRecordRaw> = [
         }
       }
     ]
-  },
-  {
-    path: '/unauthorised',
-    name: 'unauthorised',
-    component: () => import('../views/403.vue'),
-    meta: {
-      noAuth: true,
-    }
   },
   {
     path: '/:pathMatch(.*)*',

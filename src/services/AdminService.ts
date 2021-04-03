@@ -6,7 +6,7 @@ import { AxiosResponse } from 'axios';
 import Service from './Service';
 
 export default class AdminService extends Service<AdminData, AdminUpdateParam>{
-    url = "/admin";
+    url = "/v1/users";
    // url = "/views/auth/";
     constructor(url?: string) {
         super(url);
@@ -64,7 +64,7 @@ export default class AdminService extends Service<AdminData, AdminUpdateParam>{
   
 
     public resetPassword(payload: AdminResetPassParam) {
-        return API.post('/account/password/reset', payload)
+        return API.post('/reset-password', payload)
             .then(({ data }: AxiosResponse<APIResponse<LoginData>>) => {
                 return data.data;
             }).catch((error) => {
@@ -72,7 +72,7 @@ export default class AdminService extends Service<AdminData, AdminUpdateParam>{
                 throw error;
             });
     }
-    public getCurrentUser() {
+    public getCurrentAdmin() {
         return API.get('/admin/profile',)
             .then(({ data }: AxiosResponse<APIResponse<AdminData>>) => {
                 return data.data;

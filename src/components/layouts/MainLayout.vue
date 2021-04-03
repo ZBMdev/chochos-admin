@@ -54,7 +54,7 @@
             <Avatar
               class=""
               style="background-color:#9c27b0; color: #ffffff"
-              label="B"
+              label="C"
               shape="circle"
             />
           </Button>
@@ -118,13 +118,21 @@ export default class MainLayout extends Vue {
         {
           label: 'Logout',
           icon: 'pi pi-pw pi-power-off',
-          to: '/',
+          to: '/login'
+          // command: () => this.logout(),
         },
       ]
     },
   ];
   itemRefs: Ref[] = [];
 
+  /* logout() {
+    window.localStorage.setItem("token", "");
+    window.location.href = `/login?redirect=${window.location.pathname}`
+    // this.$router.push({ name: "login", query: { redirect: this.$route.path } });
+
+  } */
+  
   mounted() {
 
     this.notificationMenu = [

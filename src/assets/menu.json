@@ -41,6 +41,19 @@
 		"separator": true
 	},
 	{
+		"label": "Occupations",
+		"items": [
+			{
+				"label": "All Occupations",
+				"icon": "pi pi-th-large",
+				"to": "/jobs"
+			}
+		]
+	},
+	{
+		"separator": true
+	},
+	{
 		"label": "Transactions",
 		"items": [
 			{
@@ -50,8 +63,8 @@
 			},
 			{
 				"label": "Jobs Delivered",
-				"icon": "pi pi-briefcase",
-				"to": "/job-requests"
+				"icon": "pi pi-send",
+				"to": "/jobs-delivered"
 			},
 			{
 				"label": "All Orders",

@@ -4,7 +4,7 @@ import AdminService from '@/services/AdminService';
 // import { ResourceModule, ResourceAction } from '@/types/roles'
 
 export async function getUser () {
-  const user = await (new AdminService()).getCurrentUser();
+  const user = await (new AdminService()).getCurrentAdmin();
   return user
 }
 

@@ -1,4 +1,4 @@
-<template>
+<!--<template>
   <div class="other-layout p-d-flex p-ai-center">
     <main class="layout-content">
       <div class="brand p-text-center">
@@ -8,6 +8,14 @@
           alt="Chochos admin"
         />
       </div>
+      <router-view />
+    </main>
+  </div>
+</template> -->
+
+<template>
+  <div class="other-layout p-d-flex p-ai-center">
+    <main class="layout-content">
       <router-view />
     </main>
   </div>

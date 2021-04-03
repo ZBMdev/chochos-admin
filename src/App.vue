@@ -21,7 +21,7 @@ export default class extends Vue {
 
   handleError(message: { message: string; validationErrors: string[] }) {
     const error = `${message.message}\n${message.validationErrors?.map((val) => '* ' + val).join("\n")}`;
-    this.toast.add({ severity: "error", summary: "An error occured", detail: error, life: 3000 });
+    this.toast.add({ severity: "error", summary: "An error occured", detail: error, life: 5000 });
     // eslint-disable-next-line
     // @ts-ignore
     this.emitter.off('error', this.handleError); this.emitter.on('error', this.handleError)

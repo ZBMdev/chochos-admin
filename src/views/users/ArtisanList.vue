@@ -27,13 +27,13 @@
             headerStyle="width: 200px;"
           ></Column>
           <Column
-            field="role.name"
-            header="Job"
+            field="skills"
+            header="Skills"
             headerStyle="width: 150px;"
           ></Column>
           <Column
-            field="sales"
-            header="Requests"
+            field="requests"
+            header="Number of Requests"
             headerStyle="width: 200px;"
           ></Column>
         </DataTable>

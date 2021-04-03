@@ -1,60 +1,50 @@
-import { CategoryCreateParam, CategoryData } from "./category";
-
-export interface ImageData {
-    id: number;
-    url: string;
-    associate_model_id: number;
-    associate_model_name: string;
-    updated_on: Date | null;
-    created_on: Date | null;
-}
-
-export interface ProductImageUpdateParam {
-    urls: string[];
-}
-
-
-
+// import { CategoryCreateParam, CategoryData } from "./category";
 
 export interface ProductData {
-    // eslint-disable-next-line
-    BannerProduct?: any;
-    id: number;
-    name: string;
-    description: string;
-    price: number;
-    max_price: number;
-    discount: number;
-    quantity: number;
-    colors: string;
-    size_variation: string;
-    size_metric: string;
-    average_rating: number;
-    orders: number;
-    reviews: number;
-    specifications: string;
-    tags: string;
-    is_published: boolean;
-    published_at: Date;
-    created_at: Date | null;
-    updated_at: Date | null;
-    images: Partial<ImageData>[];
-    categories: CategoryData[];
+    id:                 number;
+    name:               string;
+    description:        string;
+    colour:             null | string;
+    quantity:           number;
+    isDeleted:          null;
+    brand:              null;
+    metricQuantity:     number;
+    metric:             null | string;
+    rating:             number;
+    unitPrice:          number;
+    userId:             number;
+    productCategoryId:  number;
+    updatedOn:          Date;
+    createdOn:          Date;
+    productCategory_id: number;
+    productImages:      Partial<ProductImage>[];
 }
 
 export interface ProductCreateParam {
     name: string;
     description: string;
-    price: number;
-    discount: number;
-    quantity: number;
-    size_variation: string;
-    size_metric: string;
-    specifications: string;
-    tags: string;
-    is_published: boolean;
-    published_at: Date;
-    categories: CategoryCreateParam[];
+    colour:             null | string;
+    quantity:           number;
+    brand:              null;
+    metricQuantity:     number;
+    metric:             null | string;
+    rating:             number;
+    unitPrice:          number;
+    updatedOn:          Date;
+    createdOn:          Date;
+}
+
+export interface ProductImage {
+    id:        number;
+    url:       string;
+    order:     number;
+    updatedOn: Date;
+    createdOn: Date;
+    productId: number;
+    deletedAt: null;
+}
+export interface ProductImageUpdateParam {
+    urls: string[];
 }
 
 export enum StockStatus {

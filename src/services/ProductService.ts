@@ -1,7 +1,7 @@
 /* eslint-disable */
 // import Product from '@/models/Product';
 import { APIResponse, PaginatedResponse } from '@/types/api';
-import { ProductCreateParam, ProductData, ProductImageUpdateParam, ImageData } from '@/types/product'
+import { ProductCreateParam, ProductData, ProductImageUpdateParam, ProductImage } from '@/types/product'
 // import { ProductCreateParam, ProductData } from '@/types/product'
 import { API } from '@/utils/api';
 import { AxiosResponse } from 'axios';
@@ -9,7 +9,7 @@ import Service from './Service';
 
 export default class ProductService extends Service<ProductData, ProductCreateParam>{
 
-    url = "/admin/products";
+    url = "/products";
     constructor(url?: string) {
         super(url);
     }
@@ -23,7 +23,7 @@ export default class ProductService extends Service<ProductData, ProductCreatePa
     //             throw error;
     //         });
     // }
-
+    
     async search(findOptions = "") {
         return API.get(`/products/filter?${findOptions}`)
             .then(({ data }: AxiosResponse<APIResponse<PaginatedResponse<ProductData>>>) => {

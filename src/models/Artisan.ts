@@ -1,8 +1,8 @@
-import { CustomerData, RegisterObject, Languages } from "@/types/customer";
+import { ArtisanData, ArtisanRegisterParams, Languages } from "@/types/artisan";
 // import { format } from "timeago.js";
 import Model from "./Model";
 
-export default class Customer extends Model {
+export default class Artisan extends Model {
     fullName!:         string;
     id!:               number;
     lastName!:         string;
@@ -22,7 +22,7 @@ export default class Customer extends Model {
     languages!:        Languages;
     categoryId!:       number ;
 
-    constructor(data?: Partial<CustomerData>) {
+    constructor(data?: Partial<ArtisanData>) {
         super();
         if (data) {
             Object.assign(this, data);
@@ -45,8 +45,8 @@ export default class Customer extends Model {
             lastName: this.lastName,
             fullName: this.fullName,
             username: this.username,
-            userCategory: this.userCategory,
-        } as RegisterObject;
+            address: this.address
+        } as ArtisanRegisterParams;
     }
 
 }

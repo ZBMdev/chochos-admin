@@ -79,6 +79,7 @@ export default defineComponent({
           // this.$router.push(redirectTo);
           // I'm using this because I need the page to refresh
           window.location.href = redirectTo;
+          // this.$router.push('dashboard');
         })
         .finally(() => {
           this.isLoading = false;

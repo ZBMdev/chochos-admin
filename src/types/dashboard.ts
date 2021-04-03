@@ -14,6 +14,12 @@ export interface DashboardSummary {
     monthlyEarning:     number;
 }
 
+export interface TopArtisans {
+    name:             string;
+    image:            string;
+    job:              string;
+}
+
 export interface TimeSummary {
     hourly:         number;
     daily:          number;

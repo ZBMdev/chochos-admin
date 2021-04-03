@@ -280,10 +280,10 @@ export default class OrderList extends Vue {
     this.isLoading = true;
     this.orderService.getAllPaginated(`${qs.stringify(this.lazyParams)}`)
       .then(data => {
-        this.orders = data.data.map((order) => new Order(order));
-        this.totalRecords = data.total;
-        this.firstRecordIndex = data.current_page > 1 ? data.limit * data.current_page - 1 : 0;
-        this.rowstoDisplay = data.limit;
+        this.orders = data.items.map((order) => new Order(order));
+        this.totalRecords = data.totalCount;
+        this.firstRecordIndex = data.page > 1 ? data.pageSize * data.page - 1 : 0;
+        this.rowstoDisplay = data.pageSize;
         this.isLoading = false;
         this.generalLoading = false;
       });
@@ -294,8 +294,8 @@ export default class OrderList extends Vue {
     this.orderService.search(`${qs.stringify(this.lazyParams)}`)
       .then((data) => {
         if (data) {
-          this.orders = data.data.map((order) => new Order(order));
-          this.totalRecords = data.total;
+          this.orders = data.items.map((order) => new Order(order));
+          this.totalRecords = data.totalCount;
           this.firstRecordIndex = 0;
           this.isLoading = false;
           this.generalLoading = false;
