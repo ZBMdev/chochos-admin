@@ -10,16 +10,16 @@
         <DataTable
           class="customers p-datatable-sm"
           :value="customers"
-          dataKey="id"
           :paginator="true"
-          :rows="25"
-          :filters="filters"
+          :rows="10"
+          :rowsPerPageOptions="[10, 20, 50, 100, 200]"
+          currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
           paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
-          :rowsPerPageOptions="[25, 50, 100, 200]"
-          currentPageReportTemplate="Showing {first} to {last} of {totalRecords} customers"
-          :scrollable="true"
-          responsiveLayout="scroll"
-          style="width: 100%"
+          :lazy="true"
+          paginatorPosition="both"
+          :totalRecords="totalRecords"
+          :loading="isLoading"
+          :first="firstRecordIndex"
         >
           <template #header>
             <div class="table-header p-d-flex">
@@ -43,16 +43,6 @@
             headerStyle="width: 2.3rem"
             :exportable="true"
           ></Column>
-          <Column field="name" headerStyle="width: 3rem;">
-            <template #body="{data}">
-              <Avatar
-                :label="data.name.charAt(0).toUpperCase()"
-                class="p-mr-2"
-                style="background-color:#c8e6c9;color:#256029"
-                shape="circle"
-              />
-            </template>
-          </Column>
           <Column
             field="name"
             headerStyle="width: 250px"
@@ -69,11 +59,11 @@
               />
             </template>
             <template #body="slotProps">
-              {{ slotProps.data.name }}
+              {{ slotProps.data.fullName }}
             </template>
           </Column>
           <Column
-            field="userName"
+            field="username"
             headerStyle="width: 250px"
             header="Username"
             :sortable="true"
@@ -82,17 +72,17 @@
             <template #filter>
               <InputText
                 type="text"
-                v-model="filters['userName']"
+                v-model="filters['username']"
                 class="p-column-filter"
                 placeholder="Search by username"
               />
             </template>
             <template #body="slotProps">
-              {{ slotProps.data.userName }}
+              {{ slotProps.data.username }}
             </template>
           </Column>
           <Column
-            field="userEmail"
+            field="email"
             headerStyle="width: 250px"
             header="Email"
             :sortable="true"
@@ -101,17 +91,17 @@
             <template #filter>
               <InputText
                 type="text"
-                v-model="filters['userEmail']"
+                v-model="filters['email']"
                 class="p-column-filter"
                 placeholder="Search by email"
               />
             </template>
             <template #body="slotProps">
-              {{ slotProps.data.userEmail }}
+              {{ slotProps.data.email }}
             </template>
           </Column>        
           <Column
-            field="houseAddress"
+            field="address"
             headerStyle="width: 250px"
             header="Address"
             :sortable="true"
@@ -120,17 +110,17 @@
             <template #filter>
               <InputText
                 type="text"
-                v-model="filters['houseAddress']"
+                v-model="filters['address']"
                 class="p-column-filter"
                 placeholder="Search by address"
               />
             </template>
             <template #body="slotProps">
-              {{ slotProps.data.houseAddress }}
+              {{ slotProps.data.address }}
             </template>
           </Column>
           <Column
-            field="userLanguages"
+            field="languages"
             headerStyle="width: 250px"
             header="Languages"
             :sortable="true"
@@ -139,13 +129,13 @@
             <template #filter>
               <InputText
                 type="text"
-                v-model="filters['userLanguages']"
+                v-model="filters['languages']"
                 class="p-column-filter"
                 placeholder="Search by languages"
               />
             </template>
             <template #body="slotProps">
-              {{ slotProps.data.userLanguages }}
+              {{ slotProps.data.languages }}
             </template>
           </Column>
         </DataTable>
@@ -159,14 +149,23 @@ import { Options, Vue } from 'vue-class-component';
 import MainLayout from '@/components/layouts/MainLayout.vue';
 import Customer from '@/models/Customer';
 import CustomerService from '@/services/CustomerService';
+import Rating from 'primevue/rating';
 import { useToast } from 'primevue/usetoast';
 import qs from 'qs';
 // import { toast } from '@/utils/helper';
 
-@Options({
+interface CustomerLazyParameters {
+  page: number;
+  limit: number;
+  name: string;
+}
+
+
+@Options<CustomerList>({
   components: { MainLayout, },
 })
-export default class Customers extends Vue {
+
+export default class CustomerList extends Vue {
   isLoading = false;
   totalRecords = 0;
   customers: Customer[] = [];
@@ -176,6 +175,9 @@ export default class Customers extends Vue {
   filters: Record<string, unknown> = {};
   submitted = false;
   toast = useToast();
+  lazyParams: Partial<CustomerLazyParameters> = {};
+  firstRecordIndex = 0;
+  rowstoDisplay = 10;
 
   created() {
     // watch the params of the route to fetch the data again
@@ -191,17 +193,23 @@ export default class Customers extends Vue {
   }
 
   getData() {
-    this.isLoading = true;
-    this.service.getAllPaginated(this.service.allUsers).then(data => {
-      this.datasource = data.items.map((cust) => new Customer(cust));
-      this.totalRecords = data.totalCount;
-      this.isLoading = false;
-      console.log("users will soon show")
-    }).catch((e) => {
-      this.toast.add({ severity: "error", summary: "There was an error fetching the customers", detail: "Please check your internet connection and refresh the page" })
-      console.log(e);
-    });
+    this.isLoading = true
+    this.lazyParams = { page: 1, limit: this.rowstoDisplay }
+    this.loadLazyData();
   }
+  
+  loadLazyData() {
+    this.isLoading = true;
+    this.service.getAllPaginated(`${qs.stringify(this.lazyParams)}`)
+      .then(data => {
+        this.customers = data.items.map((prod) => new Customer(prod));
+        this.totalRecords = data.totalCount;
+        this.firstRecordIndex = data.page > 1 ? data.pageSize * data.page - 1 : 0;
+        this.rowstoDisplay = data.pageSize;
+        this.isLoading = false;
+      });
+  }
+
 }
 </script>
 

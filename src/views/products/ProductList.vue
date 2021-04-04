@@ -524,7 +524,6 @@ export default class ProductList extends Vue {
               >
             </template>
           </Column>
-          
         </DataTable>
       </template>
     </Card>

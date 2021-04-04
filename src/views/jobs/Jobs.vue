@@ -38,7 +38,7 @@
           <template #loading>
             Loading jobs data. Please wait.
           </template>
-        <Column
+          <Column
             field="CustomerName"
             headerStyle="width: 250px"
             header="Customer"

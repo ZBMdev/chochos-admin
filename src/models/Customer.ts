@@ -34,23 +34,23 @@ export default class Customer extends Model {
     }
 
     get userName() {
-        return `${this.username}`;
+        return this.username;
     }
 
     get userEmail() {
-        return `${this.email}`;
+        return this.email;
     }
 
     get houseAddress() {
-        return `${this.address}`;
+        return this.address;
     }
 
     get userLanguages() {
-        return `${this.languages}`;
+        return this.languages;
     }
 
     get last_login_date() {
-        return `${this.toDaysAgo(this.last_login)}`;
+        return this.toDaysAgo(this.last_login);
     }
 
     toCreateParam(password: string) {
