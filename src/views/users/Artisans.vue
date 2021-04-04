@@ -7,16 +7,16 @@
     <Card v-else>
       <template #content>
         <DataTable
-          class="artisans p-datatable-sm"
+          class="p-datatable-responsive p-datatable-sm"
           ref="artisan-dt"
           :value="artisans"
           v-model:selection="selectedArtisans"
           dataKey="id"
           :paginator="true"
-          :rows="25"
+          :rows="15"
           :filters="filters"
           paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
-          :rowsPerPageOptions="[25, 50, 100, 200]"
+          :rowsPerPageOptions="[15, 30, 45, 60, 75]"
           currentPageReportTemplate="Showing {first} to {last} of {totalRecords} artisans"
           :scrollable="true"
           style="width: 100%"
@@ -42,7 +42,12 @@
               </div>
             </div>
           </template>
-
+          <template #empty>
+            No artisan found.
+          </template>
+          <template #loading>
+            Loading artisans data. Please wait.
+          </template>
           <Column
             selectionMode="multiple"
             headerStyle="width: 2.3rem"
@@ -56,7 +61,7 @@
             filterMode="contains"
           >
             <template #body="slotProps">
-              {{ slotProps.data.items.fullName }}
+              {{ slotProps.data.fullName }}
             </template>
             <template #filter>
               <InputText
@@ -69,13 +74,13 @@
           </Column>
           <Column
             field="username"
-            headerStyle="width: 150px"
-            header="Skills"
+            headerStyle="width: 250px"
+            header="Name"
             :sortable="true"
             filterMode="contains"
           >
             <template #body="slotProps">
-              {{ slotProps.data.about }} 
+              {{ slotProps.data.username }}
             </template>
             <template #filter>
               <InputText
@@ -94,7 +99,7 @@
             filterMode="contains"
           >
             <template #body="slotProps">
-              {{ slotProps.data.items.email }}
+              {{ slotProps.data.email }}
             </template>
             <template #filter>
               <InputText
@@ -103,6 +108,19 @@
                 class="p-column-filter"
                 placeholder="Search by email"
               />
+            </template>
+          </Column>
+          <Column
+            field="about"
+            headerStyle="width: 150px"
+            header="About"
+            :sortable="true"
+            filterMode="contains"
+          >
+            <template #body="slotProps">
+              <span
+                v-html="`${slotProps.data.about.substr(0, 10)}...`"
+              ></span>
             </template>
           </Column>
           <Column
@@ -125,13 +143,18 @@
             </template>
           </Column>
           <Column
-            field="totalRatingValue"
-            headerStyle="width: 150px"
-            header="Rating"
-            :sortable="true"
+            field="rating"
+            header="Reviews"
+            filterField="rating"
+            filterMatchMode="contains"
           >
             <template #body="slotProps">
-              {{ slotProps.data.totalRatingValue }}
+              <span class="p-column-title">Reviews</span>
+              <Rating
+                :modelValue="slotProps.data.rating"
+                :readonly="true"
+                :cancel="false"
+              />
             </template>
           </Column>
           <Column
@@ -174,7 +197,19 @@ import MainLayout from '@/components/layouts/MainLayout.vue';
 import Artisan from '@/models/Artisan';
 import ArtisanService from '@/services/ArtisanService';
 import { useToast } from 'primevue/usetoast';
+import qs from 'qs';
 // import { toast } from '@/utils/helper';
+
+interface ArtisanLazyParameters {
+  page: number;
+  limit: number;
+  name: string;
+  maxPrice: string;
+  minPrice: string;
+  rating: number;
+  discount: number;
+  isPublished: boolean;
+}
 
 @Options({
   components: { MainLayout, },
@@ -184,7 +219,7 @@ export default class Artisans extends Vue {
   artisans: Artisan[] = [];
   datasource: Artisan[] = [];
   totalRecords = 0;
-  artisanService = new ArtisanService();
+  service: ArtisanService = new ArtisanService();
   selectedArtisans: Artisan[] = [];
   filters: Record<string, unknown> = {};
   submitted = false;
@@ -205,13 +240,13 @@ export default class Artisans extends Vue {
 
   getData() {
     this.isLoading = true;
-    this.artisanService.getAllPaginated(this.artisanService.allUsers).then(data => {
+    this.service.getAllPaginated(this.service.allArtisans).then(data => {
       this.datasource = data.items.map((cust) => new Artisan(cust));
       this.totalRecords = data.totalCount;
       this.isLoading = false;
       console.log("users will soon show")
     }).catch((e) => {
-      this.toast.add({ severity: "error", summary: "There was an error fetching the customers", detail: "Please check your internet connection and refresh the page" })
+      this.toast.add({ severity: "error", summary: "There was an error fetching the artisans", detail: "Please check your internet connection and refresh the page" })
       console.log(e);
     });
   }

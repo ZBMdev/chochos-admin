@@ -41,7 +41,7 @@ export default class Product extends Model {
         return (this.quantity > 10) ? StockStatus.INSTOCK : (this.quantity > 0) ? StockStatus.LOWSTOCK : StockStatus.OUTOFSTOCK;
     }
 
-    get avergaeRating() {
+    get averageRating() {
         return this.rating;
     }
     get priceCurrency() {

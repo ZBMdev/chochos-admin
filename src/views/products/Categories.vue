@@ -388,12 +388,12 @@ export default class Categories extends Vue {
     <Card v-else>
       <template #content>
         <DataTable
-         :value="products"
+         :value="categories"
         >
         <Column
             field="name"
             headerStyle="width: 250px"
-            header="Product"
+            header="Name"
             :sortable="true"
             filterMode="contains"
           >
@@ -410,72 +410,16 @@ export default class Categories extends Vue {
             </template>
           </Column>
           <Column
-            header="Image"
-            headerStyle="width:4rem;">
-            <template #body="slotProps">
-              <span class="p-column-title">Image</span>
-              <img
-                :src="slotProps.data.mainImage"
-                :alt="slotProps.data.name"
-                class="product-image"
-              />
-            </template>
-          </Column>
-          <Column
-            ref="price"
-            field="unitPrice"
-            header="Price"
-            filterField="price"
-            filterMatchMode="contains"
-          >
-            <template #body="slotProps">
-              <span class="p-column-title">Price</span>
-              {{ formatCurrency(slotProps.data.unitPrice) }}
-            </template>
-          </Column>
-          <Column
             field="categories"
-            header="Category"
+            header="Date"
             filterField="categories"
             filterMatchMode="contains"
           >
             <template #body="slotProps">
-              <span class="p-column-title">Categories</span>
-              {{ slotProps.data.categoriesNames }}
+              <span class="p-column-title">Date</span>
+              {{ slotProps.data.createdAtFormated }}
             </template>
           </Column>
-          <Column
-            field="rating"
-            header="Reviews"
-            filterField="rating"
-            filterMatchMode="contains"
-          >
-            <template #body="slotProps">
-              <span class="p-column-title">Reviews</span>
-              <Rating
-                :modelValue="slotProps.data.rating"
-                :readonly="true"
-                :cancel="false"
-              />
-            </template>
-          </Column>
-          <Column
-            header="Status"
-            filterField="quantity"
-            filterMatchMode="contains"
-          >
-            <template #body="slotProps">
-              <span class="p-column-title">Status</span>
-              <span
-                :class="
-                  'product-badge status-' +
-                    slotProps.data.stockAvailability.toLowerCase()
-                "
-                >{{ slotProps.data.stockAvailability }}</span
-              >
-            </template>
-          </Column>
-          
         </DataTable>
       </template>
     </Card>

@@ -8,10 +8,38 @@
     <Card v-else>
       <template #content>
         <DataTable
-         :value="jobs"
+          dataKey="id"
+          class="p-datatable-responsive p-datatable-sm"
+          :value="jobs"
+          :paginator="true"
+          :rows="10"
+          :rowsPerPageOptions="[10, 20, 50, 100, 200]"
+          currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
+          paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
+          paginatorPosition="both"
+          :totalRecords="totalRecords"
+          :loading="isLoading"
+          :first="firstRecordIndex"
         >
+          <template #header>
+            <div class="table-header p-d-flex">
+              <span class="p-input-icon-left">
+                <i class="pi pi-search" />
+                <InputText
+                  v-model="filters['global']"
+                  placeholder="Search..."
+                />
+              </span>
+            </div>
+          </template>
+          <template #empty>
+            No job found.
+          </template>
+          <template #loading>
+            Loading jobs data. Please wait.
+          </template>
         <Column
-            field="name"
+            field="CustomerName"
             headerStyle="width: 250px"
             header="Customer"
             :sortable="true"
@@ -20,7 +48,7 @@
             <template #filter>
               <InputText
                 type="text"
-                v-model="filters['name']"
+                v-model="filters['CustomerName']"
                 class="p-column-filter"
                 placeholder="Search by name"
               />
@@ -28,7 +56,8 @@
             <template #body="slotProps">
               {{ slotProps.data.customerName }}
             </template>
-          </Column> <Column
+          </Column>
+          <Column
             field="name"
             headerStyle="width: 250px"
             header="Executor"
@@ -56,26 +85,48 @@
           >
             <template #body="slotProps">
               <span class="p-column-title">Amount</span>
-              {{ formatCurrency(slotProps.data.amount) }}
+              {{ formatCurrency(slotProps.data.productsAmount) }}
             </template>
           </Column>
           <Column
-            header="Status"
-            filterField="quantity"
+            ref="date"
+            field="date"
+            header="Start Date"
+            filterField="date"
             filterMatchMode="contains"
           >
             <template #body="slotProps">
-              <span class="p-column-title">Status</span>
-              <span
-                :class="
-                  'product-badge status-' +
-                    slotProps.data.stockAvailability.toLowerCase()
-                "
-                >{{ slotProps.data.stockAvailability }}</span
-              >
+              <span class="p-column-title">Start Date</span>
+              {{ slotProps.data.start_date }}
             </template>
-          </Column>
-          
+          </Column>  
+          <Column
+            ref="status"
+            field="status"
+            header="Job Status"
+            filterField="status"
+            filterMatchMode="contains"
+          >
+            <template #body="slotProps">
+              <span class="p-column-title">Job Status</span>
+              {{ slotProps.data.status }}
+            </template>
+          </Column>  
+          <Column
+            field="rating"
+            header="Job Reviews"
+            filterField="rating"
+            filterMatchMode="contains"
+          >
+            <template #body="slotProps">
+              <span class="p-column-title">Job Reviews</span>
+              <Rating
+                :modelValue="slotProps.data.customerReview"
+                :readonly="true"
+                :cancel="false"
+              />
+            </template>
+          </Column>    
         </DataTable>
       </template>
     </Card>
@@ -103,7 +154,7 @@ export default class ProductList extends Vue {
   jobs: Job[] = [];
   selectedJobs: Job[] = [];
   filterValue = '';
-  loading = false;
+  isLoading = false;
   generalLoading = false;
   totalRecords = 0;
   service: JobService = new JobService();
@@ -132,7 +183,7 @@ export default class ProductList extends Vue {
 
   getData() {
     this.generalLoading = true
-    this.loading = true;
+    this.isLoading = true;
     this.lazyParams = { page: 1, limit: this.rowstoDisplay }
     this.loadLazyData();
   }
@@ -170,14 +221,14 @@ export default class ProductList extends Vue {
   } */
 
   loadLazyData() {
-    this.loading = true;
+    this.isLoading = true;
     this.service.getAllPaginated(`${qs.stringify(this.lazyParams)}`)
       .then(data => {
         this.jobs = data.items.map((prod) => new Job(prod));
         this.totalRecords = data.totalCount;
         this.firstRecordIndex = data.page > 1 ? data.pageSize * data.page - 1 : 0;
         this.rowstoDisplay = data.pageSize;
-        this.loading = false;
+        this.isLoading = false;
         this.generalLoading = false;
       });
   }

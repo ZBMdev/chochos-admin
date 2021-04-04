@@ -37,6 +37,11 @@ export default class Job extends Model {
     get customerName() {
         return `${this.customer.fullName}`.trim();
     }
+
+    get customerReview() {
+        return `${this.customer.rating}`;
+    }
+
     get amount() {
         return this.totalAmount.toLocaleString('en-NG', { style: 'currency', currency: 'NGN' });
     }

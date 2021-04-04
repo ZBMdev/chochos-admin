@@ -9,9 +9,7 @@
       <template #content>
         <DataTable
           class="customers p-datatable-sm"
-          ref="customer-dt"
           :value="customers"
-          v-model:selection="selectedCustomers"
           dataKey="id"
           :paginator="true"
           :rows="25"
@@ -34,14 +32,29 @@
               </span>
             </div>
           </template>
-
+          <template #empty>
+            No user found.
+          </template>
+          <template #loading>
+            Loading users data. Please wait.
+          </template>
           <Column
             selectionMode="multiple"
             headerStyle="width: 2.3rem"
             :exportable="true"
           ></Column>
+          <Column field="name" headerStyle="width: 3rem;">
+            <template #body="{data}">
+              <Avatar
+                :label="data.name.charAt(0).toUpperCase()"
+                class="p-mr-2"
+                style="background-color:#c8e6c9;color:#256029"
+                shape="circle"
+              />
+            </template>
+          </Column>
           <Column
-            field="fullName"
+            field="name"
             headerStyle="width: 250px"
             header="Name"
             :sortable="true"
@@ -50,7 +63,7 @@
             <template #filter>
               <InputText
                 type="text"
-                v-model="filters['fullName']"
+                v-model="filters['name']"
                 class="p-column-filter"
                 placeholder="Search by name"
               />
@@ -60,7 +73,7 @@
             </template>
           </Column>
           <Column
-            field="username"
+            field="userName"
             headerStyle="width: 250px"
             header="Username"
             :sortable="true"
@@ -69,16 +82,17 @@
             <template #filter>
               <InputText
                 type="text"
-                v-model="filters['username']"
+                v-model="filters['userName']"
                 class="p-column-filter"
-                placeholder="Search by name"
+                placeholder="Search by username"
               />
             </template>
             <template #body="slotProps">
-              {{ slotProps.data.username }}
+              {{ slotProps.data.userName }}
             </template>
-          </Column><Column
-            field="email"
+          </Column>
+          <Column
+            field="userEmail"
             headerStyle="width: 250px"
             header="Email"
             :sortable="true"
@@ -87,17 +101,17 @@
             <template #filter>
               <InputText
                 type="text"
-                v-model="filters['email']"
+                v-model="filters['userEmail']"
                 class="p-column-filter"
-                placeholder="Search by name"
+                placeholder="Search by email"
               />
             </template>
             <template #body="slotProps">
-              {{ slotProps.items.email }}
+              {{ slotProps.data.userEmail }}
             </template>
           </Column>        
           <Column
-            field="address"
+            field="houseAddress"
             headerStyle="width: 250px"
             header="Address"
             :sortable="true"
@@ -106,13 +120,32 @@
             <template #filter>
               <InputText
                 type="text"
-                v-model="filters['address']"
+                v-model="filters['houseAddress']"
                 class="p-column-filter"
-                placeholder="Search by name"
+                placeholder="Search by address"
               />
             </template>
             <template #body="slotProps">
-              {{ slotProps.items.address }}
+              {{ slotProps.data.houseAddress }}
+            </template>
+          </Column>
+          <Column
+            field="userLanguages"
+            headerStyle="width: 250px"
+            header="Languages"
+            :sortable="true"
+            filterMode="contains"
+          >
+            <template #filter>
+              <InputText
+                type="text"
+                v-model="filters['userLanguages']"
+                class="p-column-filter"
+                placeholder="Search by languages"
+              />
+            </template>
+            <template #body="slotProps">
+              {{ slotProps.data.userLanguages }}
             </template>
           </Column>
         </DataTable>
@@ -127,6 +160,7 @@ import MainLayout from '@/components/layouts/MainLayout.vue';
 import Customer from '@/models/Customer';
 import CustomerService from '@/services/CustomerService';
 import { useToast } from 'primevue/usetoast';
+import qs from 'qs';
 // import { toast } from '@/utils/helper';
 
 @Options({
@@ -135,10 +169,9 @@ import { useToast } from 'primevue/usetoast';
 export default class Customers extends Vue {
   isLoading = false;
   totalRecords = 0;
-  fullNames = '';
   customers: Customer[] = [];
   datasource: Customer[] = [];
-  customerService = new CustomerService();
+  service: CustomerService = new CustomerService();
   selectedCustomers: Customer[] = [];
   filters: Record<string, unknown> = {};
   submitted = false;
@@ -159,7 +192,7 @@ export default class Customers extends Vue {
 
   getData() {
     this.isLoading = true;
-    this.customerService.getAllPaginated(this.customerService.allUsers).then(data => {
+    this.service.getAllPaginated(this.service.allUsers).then(data => {
       this.datasource = data.items.map((cust) => new Customer(cust));
       this.totalRecords = data.totalCount;
       this.isLoading = false;

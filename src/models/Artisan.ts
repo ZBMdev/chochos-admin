@@ -33,6 +33,10 @@ export default class Artisan extends Model {
         return `${this.firstName} ${this.lastName}`.trim();
     }
 
+    get aboutArtisan() {
+        return this.about;
+    }
+
     get last_login_date() {
         return this.toDaysAgo(this.last_login);
     }

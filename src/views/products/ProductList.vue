@@ -416,23 +416,44 @@ export default class ProductList extends Vue {
     <Card v-else>
       <template #content>
         <DataTable
-         :value="products"
+          dataKey="id"
+          class="p-datatable-responsive p-datatable-sm"
+          :value="products"
+          :paginator="true"
+          :rows="10"
+          :rowsPerPageOptions="[10, 20, 50, 100, 200]"
+          currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
+          paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
+          :lazy="true"
+          paginatorPosition="both"
+          :totalRecords="totalRecords"
+          :loading="loading"
+          :first="firstRecordIndex"
         >
+          <template #header>
+            <div class="table-header">
+              Products
+              <span class="p-input-icon-left">
+                <i class="pi pi-search" />
+                <InputText
+                  v-model="filterValue"
+                  placeholder="Search products"
+                  @keypress.enter="filterProducts"
+                />
+              </span>
+            </div>
+          </template>
+          <template #empty>
+            No products found.
+          </template>
+          <template #loading>
+            Loading products data. Please wait.
+          </template>
         <Column
             field="name"
             headerStyle="width: 250px"
-            header="Product"
-            :sortable="true"
-            filterMode="contains"
+            header="Name"
           >
-            <template #filter>
-              <InputText
-                type="text"
-                v-model="filters['name']"
-                class="p-column-filter"
-                placeholder="Search by name"
-              />
-            </template>
             <template #body="slotProps">
               {{ slotProps.data.name }}
             </template>
@@ -481,7 +502,7 @@ export default class ProductList extends Vue {
             <template #body="slotProps">
               <span class="p-column-title">Reviews</span>
               <Rating
-                :modelValue="slotProps.data.averageRating"
+                :modelValue="slotProps.data.rating"
                 :readonly="true"
                 :cancel="false"
               />

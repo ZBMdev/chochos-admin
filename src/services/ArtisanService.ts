@@ -8,7 +8,7 @@ import qs from 'qs';
 export default class ArtisanService extends Service<ArtisanData, ArtisanRegisterParams>{
     url = "/artisans";
 
-    allUsers = qs.stringify({
+    allArtisans = qs.stringify({
         limit: 1000000
     });
 }
