@@ -71,6 +71,14 @@ const routes: Array<RouteRecordRaw> = [
         }
       },
       {
+        path: '/skills',
+        name: 'Skills',
+        component: () => import('../views/users/Skills.vue'),
+        meta: {
+          title: `Skills`,
+        }
+      },
+      {
         path: '/jobs',
         name: 'jobs',
         component: () => import('../views/jobs/Jobs.vue'),

@@ -6,6 +6,7 @@ import store from './store'
 import PrimeVue from 'primevue/config'
 import Accordion from 'primevue/accordion';
 import AccordionTab from 'primevue/accordiontab';
+import Avatar from 'primevue/avatar';
 import Button from 'primevue/button';
 import firebase from 'firebase/app';
 import Password from 'primevue/password';
@@ -45,7 +46,9 @@ import ProgressSpinner from 'primevue/progressspinner';
 import Message from 'primevue/message';
 import MultiSelect from 'primevue/multiselect';
 
+import Rating from 'primevue/rating';
 import Sidebar from 'primevue/sidebar';
+
 import TabPanel from 'primevue/tabpanel';
 import TabView from 'primevue/tabview';
 import Tag from 'primevue/tag';
@@ -99,6 +102,7 @@ app.use(router)
 
 app.component('Accordion', Accordion);
 app.component('AccordionTab', AccordionTab);
+app.component('Avatar', Avatar);
 app.component('Button', Button);
 app.component('Password', Password);
 
@@ -136,7 +140,9 @@ app.component('ProgressSpinner', ProgressSpinner);
 app.component('Message', Message);
 app.component('MultiSelect', MultiSelect);
 
+app.component('Rating', Rating);
 app.component('Sidebar', Sidebar);
+
 app.component('TabPanel', TabPanel);
 app.component('TabView', TabView);
 app.component('Tag', Tag);

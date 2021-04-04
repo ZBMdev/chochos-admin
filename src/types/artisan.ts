@@ -75,7 +75,7 @@ export interface ArtisanData {
     address:          string;
     mobile:           string;
     photoUrl:         string;
-    last_login:      string;
+    last_login:       Date;
     about:            string;
     languages:        Languages;
     categoryId:       number ;

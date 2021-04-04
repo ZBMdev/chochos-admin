@@ -8,7 +8,8 @@
     <Card v-else>
       <template #content>
         <DataTable
-          class="customers p-datatable-sm"
+          dataKey="id"
+          class="p-datatable-responsive p-datatable-sm"
           :value="customers"
           :paginator="true"
           :rows="10"
@@ -16,10 +17,13 @@
           currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
           paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
           :lazy="true"
+          responsiveLayout="scroll"
+          :scrollable="true"
           paginatorPosition="both"
           :totalRecords="totalRecords"
           :loading="isLoading"
           :first="firstRecordIndex"
+          :rowHover="true"
         >
           <template #header>
             <div class="table-header p-d-flex">
@@ -38,11 +42,16 @@
           <template #loading>
             Loading users data. Please wait.
           </template>
-          <Column
-            selectionMode="multiple"
-            headerStyle="width: 2.3rem"
-            :exportable="true"
-          ></Column>
+          <Column field="name" headerStyle="width: 3rem;">
+            <template #body="{data}">
+              <Avatar
+                :label="data.name.charAt(0).toUpperCase()"
+                class="p-mr-2"
+                style="background-color:#c8e6c9;color:#256029"
+                shape="circle"
+              />
+            </template>
+          </Column>
           <Column
             field="name"
             headerStyle="width: 250px"
@@ -207,7 +216,10 @@ export default class CustomerList extends Vue {
         this.firstRecordIndex = data.page > 1 ? data.pageSize * data.page - 1 : 0;
         this.rowstoDisplay = data.pageSize;
         this.isLoading = false;
-      });
+      }).catch((e) => {
+      this.toast.add({ severity: "error", summary: "There was an error fetching the customers", detail: "Please check your internet connection and refresh the page" })
+      console.log(e);
+    });
   }
 
 }

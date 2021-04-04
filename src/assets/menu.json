@@ -29,11 +29,6 @@
 				"label": "New Product",
 				"icon": "pi pi-plus-circle",
 				"to": "/products/new"
-			},
-			{
-				"label": "Categories",
-				"icon": "pi pi-tags",
-				"to": "/categories"
 			}
 		]
 	},
@@ -41,12 +36,17 @@
 		"separator": true
 	},
 	{
-		"label": "Occupations",
+		"label": "Categories",
 		"items": [
 			{
-				"label": "All Occupations",
-				"icon": "pi pi-th-large",
-				"to": "/jobs"
+				"label": "Products",
+				"icon": "pi pi-tags",
+				"to": "/categories"
+			},
+			{
+				"label": "Skills",
+				"icon": "pi pi-tools",
+				"to": "/skills"
 			}
 		]
 	},
@@ -57,7 +57,7 @@
 		"label": "Transactions",
 		"items": [
 			{
-				"label": "Job Requests",
+				"label": "Jobs",
 				"icon": "pi pi-briefcase",
 				"to": "/job-requests"
 			},

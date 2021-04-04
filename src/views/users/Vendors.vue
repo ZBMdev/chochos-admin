@@ -7,18 +7,20 @@
     <Card v-else>
       <template #content>
         <DataTable
-          class="vendors p-datatable-sm"
+          class="p-datatable-responsive p-datatable-sm"
           ref="vendor-dt"
           :value="vendors"
           v-model:selection="selectedVendors"
           dataKey="id"
-          :paginator="true"
-          :rows="25"
+          :rows="10"
           :filters="filters"
+          :paginator="true"
+          paginatorPosition="both"
           paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
-          :rowsPerPageOptions="[25, 50, 100, 200]"
+          :rowsPerPageOptions="[10,20, 50, 100, 200]"
           currentPageReportTemplate="Showing {first} to {last} of {totalRecords} vendors"
           :scrollable="true"
+          :rowHover="true"
           style="width: 100%"
         >
           <template #header>
@@ -30,24 +32,13 @@
                   placeholder="Search..."
                 />
               </span>
-              <div class="p-ml-auto">
-                <span class="p-mr-2">Filter By</span>
-                <Dropdown
-                  class="filter-by p-ml-2"
-                  v-model="selectedFilter"
-                  :options="fitlterOptions"
-                  placeholder="Filter By"
-                  @change="filterTable"
-                />
-              </div>
             </div>
+          </template> <template #empty>
+            No vendor found.
           </template>
-
-          <Column
-            selectionMode="multiple"
-            headerStyle="width: 2.3rem"
-            :exportable="true"
-          ></Column>
+          <template #loading>
+            Loading vendors data. Please wait.
+          </template>
           <Column
             field="name"
             headerStyle="width: 250px"
@@ -56,15 +47,7 @@
             filterMode="contains"
           >
             <template #body="slotProps">
-              {{ slotProps.data.items.fullName }}
-            </template>
-            <template #filter>
-              <InputText
-                type="text"
-                v-model="filters['name']"
-                class="p-column-filter"
-                placeholder="Search by name"
-              />
+              {{ slotProps.data.fullName }}
             </template>
           </Column>
           <Column
@@ -77,14 +60,6 @@
             <template #body="slotProps">
               {{ slotProps.data.username }}
             </template>
-            <template #filter>
-              <InputText
-                type="text"
-                v-model="filters['username']"
-                class="p-column-filter"
-                placeholder="Search by username"
-              />
-            </template>
           </Column>
           <Column
             field="email"
@@ -94,15 +69,7 @@
             filterMode="contains"
           >
             <template #body="slotProps">
-              {{ slotProps.data.items.email }}
-            </template>
-            <template #filter>
-              <InputText
-                type="text"
-                v-model="filters['email']"
-                class="p-column-filter"
-                placeholder="Search by email"
-              />
+              {{ slotProps.data.email }}
             </template>
           </Column>
           <Column
@@ -113,25 +80,23 @@
             :sortable="true"
           >
             <template #body="slotProps">
-              {{ slotProps.data.last_login }}
-            </template>
-            <template #filter>
-              <InputText
-                type="text"
-                v-model="filters['last_login']"
-                class="p-column-filter"
-                placeholder="Search by last active"
-              />
+              {{ slotProps.data.lastLogin }}
             </template>
           </Column>
           <Column
-            field="totalRatingValue"
-            headerStyle="width: 150px"
-            header="Rating"
-            :sortable="true"
+            field="rating"
+            headerStyle="width: 250px"
+            header="Reviews"
+            filterField="rating"
+            filterMatchMode="contains"
           >
             <template #body="slotProps">
-              {{ slotProps.data.totalRatingValue }}
+              <span class="p-column-title">Reviews</span>
+              <Rating
+                :modelValue="slotProps.data.rating"
+                :readonly="true"
+                :cancel="false"
+              />
             </template>
           </Column>
           <Column
@@ -153,14 +118,6 @@
             <template #body="slotProps">
               {{ slotProps.data.address}}
             </template>
-            <template #filter>
-              <InputText
-                type="text"
-                v-model="filters['address']"
-                class="p-column-filter"
-                placeholder="Search by address"
-              />
-            </template>
           </Column>
         </DataTable>
       </template>
@@ -174,7 +131,14 @@ import MainLayout from '@/components/layouts/MainLayout.vue';
 import Vendor from '@/models/Vendor';
 import VendorService from '@/services/VendorService';
 import { useToast } from 'primevue/usetoast';
+import qs from 'qs';
 // import { toast } from '@/utils/helper';
+
+interface VendorLazyParameters {
+  page: number;
+  limit: number;
+  name: string;
+}
 
 @Options({
   components: { MainLayout, },
@@ -184,11 +148,14 @@ export default class Vendors extends Vue {
   vendors: Vendor[] = [];
   datasource: Vendor[] = [];
   totalRecords = 0;
-  vendorService = new VendorService();
+  service: VendorService = new VendorService();
   selectedVendors: Vendor[] = [];
   filters: Record<string, unknown> = {};
   submitted = false;
   toast = useToast();
+  lazyParams: Partial<VendorLazyParameters> = {};
+  firstRecordIndex = 0;
+  rowstoDisplay = 10;
 
   created() {
     // watch the params of the route to fetch the data again
@@ -204,17 +171,26 @@ export default class Vendors extends Vue {
   }
 
   getData() {
+    this.isLoading = true
+    this.lazyParams = { page: 1, limit: this.rowstoDisplay }
+    this.loadLazyData();
+  }
+  
+  loadLazyData() {
     this.isLoading = true;
-    this.vendorService.getAllPaginated(this.vendorService.allUsers).then(data => {
-      this.datasource = data.items.map((cust) => new Vendor(cust));
-      this.totalRecords = data.totalCount;
-      this.isLoading = false;
-      console.log("Vendors will soon show")
-    }).catch((e) => {
-      this.toast.add({ severity: "error", summary: "There was an error fetching the customers", detail: "Please check your internet connection and refresh the page" })
+    this.service.getAllPaginated(`${qs.stringify(this.lazyParams)}`)
+      .then(data => {
+        this.vendors = data.items.map((prod) => new Vendor(prod));
+        this.totalRecords = data.totalCount;
+        this.firstRecordIndex = data.page > 1 ? data.pageSize * data.page - 1 : 0;
+        this.rowstoDisplay = data.pageSize;
+        this.isLoading = false;
+      }).catch((e) => {
+      this.toast.add({ severity: "error", summary: "There was an error fetching the vendors", detail: "Please check your internet connection and refresh the page" })
       console.log(e);
     });
   }
+
 }
 </script>
 

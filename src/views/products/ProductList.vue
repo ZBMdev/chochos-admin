@@ -429,6 +429,7 @@ export default class ProductList extends Vue {
           :totalRecords="totalRecords"
           :loading="loading"
           :first="firstRecordIndex"
+          :rowHover="true"
         >
           <template #header>
             <div class="table-header">

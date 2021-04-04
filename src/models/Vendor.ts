@@ -17,7 +17,7 @@ export default class Vendor extends Model {
     address!:          string;
     mobile!:           string;
     photoUrl!:         string;
-    last_login!:      string;
+    last_login!:       Date;
     about!:            string;
     languages!:        Languages;
     categoryId!:       number ;
@@ -33,8 +33,8 @@ export default class Vendor extends Model {
         return `${this.firstName} ${this.lastName}`.trim();
     }
 
-    get last_login_date() {
-        return this.toDaysAgo(this.last_login);
+    get lastLogin() {
+        return this.formatDate(this.last_login)
     }
 
     toCreateParam(password: string) {

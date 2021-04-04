@@ -13,13 +13,15 @@
           v-model:selection="selectedArtisans"
           dataKey="id"
           :paginator="true"
-          :rows="15"
+          paginatorPosition="both"
+          :rows="10"
           :filters="filters"
           paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
-          :rowsPerPageOptions="[15, 30, 45, 60, 75]"
+          :rowsPerPageOptions="[10, 20, 50, 100, 200]"
           currentPageReportTemplate="Showing {first} to {last} of {totalRecords} artisans"
           :scrollable="true"
-          style="width: 100%"
+          responsiveLayout="scroll"
+          :rowHover="true"
         >
           <template #header>
             <div class="table-header p-d-flex">
@@ -30,16 +32,6 @@
                   placeholder="Search..."
                 />
               </span>
-              <div class="p-ml-auto">
-                <span class="p-mr-2">Filter By</span>
-                <Dropdown
-                  class="filter-by p-ml-2"
-                  v-model="selectedFilter"
-                  :options="fitlterOptions"
-                  placeholder="Filter By"
-                  @change="filterTable"
-                />
-              </div>
             </div>
           </template>
           <template #empty>
@@ -48,14 +40,20 @@
           <template #loading>
             Loading artisans data. Please wait.
           </template>
-          <Column
-            selectionMode="multiple"
-            headerStyle="width: 2.3rem"
-            :exportable="true"
-          ></Column>
+          <Column field="name" headerStyle="width: 3rem;">
+            <template #body="slotProps">
+              <Avatar
+                :label="slotProps.data.name.charAt(0).toUpperCase()"
+                class="p-mr-2"
+                style="background-color:#c8e6c9;color:#256029"
+                shape="circle"
+              />
+            </template>
+          </Column>
           <Column
             field="name"
-            headerStyle="width: 250px"
+            style="min-width: 14rem"
+            headerStyle="min-width: 14rem"
             header="Name"
             :sortable="true"
             filterMode="contains"
@@ -74,8 +72,9 @@
           </Column>
           <Column
             field="username"
-            headerStyle="width: 250px"
-            header="Name"
+            style="min-width: 14rem"
+            headerStyle="min-width: 14rem"
+            header="Username"
             :sortable="true"
             filterMode="contains"
           >
@@ -93,7 +92,8 @@
           </Column>
           <Column
             field="email"
-            headerStyle="width: 250px"
+            style="min-width: 14rem"
+            headerStyle="min-width: 14rem"
             header="Email"
             :sortable="true"
             filterMode="contains"
@@ -112,26 +112,28 @@
           </Column>
           <Column
             field="about"
-            headerStyle="width: 150px"
+            style="min-width: 14rem"
+            headerStyle="min-width: 14rem"
             header="About"
             :sortable="true"
             filterMode="contains"
           >
             <template #body="slotProps">
               <span
-                v-html="`${slotProps.data.about.substr(0, 10)}...`"
+                v-html="`${slotProps.data.about.substr(0, 15)}...`"
               ></span>
             </template>
           </Column>
           <Column
             field="last_login"
-            headerStyle="width: 150px"
+            style="min-width: 10rem"
+            headerStyle="min-width: 10rem"
             header="Last active"
             sortField="last_login_date"
             :sortable="true"
           >
             <template #body="slotProps">
-              {{ slotProps.data.last_login }}
+              {{ slotProps.data.lastLogin }}
             </template>
             <template #filter>
               <InputText
@@ -145,6 +147,8 @@
           <Column
             field="rating"
             header="Reviews"
+            style="min-width: 10rem"
+            headerStyle="min-width: 10rem"
             filterField="rating"
             filterMatchMode="contains"
           >
@@ -159,7 +163,8 @@
           </Column>
           <Column
             field="languages"
-            headerStyle="width: 150px"
+            style="min-width: 10rem"
+            headerStyle="min-width: 10rem"
             header="Languages"
             :sortable="true"
           >
@@ -169,7 +174,8 @@
           </Column>
           <Column
             field="address"
-            headerStyle="width: 150px"
+            style="min-width: 14rem"
+            headerStyle="min-width: 14rem"
             header="Address"
             :sortable="true"
           >
@@ -204,16 +210,12 @@ interface ArtisanLazyParameters {
   page: number;
   limit: number;
   name: string;
-  maxPrice: string;
-  minPrice: string;
-  rating: number;
-  discount: number;
-  isPublished: boolean;
 }
 
 @Options({
   components: { MainLayout, },
-})
+}) 
+
 export default class Artisans extends Vue {
   isLoading = false;
   artisans: Artisan[] = [];
@@ -224,6 +226,9 @@ export default class Artisans extends Vue {
   filters: Record<string, unknown> = {};
   submitted = false;
   toast = useToast();
+  lazyParams: Partial<ArtisanLazyParameters> = {};
+  firstRecordIndex = 0;
+  rowstoDisplay = 10;
 
   created() {
     // watch the params of the route to fetch the data again
@@ -239,17 +244,26 @@ export default class Artisans extends Vue {
   }
 
   getData() {
+    this.isLoading = true
+    this.lazyParams = { page: 1, limit: this.rowstoDisplay }
+    this.loadLazyData();
+  }
+  
+  loadLazyData() {
     this.isLoading = true;
-    this.service.getAllPaginated(this.service.allArtisans).then(data => {
-      this.datasource = data.items.map((cust) => new Artisan(cust));
-      this.totalRecords = data.totalCount;
-      this.isLoading = false;
-      console.log("users will soon show")
-    }).catch((e) => {
+    this.service.getAllPaginated(`${qs.stringify(this.lazyParams)}`)
+      .then(data => {
+        this.artisans = data.items.map((prod) => new Artisan(prod));
+        this.totalRecords = data.totalCount;
+        this.firstRecordIndex = data.page > 1 ? data.pageSize * data.page - 1 : 0;
+        this.rowstoDisplay = data.pageSize;
+        this.isLoading = false;
+      }).catch((e) => {
       this.toast.add({ severity: "error", summary: "There was an error fetching the artisans", detail: "Please check your internet connection and refresh the page" })
       console.log(e);
     });
   }
+
 }
 </script>
 
