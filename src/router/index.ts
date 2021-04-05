@@ -11,9 +11,25 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/login',
     name: 'login',
-    component: Login,
+    component: () => import('../views/auth/Login.vue'),
     meta: {
-      title: `Login`,
+      title: "Sign in",
+    }
+  },
+  {
+    path: '/reset-password/init',
+    name: 'init-reset-password',
+    component: () => import('../views/auth/InitResetPassword.vue'),
+    meta: {
+      title: "Request password reset",
+    }
+  },
+  {
+    path: '/reset-password',
+    name: 'reset-password',
+    component: () => import('../views/auth/ResetPassword.vue'),
+    meta: {
+      title: "Reset",
     }
   },
   { 
