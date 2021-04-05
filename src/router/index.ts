@@ -3,10 +3,19 @@ import Dashboard from '../views/Dashboard.vue'
 import Analytics from '../views/Analytics.vue'
 import MainLayout from '../components/layouts/MainLayout.vue'
 import Profile from '../views/users/Profile.vue'
+import Login from '../views/auth/Login.vue'
 
 const appTitle = "Chochos Admin";
 
 const routes: Array<RouteRecordRaw> = [
+  {
+    path: '/login',
+    name: 'login',
+    component: Login,
+    meta: {
+      title: `Login`,
+    }
+  },
   { 
     path: '/',
     component: MainLayout,
@@ -63,6 +72,14 @@ const routes: Array<RouteRecordRaw> = [
         }
       },
       {
+        path: '/occupations',
+        name: 'Occupations',
+        component: () => import('../views/jobs/Occupations.vue'),
+        meta: {
+          title: `Occupations`,
+        }
+      },
+      {
         path: '/categories',
         name: 'Categories',
         component: () => import('../views/products/Categories.vue'),
@@ -76,6 +93,14 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import('../views/users/Skills.vue'),
         meta: {
           title: `Skills`,
+        }
+      },
+      {
+        path: '/artisan-category',
+        name: 'ArtisanCategory',
+        component: () => import('../views/users/ArtisanCategories.vue'),
+        meta: {
+          title: `Artisans`,
         }
       },
       {

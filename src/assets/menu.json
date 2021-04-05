@@ -39,9 +39,19 @@
 		"label": "Categories",
 		"items": [
 			{
+				"label": "Occupations",
+				"icon": "pi pi-briefcase",
+				"to": "/occupations"
+			},
+			{
 				"label": "Products",
 				"icon": "pi pi-tags",
 				"to": "/categories"
+			},
+			{
+				"label": "Artisans",
+				"icon": "pi pi-user",
+				"to": "/artisan-category"
 			},
 			{
 				"label": "Skills",

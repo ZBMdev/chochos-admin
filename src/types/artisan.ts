@@ -53,12 +53,6 @@ export interface ArtisanRegisterParams {
     username: string;
     address: string;
 }
-export interface Data {
-    page:       number;
-    pageSize:   number;
-    items:      ArtisanData[];
-    totalCount: number;
-}
 
 export interface ArtisanData {
     fullName:         string;
@@ -85,5 +79,4 @@ export enum Languages {
     English = "English",
     Igbo = "Igbo",
 }
-
 
