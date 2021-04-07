@@ -427,9 +427,11 @@ export default class ProductList extends Vue {
           :lazy="true"
           paginatorPosition="both"
           :totalRecords="totalRecords"
-          :loading="loading"
+          :loading="isLoading"
           :first="firstRecordIndex"
           :rowHover="true"
+          :scrollable="true"
+          responsiveLayout="scroll"
         >
           <template #header>
             <div class="table-header">
@@ -452,7 +454,7 @@ export default class ProductList extends Vue {
           </template>
         <Column
             field="name"
-            headerStyle="width: 250px"
+            style="min-width: 12rem"
             header="Name"
           >
             <template #body="slotProps">
@@ -461,7 +463,8 @@ export default class ProductList extends Vue {
           </Column>
           <Column
             header="Image"
-            headerStyle="width:4rem;">
+            style="min-width: 6rem"
+          >
             <template #body="slotProps">
               <span class="p-column-title">Image</span>
               <img
@@ -477,6 +480,7 @@ export default class ProductList extends Vue {
             header="Price"
             filterField="price"
             filterMatchMode="contains"
+            style="min-width: 4rem"
           >
             <template #body="slotProps">
               <span class="p-column-title">Price</span>
@@ -484,14 +488,15 @@ export default class ProductList extends Vue {
             </template>
           </Column>
           <Column
-            field="categories"
-            header="Category"
-            filterField="categories"
+            field="userId"
+            header="Vendor ID"
+            filterField="userId"
             filterMatchMode="contains"
+            style="min-width: 4rem"
           >
             <template #body="slotProps">
-              <span class="p-column-title">Categories</span>
-              {{ slotProps.data.categoriesNames }}
+              <span class="p-column-title">Vendor</span>
+              {{ slotProps.data.userId }}
             </template>
           </Column>
           <Column
@@ -499,6 +504,7 @@ export default class ProductList extends Vue {
             header="Reviews"
             filterField="rating"
             filterMatchMode="contains"
+            style="min-width: 10rem"
           >
             <template #body="slotProps">
               <span class="p-column-title">Reviews</span>
@@ -513,6 +519,7 @@ export default class ProductList extends Vue {
             header="Status"
             filterField="quantity"
             filterMatchMode="contains"
+            style="min-width: 8rem"
           >
             <template #body="slotProps">
               <span class="p-column-title">Status</span>

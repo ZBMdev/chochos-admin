@@ -9,6 +9,4 @@ export interface SkillsData {
 export interface CreateSkillsParam {
     name:        string;
     description: string;
-    updated_on:  Date;
-    created_on:  Date;
 }

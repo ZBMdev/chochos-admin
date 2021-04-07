@@ -60,19 +60,6 @@
                     locale="en-NG"
                   />
                 </div>
-
-                <div class="p-col p-field">
-                  <label for="discount">Discount Price</label>
-                  <InputNumber
-                    class="product-discount"
-                    id="discount"
-                    type="text"
-                    mode="currency"
-                    currency="NGN"
-                    locale="en-NG"
-                    v-model="product.discount"
-                  />
-                </div>
               </div>
             </template>
           </Card>
@@ -83,16 +70,11 @@
             </template>
             <template #content>
               <div style="position: relative;" class="">
-                <!-- <BlockUI
-                  :baseZIndex="imageLoading ? 30 : 0"
-                  autoZIndex="false"
-                  :blocked="imageLoading"
-                > -->
                 <ProgressSpinner v-if="imageLoading" />
                 <template v-else>
                   <div class="p-grid p-gutter-4 product-images">
                     <div
-                      v-for="image in product.images"
+                      v-for="image in product.productImages"
                       :key="image.id"
                       class="p-col-6 p-lg-4"
                     >
@@ -192,17 +174,8 @@
               type="submit"
               class="p-ml-auto p-button-info p-mr-2"
               icon="pi pi-save"
-              :label="!product.is_published ? `Save Draft` : 'Update'"
+              label="Save"
               @click="saveProduct()"
-            />
-            <!--  -->
-            <Button
-              v-if="!product.is_published"
-              type="submit"
-              class="p-ml-auto"
-              icon="pi pi-upload"
-              label="Publish"
-              @click="publishProduct()"
             />
           </div>
 
@@ -215,20 +188,13 @@
                 <b>Published </b>
                 <span>
                   {{
-                    product.is_published ? product.publishedAtFormated : "--"
+                    product.createdOn
                   }}
                 </span>
-                <a
-                  v-if="product.is_published"
-                  href="/"
-                  @click.prevent="unPublishProduct()"
-                >
-                  unpublish
-                </a>
               </div>
               <div>
                 <b>Last updated </b>
-                <span>{{ product.updatedAtFormated }}</span>
+                <span>{{ product.updatedOn }}</span>
               </div>
               <div>
                 <!-- <b>By </b> <span>{{ $store.state.Admin.user.name }}</span> -->
@@ -249,37 +215,7 @@
               Category
             </template>
             <template #content>
-              <Tree
-                :value="categories"
-                selectionMode="checkbox"
-                v-model:selectionKeys="selectedCategories"
-                @node-select="updateProductCategories"
-                @node-unselect="updateProductCategories"
-                :expandedKeys="expandedKeys"
-              ></Tree>
-              <!-- <MultiSelect
-                v-model="selectedCategories"
-                :options="categories"
-                optionLabel="name"
-                optionValue="id"
-                placeholder="Select Categories"
-                :filter="true"
-              /> -->
-            </template>
-          </Card>
-
-          <Card class="p-fluid p-mb-4">
-            <template #title>
-              Tags
-            </template>
-            <template #content>
-              <Chips
-                class="product-tags"
-                id="tags"
-                v-model="product.tagList"
-                separator=","
-              />
-              <small id="tags-help">Separate by comma</small>
+              {{ product.productCategoryId }}
             </template>
           </Card>
 
@@ -345,7 +281,7 @@ import SpecificationCard from '@/components/products/SpecificationCard.vue';
 import { useToast } from 'primevue/usetoast';
 import ProductService from '@/services/ProductService';
 import Category from '@/models/Category';
-// import CategoryService from '@/services/CategoryService';
+import CategoryService from '@/services/CategoryService';
 // import { ProductCreateParam } from '@/types/product';
 import { TreeNode, SelectedCheckbox } from '@/types/category';
 import BombsightService from '@/services/BombsightService';
@@ -361,7 +297,7 @@ export default class ProductEdit extends Vue {
   selectedCategories: SelectedCheckbox = {};
   toast = useToast();
   productService: ProductService = new ProductService();
- //  categoryService: CategoryService = new CategoryService();
+  categoryService: CategoryService = new CategoryService();
   isLoading = false;
   expandedKeys: Record<number, boolean> = {};
   deleteProductDialog = false;
@@ -370,7 +306,7 @@ export default class ProductEdit extends Vue {
   imageLoading = false;
 
   /* updateProductCategories() {
-    this.product.categories = Category.fromSelectedKeys(this.selectedCategories, this.categories)
+    this.product.productCategoryId = Category.fromSelectedKeys(this.selectedCategories, this.categories)
   } */
 
   created() {
@@ -469,6 +405,22 @@ export default class ProductEdit extends Vue {
         this.expandNode(child);
       }
     }
+  }
+
+  publishProduct() {
+    // eslint-disable-next-line @typescript-eslint/camelcase
+    this.saveProduct({ ...this.product.toCreateParam() })
+      .then(() => {
+        this.toast.add({ severity: 'info', detail: 'Product published', life: 3000 });
+      });
+  }
+
+  unPublishProduct() {
+    // eslint-disable-next-line @typescript-eslint/camelcase
+    this.saveProduct({ ...this.product.toCreateParam() })
+      .then(() => {
+        this.toast.add({ severity: 'info', detail: 'Product unpublished', life: 3000 });
+      });
   }
 
   saveProduct(param = this.product.toCreateParam()) {

@@ -119,20 +119,7 @@
         </DataTable>
       </template>
     </Card>
-
-    <Dialog v-model:visible="display">
-        <template #header>
-        <h3>Header</h3>
-      </template>
-
-      Content
-
-      <template #footer>
-        <Button label="No" icon="pi pi-times" class="p-button-text"/>
-            <Button label="Yes" icon="pi pi-check" autofocus />
-      </template>
-    </Dialog>
-
+    
     <Dialog
       v-model:visible="categoryDialog"
       :style="{ width: '450px' }"

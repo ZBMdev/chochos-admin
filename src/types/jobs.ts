@@ -1,10 +1,3 @@
-export interface Jobs {
-    page:       number;
-    pageSize:   number;
-    items:      JobData[];
-    totalCount: number;
-}
-
 export interface JobData{
     id:                 number;
     jobRequestId:       number;
@@ -13,7 +6,7 @@ export interface JobData{
     paymentId:          number;
     productsDelivered:  boolean;
     startDate:          Date;
-    status:             number;
+    status:             JobStatus;
     completedOnDate:    Date | null;
     isStarted:          boolean;
     isCompleted:        boolean;
@@ -76,4 +69,44 @@ export enum Name {
     RequestForCleaning = "Request for Cleaning",
     RequestForElectrician = "Request for Electrician",
     RequestForTheKing = "Request for the King",
+}
+
+
+
+export enum JobStatus {
+    Declined = "0",
+    Processing = "1",
+    Pending = "2",
+    Completed = "3",
+}
+
+export const statusDecorations = {
+    [JobStatus.Pending]: {
+        colors: {
+            light: "#ffcdd2",
+            dark: "#c63737",
+        },
+        icon: "pi pi-ellipsis-h"
+    },
+    [JobStatus.Processing]: {
+        colors: {
+            light: "#feedaf",
+            dark: "#8a5340",
+        },
+        icon: "pi pi-cog"
+    },
+    [JobStatus.Completed]: {
+        colors: {
+            light: "#dbe6c8",
+            dark: "#446025",
+        },
+        icon: "pi pi-check"
+    },
+    [JobStatus.Declined]: {
+        colors: {
+            light: "#bababa",
+            dark: "#3c3c3c",
+        },
+        icon: "pi pi-times"
+    },
 }

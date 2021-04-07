@@ -13,7 +13,7 @@ export default class SkillsService extends Service<SkillsData, CreateSkillsParam
         limit: 1000000
     });
 
-    /* getAllSkills() {
+    getAllSkills() {
         return API.get(`/skills`)
             .then(({ data }: AxiosResponse<APIResponse<SkillsData[]>>) => {
                 return data.data;
@@ -23,14 +23,14 @@ export default class SkillsService extends Service<SkillsData, CreateSkillsParam
             });
     }
 
-    updateSkills(payload: CreateSkillsParam, id: number) {
-        return API.patch(`/skills/${id}`, payload)
-            .then(({ data }: AxiosResponse<APIResponse<SkillsData>>) => {
+    updateSkills(payload: Partial<CreateSkillsParam>, id: number, query?: string) {
+        return API.patch(`${this.url}/${id}${query ? '?' + query : ''}`, payload)
+            .then(({ data }: AxiosResponse<APIResponse<CreateSkillsParam>>) => {
                 return data.data;
             }).catch((error) => {
                 console.log(error.message, error)
                 throw error;
             });
-    } */
+    }
 
 }

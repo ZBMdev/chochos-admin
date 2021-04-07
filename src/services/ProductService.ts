@@ -43,5 +43,15 @@ export default class ProductService extends Service<ProductData, ProductCreatePa
                 throw error;
             });
     }
+
+    async updateP(payload: ProductCreateParam, productId: number) {
+        return API.put(`${this.url}/${productId}`, payload)
+            .then(({ data }: AxiosResponse<APIResponse<ProductCreateParam>>) => {
+                return data.data;
+            }).catch((error) => {
+                console.log(error.message, error)
+                throw error;
+            });
+    }
     
 }

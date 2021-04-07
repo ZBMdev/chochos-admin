@@ -10,7 +10,7 @@ export default class Job extends Model {
     paymentId!:         number;
     productsDelivered!: boolean;
     startDate!:         Date;
-    status!:            number;
+    status!:            string;
     completedOnDate!:   Date | null;
     isStarted!:         boolean;
     isCompleted!:       boolean;
