@@ -100,7 +100,7 @@ const routes: Array<RouteRecordRaw> = [
         name: 'Categories',
         component: () => import('../views/products/Categories.vue'),
         meta: {
-          title: `Categories`,
+          title: `Product Categories`,
         }
       },
       {

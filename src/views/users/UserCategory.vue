@@ -1,25 +1,18 @@
+<!--
 <template>
   <div>
     <PageHeading
-      title="Artisans' Categories"
-      :subtitle="`${totalRecords} in total`" />
+      title="Customers Category"
+      :subtitle="`${totalRecords} products in total`"
+    />
     <ProgressSpinner v-if="isLoading" />
     <Card v-else>
       <template #content>
         <DataTable
-          class="p-datatable-responsive p-datatable-sm"
-          ref="artisan-dt"
-          :value="artisansCat"
-          v-model:selection="selectedArtisansCat"
-          dataKey="id"
-          :paginator="true"
-          :rows="10"
+          class="p-datatable-responsive  p-datatable-sm"
+          :value="customers"
           :filters="filters"
-          paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
-          :rowsPerPageOptions="[10, 20, 50, 100, 200]"
-          currentPageReportTemplate="Showing {first} to {last} of {totalRecords} artisans' category"
-          :scrollable="true"
-          responsiveLayout="scroll"
+          scrollable="true"
           :rowHover="true"
           @row-click="editCategory($event.data)"
         >
@@ -50,56 +43,34 @@
               </div>
             </div>
           </template>
-          <template #empty>
-            No category found.
-          </template>
-          <template #loading>
-            Loading categories data. Please wait.
-          </template>
           <Column
-            field="name"
-            style="min-width: 14rem"
-            headerStyle="min-width: 14rem"
+            field="occupation"
+            headerStyle="width: 250px"
             header="Name"
             :sortable="true"
             filterMode="contains"
           >
-            <template #body="slotProps">
-              {{ slotProps.data.name }}
-            </template>
             <template #filter>
               <InputText
                 type="text"
-                v-model="filters['name']"
+                v-model="filters['occupation']"
                 class="p-column-filter"
-                placeholder="Search by name"
+                placeholder="Search by occupation"
               />
             </template>
-          </Column>
-          <Column
-            field="description"
-            style="min-width: 14rem"
-            headerStyle="min-width: 14rem"
-            header="Description"
-            :sortable="true"
-            filterMode="contains"
-          >
             <template #body="slotProps">
-              <span
-                v-html="`${slotProps.data.description.substr(0, 25)}...`"
-              ></span>
+              {{ slotProps.data.occupation }}
             </template>
           </Column>
           <Column
-            field="created_on"
-            style="min-width: 10rem"
-            headerStyle="min-width: 10rem"
-            header="Created On"
-            sortField="last_login_date"
-            :sortable="true"
+            field="fee"
+            header="Amount"
+            filterField="fee"
+            filterMatchMode="contains"
           >
             <template #body="slotProps">
-              {{ slotProps.data.createdAt }}
+              <span class="p-column-title">Amount</span>
+              {{ currencyFormat(slotProps.data.fee) }}
             </template>
           </Column>
           <Column :exportable="false">
@@ -119,20 +90,6 @@
         </DataTable>
       </template>
     </Card>
-
-    <Dialog v-model:visible="display">
-        <template #header>
-        <h3>Header</h3>
-      </template>
-
-      Content
-
-      <template #footer>
-        <Button label="No" icon="pi pi-times" class="p-button-text"/>
-            <Button label="Yes" icon="pi pi-check" autofocus />
-      </template>
-    </Dialog>
-
     <Dialog
       v-model:visible="categoryDialog"
       :style="{ width: '450px' }"
@@ -140,9 +97,9 @@
       :modal="true"
       class="p-fluid"
     >
-      <ArtisanEdit
+      <CategoryEdit
         :category="category"
-        :artisansCat="artisansCat.filter(cat => cat.id !== category.id)"
+        :categories="categories.filter(cat => cat.id !== category.id)"
         @updated="afterUpdateCategory"
         @created="afterCreateCategory"
       />
@@ -157,7 +114,7 @@
       <div class="confirmation-content">
         <i class="pi pi-exclamation-triangle p-mr-3" style="font-size: 2rem" />
         <span v-if="category"
-          >Are you sure you want to delete <b>{{ category.name }}</b
+          >Are you sure you want to delete <b>{{ category.occupation }}</b
           >?</span
         >
       </div>
@@ -186,7 +143,7 @@
       <div class="confirmation-content">
         <i class="pi pi-exclamation-triangle p-mr-3" style="font-size: 2rem" />
         <span v-if="category"
-          >Are you sure you want to delete the selected artisan category?</span
+          >Are you sure you want to delete the selected user category?</span
         >
       </div>
       <template #footer>
@@ -207,48 +164,49 @@
   </div>
 </template>
 
+
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component';
-import MainLayout from '@/components/layouts/MainLayout.vue';
-import ArtisanCategory from '@/models/ArtisanCategory';
-import ArtisanCategoryService from '@/services/ArtisanCategoryService';
-import { ArtisanCategoryData } from '@/types/artisanCategory'
-import ArtisanEdit from "@/components/category/ArtisanEdit.vue";
+import UserCategory from '@/models/UserCategory'
+import UserCategoryService from '@/services/UserCategoryService';
+import { UserCategoryData } from '@/types/customer'
 import { useToast } from 'primevue/usetoast';
+import BombsightService from '@/services/BombsightService';
+import UserEdit from "@/components/products/UserEdit.vue";
 import qs from 'qs';
-// import { toast } from '@/utils/helper';
 
-interface ArtisanCatLazyParameters {
-  page: number;
-  limit: number;
-  name: string;
-  totalCount:  number;
-  items:      ArtisanCategoryData[];
+interface UserCategoryParameters {
+  page:       number;
+  pageSize:   number;
+  limit:      number;
+  items:      UserCategoryData[];
+  totalCount: number;
 }
 
 @Options({
-  components: { MainLayout, ArtisanEdit },
-}) 
+  components: { UserEdit },
+})
 
-export default class ArtisanList extends Vue {
-  isLoading = false;
-  artisansCat: ArtisanCategory[] = [];
-  datasource: ArtisanCategory[] = [];
-  totalRecords = 0;
-  service: ArtisanCategoryService = new ArtisanCategoryService();
-  selectedArtisans: ArtisanCategory[] = [];
-  filters: Record<string, unknown> = {};
-  submitted = false;
-  toast = useToast();
-  lazyParams: Partial<ArtisanCatLazyParameters> = {};
-  firstRecordIndex = 0;
-  rowstoDisplay = 10;
-  // categories: ArtisanCategory[] = [];
+export default class UserCategoryList extends Vue {
+  categories: UserCategory[] = [];
   categoryDialog = false;
   deleteCategoryDialog = false;
   deleteCategoriesDialog = false;
-  category!: ArtisanCategory;
-  selectedCategories: ArtisanCategory[] = [];
+  category!: UserCategory;
+  selectedCategories: UserCategory[] = [];
+  filterValue = '';
+  filters: Record<string, unknown> = {};
+  submitted = false;
+  isLoading = false;
+  generalLoading = false;
+  toast = useToast();
+  totalRecords = 0;
+  service: UserCategoryService = new UserCategoryService();
+  lazyParams: Partial<UserCategoryParameters> = {};
+  file: File & { objectURL: string } | undefined = undefined;
+  imageService = new BombsightService();
+  firstRecordIndex = 0;
+  rowstoDisplay = 10;
 
   created() {
     // watch the params of the route to fetch the data again
@@ -264,37 +222,41 @@ export default class ArtisanList extends Vue {
   }
 
   getData() {
-    this.isLoading = true
+    this.generalLoading = true
+    this.isLoading = true;
     this.lazyParams = { page: 1, limit: this.rowstoDisplay }
     this.loadLazyData();
   }
-  
+
+  formatCurrency(value: number) {
+    return value.toLocaleString('en-NG', { style: 'currency', currency: 'NGN' });
+  }
+
   loadLazyData() {
     this.isLoading = true;
     this.service.getAllPaginated(`${qs.stringify(this.lazyParams)}`)
       .then(data => {
-        this.artisansCat = data.items.map((prod) => new ArtisanCategory(prod));
+        this.categories = data.items.map((prod) => new UserCategory(prod));
         this.totalRecords = data.totalCount;
         this.firstRecordIndex = data.page > 1 ? data.pageSize * data.page - 1 : 0;
         this.rowstoDisplay = data.pageSize;
         this.isLoading = false;
-      }).catch((e) => {
-      this.toast.add({ severity: "error", summary: "There was an error fetching the artisans", detail: "Please check your internet connection and refresh the page" })
-      console.log(e);
-    });
+        this.generalLoading = false;
+      }
+    );
   }
 
-  afterUpdateCategory(justUpdated: ArtisanCategoryData) {
-    this.artisansCat[this.findIndexById(justUpdated.id)] = new ArtisanCategory(justUpdated);
+   afterUpdateCategory(justUpdated: UserCategoryData) {
+    this.categories[this.findIndexById(justUpdated.id)] = new UserCategory(justUpdated);
   }
 
-  afterCreateCategory(justUpdated: ArtisanCategoryData) {
-    this.artisansCat.push(new ArtisanCategory(justUpdated));
+  afterCreateCategory(justUpdated: UserCategoryData) {
+    this.categories.push(new UserCategory(justUpdated));
     this.categoryDialog = false;
   }
 
   get parentCategory() {
-    const parent = this.artisansCat.find((cat) => cat.id === this.category.id);
+    const parent = this.categories.find((cat) => cat.id === this.category.id);
     return parent ? parent.id : 0;
   }
   set parentCategory(parentId: number) {
@@ -302,7 +264,7 @@ export default class ArtisanList extends Vue {
     this.category.id = parentId;
   }
 
-  editCategory(category: ArtisanCategory) {
+  editCategory(category: UserCategory) {
     this.category = category;
     this.categoryDialog = true;
   }
@@ -311,13 +273,13 @@ export default class ArtisanList extends Vue {
   }
 
   openNew() {
-    this.category = new ArtisanCategory({});
+    this.category = new UserCategory({});
     this.submitted = false;
     this.categoryDialog = true;
     console.log("It will soon work")
   }
 
-  confirmDeleteCategory(category: ArtisanCategory) {
+  confirmDeleteCategory(category: UserCategory) {
     this.category = category;
     this.deleteCategoryDialog = true;
   }
@@ -332,7 +294,7 @@ export default class ArtisanList extends Vue {
   }
 
   findIndexById(id: number): number {
-    return this.artisansCat.findIndex((cat) => cat.id === id)
+    return this.categories.findIndex((cat) => cat.id === id)
   }
 
   deleteSelectedCategories() {
@@ -341,7 +303,7 @@ export default class ArtisanList extends Vue {
     this.selectedCategories.forEach(async (cat) => {
       await this.service.delete(cat.id);
     });
-    this.artisansCat = this.artisansCat.filter(val => !this.selectedCategories.includes(val));
+    this.categories = this.categories.filter(val => !this.selectedCategories.includes(val));
     this.deleteCategoriesDialog = false;
     this.selectedCategories = [];
     this.isLoading = false;
@@ -352,9 +314,9 @@ export default class ArtisanList extends Vue {
     this.isLoading = true
     this.service.delete(this.category.id)
       .then((message) => {
-        this.artisansCat = this.artisansCat.filter(val => val.id !== this.category.id);
+        this.categories = this.categories.filter(val => val.id !== this.category.id);
         this.deleteCategoryDialog = false;
-        this.category = new ArtisanCategory({});
+        this.category = new UserCategory({});
         this.toast.add({ severity: 'success', summary: 'Successful', detail: message, life: 3000 });
       }).catch(() => {
         this.toast.add({ severity: 'error', summary: 'Error', detail: 'Deleting Failed failed', life: 3000 });
@@ -363,11 +325,72 @@ export default class ArtisanList extends Vue {
       })
   }
 }
+
 </script>
 
-
 <style scoped>
-.filter-by {
-  min-width: 300px;
+.table-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.product-image {
+  width: 50px;
+  height: 3rem;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+  object-fit: cover;
+  object-position: center;
+}
+.p-datatable-responsive-demo .p-datatable-tbody > tr > td .p-column-title {
+  display: none;
+}
+
+@media screen and (max-width: 40em) {
+  .p-datatable.p-datatable-responsive-demo .p-datatable-thead > tr > th,
+  .p-datatable.p-datatable-responsive-demo .p-datatable-tfoot > tr > td {
+    display: none !important;
+  }
+  .p-datatable.p-datatable-responsive-demo .p-datatable-tbody > tr > td {
+    text-align: left;
+    display: block;
+    border: 0 none !important;
+    width: 100% !important;
+    float: left;
+    clear: left;
+  }
+  .p-datatable.p-datatable-responsive-demo
+    .p-datatable-tbody
+    > tr
+    > td
+    .p-column-title {
+    padding: 0.4rem;
+    min-width: 30%;
+    display: inline-block;
+    margin: -0.4em 1em -0.4em -0.4rem;
+    font-weight: bold;
+  }
+}
+
+.product-badge.status-instock {
+  background: #c8e6c9;
+  color: #256029;
+}
+.product-badge.status-lowstock {
+  background: #feedaf;
+  color: #8a5340;
+}
+.product-badge.status-outofstock {
+  background: #ffcdd2;
+  color: #c63737;
+}
+.product-badge {
+  border-radius: 2px;
+  padding: 0.25em 0.5rem;
+  text-transform: uppercase;
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 0.3px;
 }
 </style>
+-->

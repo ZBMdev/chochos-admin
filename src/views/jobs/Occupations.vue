@@ -22,7 +22,7 @@
           :first="firstRecordIndex"
           :rowHover="true"
         >
-        <Column
+          <Column
             field="name"
             style="min-width: 14rem"
             header="Name"
@@ -64,7 +64,6 @@
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component';
 import Occupation from '@/models/Occupation'
-import Rating from 'primevue/rating';
 import OccupationService from '@/services/OccupationService';
 import { OccupationData } from '@/types/occupation'
 import qs from 'qs';

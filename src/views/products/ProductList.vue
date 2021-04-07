@@ -525,6 +525,18 @@ export default class ProductList extends Vue {
               >
             </template>
           </Column>
+          <Column
+            :exportable="false"
+            style="width:4rem;"
+          >
+            <template #body="slotProps">
+              <Button
+                icon="pi pi-pencil"
+                class="p-button-rounded p-button-success p-mr-2"
+                @click="$router.push('/products/' + slotProps.data.id)"
+              />
+            </template>
+          </Column>
         </DataTable>
       </template>
     </Card>

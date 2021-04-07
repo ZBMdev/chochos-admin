@@ -11,7 +11,6 @@ export interface CategoryData {
 }
 
 export interface CategoryCreateParam {
-    id: number;
     name: string;
 }
 

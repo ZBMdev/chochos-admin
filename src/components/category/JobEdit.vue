@@ -1,5 +1,32 @@
-<template>
+<!-- <template>
   <div class="p-fluid">
+    <div class="p-fluid p-formgrid p-grid">
+      <div class="p-field p-col-12 p-md-6">
+        <label for="name">Category Image</label>
+        <FileUpload
+          mode="basic"
+          name="file[]"
+          :showCancelButton="true"
+          chooseLabel="Browse"
+          :customUpload="true"
+          @uploader="uploadImage"
+          accept="image/*"
+          :maxFileSize="1000000"
+          :auto="true"
+          :class="{ 'p-invalid': errors['image_url'] }"
+        />
+        <small class="p-invalid" v-if="errors['image_url']">
+          {{ errors["image_url"] }}
+        </small>
+      </div>
+      <div class="p-col-12 p-md-6">
+        <img
+          :src="uploadedImage || image_url"
+          :alt="name"
+          v-if="image_url || uploadedImage"
+        />
+      </div>
+    </div>
     <div class="p-field">
       <label for="name">Name</label>
       <InputText
@@ -110,8 +137,6 @@ import CategoryService from '@/services/CategoryService';
 import { useToast } from 'primevue/usetoast';
 import { CategoryCreateParam, CategoryData } from '@/types/category';
 
-/* eslint-disable */
-
 export default defineComponent({
   props: {
     category: { type: Object, required: true },
@@ -123,15 +148,22 @@ export default defineComponent({
       name: yup.string().required().label('Category name'),
       description: yup.string().label('Description'),
       is_activated: yup.bool().label('Activated'),
+      is_featured: yup.bool(),
+      parent_id: yup.number().oneOf([undefined, ...(props.categories as CategoryData[]).map((cat) => cat.id)]),
+      image_url: yup.string().when("is_featured", { is: true, then: yup.string().required("The category image is required when the category is featured") }),
+      tags: yup.array().of(yup.string()).required("Category tags are required"),
     });
 
-    const formValues = { ...props.category } as Record<keyof CategoryCreateParam, any>;
-    const { errors, handleSubmit, setFieldValue } = useForm({ validationSchema: schema, initialValues: formValues });
+    const formValues = { is_featured: false, ...props.category, tags: props.category.tags.split(",") } as Record<keyof CategoryCreateParam, any>;
+    const { errors, handleSubmit, setFieldValue } = useForm({ validationSchema: schema, initialValues: formValues, });
 
     const { value: name } = useField<string>("name");
     const { value: description } = useField<string>("description");
     const { value: is_activated } = useField<boolean>("is_activated");
+    const { value: is_featured } = useField<boolean>("is_featured");
     const { value: parent_id } = useField<number>("parent_id");
+    const { value: image_url } = useField<string>("image_url");
+    const { value: tags } = useField<string>("tags");
 
     const toast = useToast();
     const file = ref<File>();
@@ -149,14 +181,14 @@ export default defineComponent({
       const service = new CategoryService();
       const imageService = new BombsightService();
 
-      let values = { ...formValues }
+      let values = { ...formValues, tags: formValues.tags?.join(",") }
 
       if (file.value) {
         const formData = new FormData();
         formData.append('file', file.value, file.value.name);
         const image = await imageService.upload(formData);
-        // setFieldValue("image_url", image.url, { force: true })
-        values = { ...values }
+        setFieldValue("image_url", image.url, { force: true })
+        values = { ...values, image_url: image.url }
       }
 
       if (props.category?.id) {
@@ -198,11 +230,14 @@ export default defineComponent({
       name,
       description,
       is_activated,
-      parent_id
+      is_featured,
+      parent_id,
+      image_url,
+      tags,
     };
   }
 });
 </script>
 
 <style lang="scss" scoped>
-</style>
+</style> -->

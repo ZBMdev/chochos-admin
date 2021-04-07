@@ -13,13 +13,6 @@ export interface LoginObject {
     password: string;
 }
 
-export interface Customer {
-    page:       number;
-    pageSize:   number;
-    items:      CustomerData[];
-    totalCount: number;
-}
-
 export interface CustomerData {
     fullName:         string;
     id:               number;
@@ -45,3 +38,45 @@ export enum Languages {
     English = "English",
     Igbo = "Igbo",
 }
+
+export interface UserCategoryData {
+    id:                       number;
+    tools:                    PhcNbillImageURL;
+    occupation:               string;
+    occupationCategory_id:    number;
+    feeRate:                  number;
+    fee:                      number;
+    jobsCompleted:            number;
+    businessEmail:            PhcNbillImageURL;
+    address:                  string;
+    state:                    PhcNbillImageURL;
+    city:                     PhcNbillImageURL;
+    about:                    string;
+    identificationImageUrl:   PhcNbillImageURL;
+    PHCNbillImageUrl:         PhcNbillImageURL;
+    officialPhoneNumber:      number;
+    userCategory:             number;
+    updated_on:               Date;
+    created_on:               Date;
+    isValidated:              boolean;
+    isActive:                 boolean;
+    isPHCNBillVerified:       boolean;
+    isIdentificationVerified: boolean;
+    user_id:                  number;
+}
+
+export enum PhcNbillImageURL {
+    Hammer = "Hammer",
+    String = "string",
+}
+
+
+export interface UserCategoryCreate{
+    occupation:               string;
+    address:                  string;
+    state:                    PhcNbillImageURL;
+    city:                     PhcNbillImageURL;
+    about:                    string;
+    officialPhoneNumber:      number;
+}
+

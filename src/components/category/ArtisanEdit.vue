@@ -31,7 +31,7 @@
     <div class="p-field">
       <label class="p-mb-3">Parent Category</label>
       <Dropdown
-        :options="categories"
+        :options="artisansCat"
         v-model="parent_id"
         optionLabel="name"
         optionValue="id"
@@ -43,51 +43,7 @@
         {{ errors["parent_id"] }}
       </small>
     </div>
-    <div class="p-d-flex p-fluid">
-      <div class="p-col p-d-flex p-field">
-        <label for="is_activated">
-          <InputSwitch
-            id="is_activated"
-            class="p-mr-2"
-            v-model="is_activated"
-            :class="{ 'p-invalid': errors['is_activated'] }"
-          />
-          Activated
-        </label>
-        <small class="p-invalid" v-if="errors['is_activated']">
-          {{ errors["is_activated"] }}
-        </small>
-      </div>
-      <div class="p-col p-d-flex p-field">
-        <label for="is_featured">
-          <InputSwitch
-            id="is_featured"
-            class="p-mr-2"
-            v-model="is_featured"
-            :class="{ 'p-invalid': errors['is_featured'] }"
-          />
-          Featured
-        </label>
-        <small class="p-invalid" v-if="errors['is_featured']">
-          {{ errors["is_featured"] }}
-        </small>
-      </div>
-    </div>
-    <div class="p-field">
-      <label for="description">Tags</label>
-      <Chips
-        id="description"
-        v-model="tags"
-        required="true"
-        separator=","
-        :addOnBlur="true"
-        :allowDuplicate="false"
-        :class="{ 'p-invalid': errors['tags'] }"
-      />
-      <small class="p-invalid" v-if="errors['tags']">
-        {{ errors["tags"] }}
-      </small>
-    </div>
+    
     <div class="p-d-flex p-field">
       <LButton
         icon="pi pi-save"
@@ -106,16 +62,16 @@ import { defineComponent, ref } from "vue";
 import { useForm, useField } from "vee-validate";
 import * as yup from "yup";
 import BombsightService from '@/services/BombsightService';
-import CategoryService from '@/services/CategoryService';
+import ArtisanCategoryService from '@/services/ArtisanCategoryService';
 import { useToast } from 'primevue/usetoast';
-import { CategoryCreateParam, CategoryData } from '@/types/category';
+import { ArtisanCategoryCreate, ArtisanCategoryData } from '@/types/artisanCategory';
 
 /* eslint-disable */
 
 export default defineComponent({
   props: {
     category: { type: Object, required: true },
-    categories: { type: Array, required: true },
+    artisansCat: { type: Array, required: true },
   },
   emits: ["updated", "created"],
   setup(props, context) {
@@ -125,7 +81,7 @@ export default defineComponent({
       is_activated: yup.bool().label('Activated'),
     });
 
-    const formValues = { ...props.category } as Record<keyof CategoryCreateParam, any>;
+    const formValues = { ...props.category } as Record<keyof ArtisanCategoryCreate, any>;
     const { errors, handleSubmit, setFieldValue } = useForm({ validationSchema: schema, initialValues: formValues });
 
     const { value: name } = useField<string>("name");
@@ -146,7 +102,7 @@ export default defineComponent({
 
     const onSubmit = handleSubmit(async (formValues) => {
       isSubmitting.value = true;
-      const service = new CategoryService();
+      const service = new ArtisanCategoryService();
       const imageService = new BombsightService();
 
       let values = { ...formValues }
@@ -176,7 +132,7 @@ export default defineComponent({
         service.create(values)
           .then((newCategory) => {
             context.emit("created", newCategory);
-            toast.add({ severity: "success", summary: "Successfull!", detail: "Category created", life: 3000 });
+            toast.add({ severity: "success", summary: "Successful !!", detail: "Category created", life: 3000 });
           })
           .finally(() => {
             isSubmitting.value = false;

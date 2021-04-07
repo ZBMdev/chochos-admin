@@ -54,7 +54,7 @@
                     id="price"
                     type="text"
                     :required="true"
-                    v-model="product.price"
+                    v-model="product.unitPrice"
                     mode="currency"
                     currency="NGN"
                     locale="en-NG"
