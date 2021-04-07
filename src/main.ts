@@ -63,7 +63,6 @@ import 'primevue/resources/primevue.min.css' // core css
 import 'primeicons/primeicons.css' // icons
 import 'primeflex/primeflex.css';
 
-
 // import 'bulma/css/bulma.css';
 //import 'vee-validate';
 
@@ -81,6 +80,8 @@ firebase.initializeApp(firebaseConfig);
 
 
 import PageHeading from '@/components/elements/PageHeading.vue';
+import LButton from '@/components/elements/LButton.vue';
+
 router.beforeEach(function (to, from, next) {
     window.scrollTo(0, 0);
     next();
@@ -90,6 +91,7 @@ const app = createApp(App)
 const emitter = mitt();
 app.config.globalProperties.emitter = emitter
 app.component('PageHeading', PageHeading);
+app.component('LButton', LButton);
 
 //app.use(VeeValidate);
 
