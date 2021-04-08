@@ -21,7 +21,7 @@
           currentPageReportTemplate="Showing {first} to {last} of {totalRecords} vendors"
           :scrollable="true"
           :rowHover="true"
-          style="width: 100%"
+          responsiveLayout="scroll"
         >
           <template #header>
             <div class="table-header p-d-flex">
@@ -41,7 +41,7 @@
           </template>
           <Column
             field="name"
-            headerStyle="width: 250px"
+            style="min-width: 12rem"
             header="Name"
             :sortable="true"
             filterMode="contains"
@@ -52,7 +52,7 @@
           </Column>
           <Column
             field="username"
-            headerStyle="width: 150px"
+            style="min-width: 12rem"
             header="Username"
             :sortable="true"
             filterMode="contains"
@@ -63,7 +63,7 @@
           </Column>
           <Column
             field="email"
-            headerStyle="width: 250px"
+            style="min-width: 12rem"
             header="Email"
             :sortable="true"
             filterMode="contains"
@@ -74,7 +74,7 @@
           </Column>
           <Column
             field="last_login"
-            headerStyle="width: 150px"
+            style="min-width: 10rem"
             header="Last active"
             sortField="last_login_date"
             :sortable="true"
@@ -85,7 +85,7 @@
           </Column>
           <Column
             field="rating"
-            headerStyle="width: 250px"
+            style="min-width: 12rem"
             header="Reviews"
             filterField="rating"
             filterMatchMode="contains"
@@ -101,7 +101,7 @@
           </Column>
           <Column
             field="languages"
-            headerStyle="width: 150px"
+            style="min-width: 10rem"
             header="Languages"
             :sortable="true"
           >
@@ -111,7 +111,7 @@
           </Column>
           <Column
             field="address"
-            headerStyle="width: 150px"
+            style="min-width: 12rem"
             header="Address"
             :sortable="true"
           >

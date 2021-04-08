@@ -1,22 +1,43 @@
 /* eslint-disable */
 
-import { AdminCreateParam, AdminData } from '@/types/admin'
+import { Admin1Data, RegisterObject } from '@/types/admin'
 import Model from './Model';
 import { string, object, ref } from 'yup';
 import { FormSchema } from '@/types/dynamicForm';
 
 export default class Admin extends Model {
-    id!: number;
-    name!: string;
-    email!: string;
-    username!: string;
-    is_published = false;
-    published_at!: Date;
-    created_at!: Date;
-    updated_at!: Date;
-    images: ImageData[] = [];
+  fullName!:           string;
+  id!:                 number;
+  lastName!:           string;
+  firstName!:          string;
+  email!:              string;
+  password!:           string;
+  oldPassword!:        string;
+  username!:           string;
+  userCategory!:       number;
+  longitude!:          number;
+  latitude!:           number;
+  rating!:             number;
+  totalRatingValue!:   number;
+  totalRatingCount!:   number;
+  address!:            string;
+  mobile!:             string;
+  isValidated!:        null;
+  isActive!:           boolean;
+  push_token!:         string;
+  photoUrl!:           string;
+  last_login!:         Date;
+  updated_on!:         Date;
+  created_on!:         Date;
+  deletionDate!:       null;
+  passwordUpdated_on!: Date;
+  refreshToken!:       null;
+  about!:              null;
+  languages!:          string;
+  categoryId!:         number;
+  skills!:             any[];
 
-    constructor(data?: Partial<AdminData>) {
+    constructor(data?: Partial<Admin1Data>) {
         super();
         if (data) {
             Object.assign(this, data);
@@ -26,10 +47,13 @@ export default class Admin extends Model {
 
     toCreateParam() {
         return {
-            name: this.name,
-            email: this.email,
-            username: this.username,
-        } as AdminCreateParam;
+          email: this.email,
+          password: this.password,
+          firstName: this.firstName,
+          lastName: this.lastName,
+          username: this.username,
+          categoryId: this.categoryId  
+        } as RegisterObject;
     }
       
 }
@@ -37,19 +61,19 @@ export default class Admin extends Model {
 export const profileFormSchema: FormSchema = {
     fields: [
         {
-            label: 'Name',
-            name: 'name',
-            as: 'input',
+          label: 'Name',
+          name: 'name',
+          as: 'input',
         },
         {
-            label: 'Username',
-            name: 'username',
-            as: 'input',
+          label: 'Username',
+          name: 'username',
+          as: 'input',
         },
     ],
     validation: object({
-        username: string().required(),
-        name: string().required(),
+      username: string().required(),
+      name: string().required(),
     }),
 };
 

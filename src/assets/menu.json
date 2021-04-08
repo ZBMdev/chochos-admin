@@ -55,7 +55,7 @@
 			},
 			{
 				"label": "Skills",
-				"icon": "pi pi-tools",
+				"icon": "pi pi-key",
 				"to": "/skills"
 			}
 		]
@@ -69,17 +69,7 @@
 			{
 				"label": "Jobs",
 				"icon": "pi pi-briefcase",
-				"to": "/job-requests"
-			},
-			{
-				"label": "Jobs Delivered",
-				"icon": "pi pi-send",
-				"to": "/jobs-delivered"
-			},
-			{
-				"label": "All Orders",
-				"icon": "pi pi-shopping-cart",
-				"to": "/orders"
+				"to": "/jobs"
 			}
 		]
 	},
@@ -117,11 +107,6 @@
 	{
 		"label": "Settings",
 		"items": [
-			{
-				"label": "Store Settings",
-				"icon": "pi pi-cog",
-				"to": "/settings"
-			},
 			{
 				"label": "Profile",
 				"icon": "pi pi-user",

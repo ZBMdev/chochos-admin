@@ -75,13 +75,13 @@ export default defineComponent({
         .then((loginData) => {
           window.localStorage.setItem('token', loginData.token);
           // redirect to previous link
-          // const redirectTo = this.$route.query.redirect as string || '/dashboard';
+          const redirectTo = this.$route.query.redirect as string || '/dashboard';
           // this.$router.push(redirectTo);
           // I'm using this because I need the page to refresh
           // const redirectTo = this.$route.query.redirect as string || '/';
           // const redirectTo = this.$route.query.redirect as  || ('dashboard');
           // window.location.href = redirectTo;
-          this.$router.push('dashboard');
+          // this.$router.push('dashboard');
         })
         .finally(() => {
           this.isLoading = false;

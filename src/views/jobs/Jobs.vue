@@ -20,6 +20,9 @@
           :totalRecords="totalRecords"
           :loading="isLoading"
           :first="firstRecordIndex"
+          :rowHover="true"
+          :scrollable="true"
+          responsiveLayout="scroll"
         >
           <template #header>
             <div class="table-header p-d-flex">
@@ -40,7 +43,7 @@
           </template>
           <Column
             field="CustomerName"
-            headerStyle="width: 250px"
+            style="min-width: 14rem"
             header="Customer"
             :sortable="true"
             filterMode="contains"
@@ -59,7 +62,7 @@
           </Column>
           <Column
             field="name"
-            headerStyle="width: 250px"
+            style="min-width: 14rem"
             header="Executor"
             :sortable="true"
             filterMode="contains"
@@ -77,6 +80,25 @@
             </template>
           </Column>
           <Column
+            field="address"
+            style="min-width: 14rem"
+            header="Address"
+            :sortable="true"
+            filterMode="contains"
+          >
+            <template #filter>
+              <InputText
+                type="text"
+                v-model="filters['address']"
+                class="p-column-filter"
+                placeholder="Search by address"
+              />
+            </template>
+            <template #body="slotProps">
+              {{ slotProps.data.customerAddress }}
+            </template>
+          </Column>
+          <Column
             ref="price"
             field="totalAmount"
             header="Amount"
@@ -91,6 +113,7 @@
           <Column
             ref="date"
             field="date"
+            style="min-width: 14rem"
             header="Start Date"
             filterField="date"
             filterMatchMode="contains"
@@ -104,6 +127,7 @@
             ref="status"
             field="status"
             header="Job Status"
+            style="min-width: 8rem"
             filterField="status"
             filterMatchMode="contains"
           >
@@ -114,6 +138,7 @@
           </Column>  
           <Column
             field="rating"
+            style="min-width: 14rem"
             header="Job Reviews"
             filterField="rating"
             filterMatchMode="contains"
@@ -126,7 +151,7 @@
                 :cancel="false"
               />
             </template>
-          </Column>    
+          </Column>
         </DataTable>
       </template>
     </Card>

@@ -68,7 +68,7 @@ export interface RegisterObject{
     lastName:	string;
     fullName:	string;
     username:	string;
-    userCategory:	number;
+    categoryId:	number;
 }
 
 export interface LoginObject {
@@ -79,4 +79,42 @@ export interface LoginObject {
 export interface ResetPasswordObject {
     email: string;
     password: string;
+}
+
+export interface Admin1 {
+    user:  Admin1Data;
+    token: string;
+}
+
+export interface Admin1Data {
+    fullName:           string;
+    id:                 number;
+    lastName:           string;
+    firstName:          string;
+    email:              string;
+    password:           string;
+    oldPassword:        string;
+    username:           string;
+    userCategory:       number;
+    longitude:          number;
+    latitude:           number;
+    rating:             number;
+    totalRatingValue:   number;
+    totalRatingCount:   number;
+    address:            string;
+    mobile:             string;
+    isValidated:        null;
+    isActive:           boolean;
+    push_token:         string;
+    photoUrl:           string;
+    last_login:         Date;
+    updated_on:         Date;
+    created_on:         Date;
+    deletionDate:       null;
+    passwordUpdated_on: Date;
+    refreshToken:       null;
+    about:              null;
+    languages:          string;
+    categoryId:         number;
+    skills:             any[];
 }

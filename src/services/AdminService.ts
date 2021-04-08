@@ -73,7 +73,7 @@ export default class AdminService extends Service<AdminData, AdminUpdateParam>{
             });
     }
     public getCurrentAdmin() {
-        return API.get('/admin/profile',)
+        return API.get('/users',)
             .then(({ data }: AxiosResponse<APIResponse<AdminData>>) => {
                 return data.data;
             }).catch((error) => {

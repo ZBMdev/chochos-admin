@@ -119,7 +119,7 @@
 
             <template #content>
               <div class="p-fluid p-field">
-                <label for="colors">Colors </label>
+                <label for="colors">Colours </label>
                 <Chips
                   class="product-colors"
                   id="colors"
@@ -130,11 +130,11 @@
               </div>
 
               <div class="p-fluid p-field">
-                <label for="size_variation">Size Variations </label>
+                <label for="size_variation">Brand </label>
                 <Chips
                   class="product-size_variation"
                   id="size_variation"
-                  v-model="product.sizeVariationList"
+                  v-model="product.brand"
                   separator=","
                 />
                 <small id="size_variation-help">Separate by comma</small>
@@ -145,7 +145,7 @@
                 <Chips
                   class="product-size_metric"
                   id="size_metric"
-                  v-model="product.sizeMetricList"
+                  v-model="product.metric"
                   separator=","
                 />
                 <small id="size_metric-help">Separate by comma</small>

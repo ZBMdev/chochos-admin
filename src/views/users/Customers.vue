@@ -42,7 +42,10 @@
           <template #loading>
             Loading users data. Please wait.
           </template>
-          <Column field="name" headerStyle="width: 3rem;">
+          <Column
+            field="name"
+            headerStyle="width: 3rem;"
+          >
             <template #body="{data}">
               <Avatar
                 :label="data.name.charAt(0).toUpperCase()"
@@ -54,7 +57,7 @@
           </Column>
           <Column
             field="name"
-            headerStyle="width: 250px"
+            style="min-width: 14rem"
             header="Name"
             :sortable="true"
             filterMode="contains"
@@ -73,7 +76,7 @@
           </Column>
           <Column
             field="username"
-            headerStyle="width: 250px"
+            style="min-width: 14rem"
             header="Username"
             :sortable="true"
             filterMode="contains"
@@ -92,7 +95,7 @@
           </Column>
           <Column
             field="email"
-            headerStyle="width: 250px"
+            style="min-width: 14rem"
             header="Email"
             :sortable="true"
             filterMode="contains"
@@ -111,7 +114,7 @@
           </Column>        
           <Column
             field="address"
-            headerStyle="width: 250px"
+            style="min-width: 14rem"
             header="Address"
             :sortable="true"
             filterMode="contains"
@@ -130,7 +133,7 @@
           </Column>
           <Column
             field="languages"
-            headerStyle="width: 250px"
+            style="min-width: 10rem"
             header="Languages"
             :sortable="true"
             filterMode="contains"
@@ -158,7 +161,6 @@ import { Options, Vue } from 'vue-class-component';
 import MainLayout from '@/components/layouts/MainLayout.vue';
 import Customer from '@/models/Customer';
 import CustomerService from '@/services/CustomerService';
-import Rating from 'primevue/rating';
 import { useToast } from 'primevue/usetoast';
 import qs from 'qs';
 // import { toast } from '@/utils/helper';

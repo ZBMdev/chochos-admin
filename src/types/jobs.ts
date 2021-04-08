@@ -74,13 +74,68 @@ export enum Name {
 
 
 export enum JobStatus {
-    Declined = "0",
-    Processing = "1",
-    Pending = "2",
-    Completed = "3",
+    New = "new",
+    PaymentSuccessful = "paySuccess",
+    PaymentFailed = "payFail",
+    Started = "started",
+    Paused = "paused",
+    Completed = "completed",
+    Dispute = "dispute"
 }
 
 export const statusDecorations = {
+    [JobStatus.New]: {
+        colors: {
+            light: "#ffcdd2",
+            dark: "#c63737",
+        },
+        icon: "pi pi-ellipsis-h"
+    },
+    [JobStatus.PaymentSuccessful]: {
+        colors: {
+            light: "#feedaf",
+            dark: "#8a5340",
+        },
+        icon: "pi pi-cog"
+    },
+    [JobStatus.PaymentFailed]: {
+        colors: {
+            light: "#feedaf",
+            dark: "#8a5340",
+        },
+        icon: "pi pi-cog"
+    },
+    [JobStatus.Started]: {
+        colors: {
+            light: "#feedaf",
+            dark: "#8a5340",
+        },
+        icon: "pi pi-cog"
+    },
+    [JobStatus.Paused]: {
+        colors: {
+            light: "#feedaf",
+            dark: "#8a5340",
+        },
+        icon: "pi pi-cog"
+    },
+    [JobStatus.Dispute]: {
+        colors: {
+            light: "#feedaf",
+            dark: "#8a5340",
+        },
+        icon: "pi pi-cog"
+    },
+    [JobStatus.Completed]: {
+        colors: {
+            light: "#dbe6c8",
+            dark: "#446025",
+        },
+        icon: "pi pi-check"
+    }
+}
+
+/* export const statusDecorations = {
     [JobStatus.Pending]: {
         colors: {
             light: "#ffcdd2",
@@ -109,4 +164,4 @@ export const statusDecorations = {
         },
         icon: "pi pi-times"
     },
-}
+} */

@@ -38,6 +38,10 @@ export default class Job extends Model {
         return `${this.customer.fullName}`.trim();
     }
 
+    get customerAddress() {
+        return `${this.customer.address}`.trim();
+    }
+
     get customerReview() {
         return `${this.customer.rating}`;
     }
