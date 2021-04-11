@@ -1,6 +1,6 @@
 /* eslint-disable */
 
-import { Admin1Data, RegisterObject } from '@/types/admin'
+import { AdminsData, RegisterObject } from '@/types/admin'
 import Model from './Model';
 import { string, object, ref } from 'yup';
 import { FormSchema } from '@/types/dynamicForm';
@@ -37,7 +37,7 @@ export default class Admin extends Model {
   categoryId!:         number;
   skills!:             any[];
 
-    constructor(data?: Partial<Admin1Data>) {
+    constructor(data?: Partial<AdminsData>) {
         super();
         if (data) {
             Object.assign(this, data);

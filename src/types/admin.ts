@@ -1,11 +1,11 @@
 // import { RoleData } from "./roles";
 
-export interface LoginData {
+/* export interface LoginData {
     token: string;
     admin: AdminData;
     message: string;
     devMessage?: string;
-}
+} */
 
 export interface AdminData {
     id: number;
@@ -61,6 +61,14 @@ export interface AdminChangePassword{
     confirm_password: string;
 }
 
+
+export interface LoginData {
+    token: string;
+    admin: AdminsData;
+    message: string;
+    devMessage?: string;
+}
+
 export interface RegisterObject{
     email:	string;
     password:	string;
@@ -81,12 +89,12 @@ export interface ResetPasswordObject {
     password: string;
 }
 
-export interface Admin1 {
-    user:  Admin1Data;
+export interface Admins {
+    user:  AdminsData;
     token: string;
 }
 
-export interface Admin1Data {
+export interface AdminsData {
     fullName:           string;
     id:                 number;
     lastName:           string;

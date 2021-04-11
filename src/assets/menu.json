@@ -24,11 +24,6 @@
 				"label": "All Products",
 				"icon": "pi pi-th-large",
 				"to": "/products"
-			},
-			{
-				"label": "New Product",
-				"icon": "pi pi-plus-circle",
-				"to": "/products/new"
 			}
 		]
 	},
@@ -54,6 +49,11 @@
 				"to": "/artisan-category"
 			},
 			{
+				"label": "Customers",
+				"icon": "pi pi-users",
+				"to": "/customer-category"
+			},
+			{
 				"label": "Skills",
 				"icon": "pi pi-key",
 				"to": "/skills"
@@ -67,9 +67,19 @@
 		"label": "Transactions",
 		"items": [
 			{
+				"label": "Jobs Requests",
+				"icon": "pi pi-send",
+				"to": "/jobs-delivered"
+			},
+			{
 				"label": "Jobs",
 				"icon": "pi pi-briefcase",
 				"to": "/jobs"
+			},
+			{
+				"label": "All Orders",
+				"icon": "pi pi-shopping-cart",
+				"to": "/orders"
 			}
 		]
 	},

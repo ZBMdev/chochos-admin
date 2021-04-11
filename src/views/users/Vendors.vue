@@ -39,6 +39,16 @@
           <template #loading>
             Loading vendors data. Please wait.
           </template>
+          <Column field="name" headerStyle="width: 3rem;">
+            <template #body="slotProps">
+              <Avatar
+                :label="slotProps.data.fullName.charAt(0).toUpperCase()"
+                class="p-mr-2"
+                style="background-color:#c8e6c9;color:#256029"
+                shape="circle"
+              />
+            </template>
+          </Column>
           <Column
             field="name"
             style="min-width: 12rem"

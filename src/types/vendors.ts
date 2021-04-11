@@ -14,6 +14,13 @@ export interface Data {
     totalCount: number;
 }
 
+export interface VendorSummary{
+    page:       number;
+    pageSize:   number;
+    items:      VendorData[];
+    totalCount: number;
+}
+
 export interface VendorData {
     fullName:         string;
     id:               number;

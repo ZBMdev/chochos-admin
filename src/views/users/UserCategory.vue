@@ -1,9 +1,8 @@
-<!--
 <template>
   <div>
     <PageHeading
       title="Customers Category"
-      :subtitle="`${totalRecords} products in total`"
+      :subtitle="`${totalRecords} in total`"
     />
     <ProgressSpinner v-if="isLoading" />
     <Card v-else>
@@ -393,4 +392,3 @@ export default class UserCategoryList extends Vue {
   letter-spacing: 0.3px;
 }
 </style>
--->

@@ -1,5 +1,5 @@
 import { APIResponse } from '@/types/api';
-import { AdminCreateParam, AdminUpdateParam, AdminChangePassword, AdminData, AdminLoginParam, AdminResetPassParam, AdminInitResetPassParam, LoginData } from '@/types/admin'
+import {RegisterObject, LoginObject, Admins, AdminsData, AdminCreateParam, AdminUpdateParam, AdminChangePassword, AdminData, AdminLoginParam, AdminResetPassParam, AdminInitResetPassParam, LoginData } from '@/types/admin'
 // import qs from 'qs';
 import { API } from '@/utils/api';
 import { AxiosResponse } from 'axios';
@@ -74,7 +74,7 @@ export default class AdminService extends Service<AdminData, AdminUpdateParam>{
     }
     public getCurrentAdmin() {
         return API.get('/users',)
-            .then(({ data }: AxiosResponse<APIResponse<AdminData>>) => {
+            .then(({ data }: AxiosResponse<APIResponse<AdminsData>>) => {
                 return data.data;
             }).catch((error) => {
                 console.error("AdminService.ts >>>>>", error.message, error)

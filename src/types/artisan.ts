@@ -45,6 +45,13 @@ export interface NewSkill{
 
 */
 
+export interface ArtisanSummary{
+    page:       number;
+    pageSize:   number;
+    items:      ArtisanData[];
+    totalCount: number;
+}
+
 export interface ArtisanRegisterParams {
     email: string;
     password: string;

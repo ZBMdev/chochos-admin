@@ -24,6 +24,7 @@
           :rowHover="true"
           :scrollable="true"
           responsiveLayout="scroll"
+          :filters="filters"
         >
           <template #header>
             <div class="table-header">
@@ -47,7 +48,10 @@
         <Column
             field="name"
             style="min-width: 12rem"
+            headerStyle="min-width:12rem;"
             header="Name"
+            filterMatchMode="contains"
+            ref="name"
           >
             <template #body="slotProps">
               {{ slotProps.data.name }}
@@ -56,6 +60,7 @@
           <Column
             header="Image"
             style="min-width: 6rem"
+            headerStyle="min-width:6rem;"
           >
             <template #body="slotProps">
               <span class="p-column-title">Image</span>
@@ -67,12 +72,13 @@
             </template>
           </Column>
           <Column
-            ref="price"
+            ref="unitPrice"
             field="unitPrice"
             header="Price"
-            filterField="price"
+            filterField="unitPrice"
             filterMatchMode="contains"
             style="min-width: 4rem"
+            headerStyle="min-width:4rem;"
           >
             <template #body="slotProps">
               <span class="p-column-title">Price</span>
@@ -85,6 +91,7 @@
             filterField="userId"
             filterMatchMode="contains"
             style="min-width: 4rem"
+            headerStyle="min-width:4rem;"
           >
             <template #body="slotProps">
               <span class="p-column-title">Vendor</span>
@@ -97,6 +104,7 @@
             filterField="rating"
             filterMatchMode="contains"
             style="min-width: 10rem"
+            headerStyle="min-width:10rem;"
           >
             <template #body="slotProps">
               <span class="p-column-title">Reviews</span>
@@ -112,6 +120,7 @@
             filterField="quantity"
             filterMatchMode="contains"
             style="min-width: 8rem"
+            headerStyle="min-width:8rem;"
           >
             <template #body="slotProps">
               <span class="p-column-title">Status</span>
@@ -127,6 +136,7 @@
           <Column
             :exportable="false"
             style="width:4rem;"
+            headerStyle="min-width:4rem;"
           >
             <template #body="slotProps">
               <Button
@@ -143,27 +153,23 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from 'vue-class-component';
+import { Vue } from 'vue-class-component';
 import Product from '@/models/Product'
-import Rating from 'primevue/rating';
 import ProductService from '@/services/ProductService';
-import { StockStatus } from '@/types/product';
+import { ProductData, StockStatus } from '@/types/product';
 import qs from 'qs';
 
 interface ProductLazyParameters {
-  page: number;
-  limit: number;
-  name: string;
+  page:       number;
+  pageSize:   number;
+  items:      ProductData[];
+  totalCount: number;
+  limit:  number;
+  name: string;   
   maxPrice: string;
   minPrice: string;
-  rating: number;
-  discount: number;
-  isPublished: boolean;
 }
 
-@Options<ProductList>({
-  components: { Rating },
-})
 export default class ProductList extends Vue {
   products: Product[] = [];
   selectedProducts: Product[] = [];

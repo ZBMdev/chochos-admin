@@ -1,7 +1,7 @@
 /* eslint-disable */
 // import Product from '@/models/Product';
 import { APIResponse, PaginatedResponse } from '@/types/api';
-import { ProductCreateParam, ProductData, ProductImageUpdateParam, ProductImage } from '@/types/product'
+import { ProductCreateParam, ProductData, UpdateProductParam, ProductImageUpdateParam, ProductImage } from '@/types/product'
 // import { ProductCreateParam, ProductData } from '@/types/product'
 import { API } from '@/utils/api';
 import { AxiosResponse } from 'axios';
@@ -44,7 +44,7 @@ export default class ProductService extends Service<ProductData, ProductCreatePa
             });
     }
 
-    async updateP(payload: ProductCreateParam, productId: number) {
+    /* async updateProduct(payload: UpdateProductParam, productId: number) {
         return API.put(`${this.url}/${productId}`, payload)
             .then(({ data }: AxiosResponse<APIResponse<ProductCreateParam>>) => {
                 return data.data;
@@ -52,6 +52,6 @@ export default class ProductService extends Service<ProductData, ProductCreatePa
                 console.log(error.message, error)
                 throw error;
             });
-    }
+    } */
     
 }

@@ -1,3 +1,10 @@
+export interface CustomerSummary{
+    page:       number;
+    pageSize:   number;
+    items:      CustomerData[];
+    totalCount: number;
+}
+
 export interface RegisterObject{
     email:	string;
     password:	string;

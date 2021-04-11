@@ -186,11 +186,7 @@
             <template #content>
               <div>
                 <b>Published </b>
-                <span>
-                  {{
-                    product.createdOn
-                  }}
-                </span>
+                <span> {{ product.createdOn }} </span>
               </div>
               <div>
                 <b>Last updated </b>
@@ -286,7 +282,7 @@ import CategoryService from '@/services/CategoryService';
 import { TreeNode, SelectedCheckbox } from '@/types/category';
 import BombsightService from '@/services/BombsightService';
 import { reactive } from 'vue';
-import { ProductImageUpdateParam } from '@/types/product';
+import { UpdateProductParam, ProductImageUpdateParam } from '@/types/product';
 
 @Options<ProductEdit>({
   components: { SpecificationCard },
@@ -428,7 +424,7 @@ export default class ProductEdit extends Vue {
 
     if (this.thereIsAnID) {
       return this.productService
-        .update(this.product.id, param)
+        .put(this.product.id, param)
         .then((product) => {
           this.setProduct(new Product(product));
           this.toast.add({ severity: 'success', summary: 'Success', detail: 'Saved succesfully', life: 3000 });
@@ -442,7 +438,7 @@ export default class ProductEdit extends Vue {
         .then((product) => {
           const newProduct = new Product(product);
           this.toast.add({ severity: 'success', summary: 'Success', detail: 'Created succesfully', life: 3000 });
-          this.$router.push({ name: "EditProduct", params: { id: newProduct.id, } })
+          this.$router.push({ name: "edit-product", params: { id: newProduct.id, } })
         }).finally(() => {
           this.isLoading = false
         })

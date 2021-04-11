@@ -7,7 +7,7 @@ import { AxiosResponse } from 'axios';
 import qs from "qs";
 
 export default class OccupationsService extends Service<OccupationData, OccupationCreateParam > {
-    url = "/skills";
+    url = "/occupations";
 
     allOccupations = qs.stringify({
         limit: 1000000

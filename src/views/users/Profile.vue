@@ -17,7 +17,7 @@
           </div>
         </template>
         <template #title>
-          {{ user?.name }}
+          {{ user?.fullName }}
         </template>
         <template #content>
           <div class="p-text-left">
@@ -28,12 +28,8 @@
               Email: <b>{{ user?.email }}</b>
             </p>
             <p>
-              Role:
-              <b>{{ user ? user.role.name : "" }}</b>
-            </p>
-            <p>
               Joined since:
-              <b>{{ user ? new Date(user.created_at).toDateString() : "" }}</b>
+              <b>{{ user ? new Date(user.created_on).toDateString() : "" }}</b>
             </p>
           </div>
         </template>
@@ -78,7 +74,7 @@
 import { defineComponent } from "vue";
 import AdminService from "@/services/AdminService";
 import { useToast } from 'primevue/usetoast';
-import { AdminData, AdminCreateParam, AdminChangePassword } from "@/types/admin";
+import { AdminsData, AdminCreateParam, AdminChangePassword } from "@/types/admin";
 import getUser from "@/utils/users";
 import getInitials from "@/utils/getInitials";
 import DynamicForm from "@/components/elements/DynamicForm.vue";
@@ -90,10 +86,11 @@ export default defineComponent({
   data() {
     return {
       admin: {
-        name: '',
+        fullName: '',
         username: '',
         push_token: ' ',
-        role_id: undefined as number | undefined,
+        email: ''
+        // role_id: undefined as number | undefined,
       },
       change_password: {
         old_password: '',
@@ -104,7 +101,7 @@ export default defineComponent({
       initials: '',
       service: new AdminService(),
       Toast: useToast(),
-      user: undefined as AdminData | undefined,
+      user: undefined as AdminsData | undefined,
       loading: false,
     }
   },
@@ -167,9 +164,10 @@ export default defineComponent({
     this.user = await getUser();
 
     if (this.user) {
-      this.admin.name = this.user.name,
-        this.admin.username = this.user.username
-      this.admin.role_id = this.user.role_id
+      this.admin.fullName = this.user.fullName,
+      this.admin.username = this.user.username,
+      this.admin.email = this.user.email
+      // this.admin.role_id = this.user.role_id
       this.loading = false;
     }
 

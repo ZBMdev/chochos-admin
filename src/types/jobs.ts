@@ -1,3 +1,9 @@
+export interface JobsSummary{
+    page:       number;
+    pageSize:   number;
+    items:      JobData[];
+    totalCount: number;
+}
 export interface JobData{
     id:                 number;
     jobRequestId:       number;
@@ -6,8 +12,8 @@ export interface JobData{
     paymentId:          number;
     productsDelivered:  boolean;
     startDate:          Date;
-    status:             JobStatus;
-    completedOnDate:    Date | null;
+    status:             number;
+    completedOnDate:    Date;
     isStarted:          boolean;
     isCompleted:        boolean;
     workManTotalAmount: number;
@@ -35,9 +41,9 @@ export interface Customer {
     totalRatingValue: number;
     address:          string;
     mobile:           string;
-    photoUrl:         null | string;
-    languages:        Languages | null;
-    categoryId:       number | null;
+    photoUrl:         string;
+    languages:        Languages;
+    categoryId:       number;
 }
 
 
@@ -74,13 +80,13 @@ export enum Name {
 
 
 export enum JobStatus {
-    New = "new",
-    PaymentSuccessful = "paySuccess",
-    PaymentFailed = "payFail",
-    Started = "started",
-    Paused = "paused",
-    Completed = "completed",
-    Dispute = "dispute"
+    New = "New",
+    PaymentSuccessful = "PaymentSuccessful",
+    PaymentFailed = "PaymentFailed",
+    Started = "Started",
+    Paused = "Paused",
+    Completed = "Completed",
+    Dispute = "Dispute"
 }
 
 export const statusDecorations = {
@@ -124,7 +130,7 @@ export const statusDecorations = {
             light: "#feedaf",
             dark: "#8a5340",
         },
-        icon: "pi pi-cog"
+        icon: "pi pi-times"
     },
     [JobStatus.Completed]: {
         colors: {

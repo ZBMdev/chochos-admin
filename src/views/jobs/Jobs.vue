@@ -44,6 +44,7 @@
           <Column
             field="CustomerName"
             style="min-width: 14rem"
+            headerStyle="min-width: 14rem"
             header="Customer"
             :sortable="true"
             filterMode="contains"
@@ -63,6 +64,7 @@
           <Column
             field="name"
             style="min-width: 14rem"
+            headerStyle="min-width: 14rem"
             header="Executor"
             :sortable="true"
             filterMode="contains"
@@ -82,6 +84,7 @@
           <Column
             field="address"
             style="min-width: 14rem"
+            headerStyle="min-width: 14rem"
             header="Address"
             :sortable="true"
             filterMode="contains"
@@ -101,6 +104,8 @@
           <Column
             ref="price"
             field="totalAmount"
+            headerStyle="min-width: 14rem"
+            style="min-width: 14rem"
             header="Amount"
             filterField="price"
             filterMatchMode="contains"
@@ -114,6 +119,7 @@
             ref="date"
             field="date"
             style="min-width: 14rem"
+            headerStyle="min-width: 14rem"
             header="Start Date"
             filterField="date"
             filterMatchMode="contains"
@@ -127,18 +133,26 @@
             ref="status"
             field="status"
             header="Job Status"
-            style="min-width: 8rem"
+            style="min-width: 14rem"
+            headerStyle="min-width: 14rem"
             filterField="status"
             filterMatchMode="contains"
           >
             <template #body="slotProps">
               <span class="p-column-title">Job Status</span>
-              {{ slotProps.data.status }}
+              <span
+                :class="
+                  'product-badge status-' +
+                    slotProps.data.jobStatus
+                "
+                >{{ slotProps.data.jobStatus }}
+                </span>
             </template>
           </Column>  
           <Column
             field="rating"
             style="min-width: 14rem"
+            headerStyle="min-width: 14rem"
             header="Job Reviews"
             filterField="rating"
             filterMatchMode="contains"
@@ -160,9 +174,8 @@
 
 
 <script lang="ts">
-import { Options, Vue } from 'vue-class-component';
+import { Vue } from 'vue-class-component';
 import Job from '@/models/Job'
-import Rating from 'primevue/rating';
 import JobService from '@/services/JobService';
 import { JobData } from '@/types/jobs'
 import qs from 'qs';
@@ -331,17 +344,33 @@ export default class ProductList extends Vue {
   }
 }
 
-.product-badge.status-instock {
+.product-badge.status-New {
+  background: #c0c0c0;
+  color: #eaf1ea;
+}
+.product-badge.status-PaymentSucessful {
+  background: #feedaf;
+  color: #e1f061;
+}
+.product-badge.status-PaymentFailed {
+  background: #ffcdd2;
+  color: #c63737;
+}
+.product-badge.status-Started {
+  background: #d9d9f8;
+  color: #100ea1;
+}
+.product-badge.status-Paused {
+  background: #fad0d4;
+  color: #642f2f;
+}
+.product-badge.status-Completed {
   background: #c8e6c9;
   color: #256029;
 }
-.product-badge.status-lowstock {
-  background: #feedaf;
-  color: #8a5340;
-}
-.product-badge.status-outofstock {
-  background: #ffcdd2;
-  color: #c63737;
+.product-badge.status-Dispute {
+  background: #ffe1cd;
+  color: #ff8c00;
 }
 .product-badge {
   border-radius: 2px;

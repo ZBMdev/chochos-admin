@@ -120,6 +120,14 @@ const routes: Array<RouteRecordRaw> = [
         }
       },
       {
+        path: '/customer-category',
+        name: 'CustomerCategory',
+        component: () => import('../views/users/UserCategory.vue'),
+        meta: {
+          title: `Customers`,
+        }
+      },
+      {
         path: '/jobs',
         name: 'jobs',
         component: () => import('../views/jobs/Jobs.vue'),

@@ -4,12 +4,12 @@ export interface ProductData {
     id:                 number;
     name:               string;
     description:        string;
-    colour:             null | string;
+    colour:             string;
     quantity:           number;
     isDeleted:          null;
     brand:              null;
     metricQuantity:     number;
-    metric:             null | string;
+    metric:             string;
     rating:             number;
     unitPrice:          number;
     userId:             number;
@@ -21,17 +21,29 @@ export interface ProductData {
 }
 
 export interface ProductCreateParam {
-    name: string;
-    description: string;
-    colour:             null | string;
+    name:               string;
+    description:        string;
+    colour:             string;
     quantity:           number;
     brand:              null;
     metricQuantity:     number;
-    metric:             null | string;
+    metric:             string;
     rating:             number;
     unitPrice:          number;
     updatedOn:          Date;
     createdOn:          Date;
+}
+
+export interface UpdateProductParam {
+    name:               string;
+    description:        string;
+    colour:             string;
+    quantity:           number;
+    brand:              null;
+    metricQuantity:     number;
+    metric:             string;
+    rating:             number;
+    unitPrice:          number;
 }
 
 export interface ProductImage {

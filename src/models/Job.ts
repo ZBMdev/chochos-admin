@@ -1,4 +1,4 @@
-import { JobData, JobRequest, Customer } from "@/types/jobs";
+import { JobData, JobRequest, Customer, JobStatus } from "@/types/jobs";
 // import { format } from "timeago.js";
 import Model from "./Model";
 
@@ -10,7 +10,7 @@ export default class Job extends Model {
     paymentId!:         number;
     productsDelivered!: boolean;
     startDate!:         Date;
-    status!:            string;
+    status!:            number;
     completedOnDate!:   Date | null;
     isStarted!:         boolean;
     isCompleted!:       boolean;
@@ -51,7 +51,34 @@ export default class Job extends Model {
     }
 
     get start_date() {
-        return this.toDaysAgo(this.startDate);
+        return this.formatDate(this.startDate);
+    }
+
+    get jobStatus() {
+        // return (this.status > 10) ? JobStatus.INSTOCK : (this.status > 0) ? StockStatus.LOWSTOCK : StockStatus.OUTOFSTOCK;
+        // return (this.status = 0) ? JobStatus.New : (this.status = 1) ? JobStatus.PaymentSuccessful : (this.status = 1) ? JobStatus.PaymentSuccessful :
+        // (this.status = 1) ? JobStatus.PaymentSuccessful : (this.status = 1) ? JobStatus.PaymentSuccessful : (this.status = 1) ? JobStatus.PaymentSuccessful :
+        // (this.status = 1) ? JobStatus.PaymentSuccessful;
+
+        return (this.status = 0) ? JobStatus.New : (this.status = 0) ? JobStatus.PaymentSuccessful : JobStatus.Completed;
+
+        /* let job = this.status;
+        if (job = 0) {
+            return JobStatus.New;
+        } else if ( job = 1 ) {
+            return JobStatus.PaymentSuccessful;
+        } else if ( job = 2 ) {
+            return JobStatus.PaymentFailed;
+        } else if ( job = 3 ) {
+            return JobStatus.Started;
+        } else if ( job = 4 ) {
+            return JobStatus.Paused;
+        } else if ( job = 5 ) {
+            return JobStatus.Completed;
+        }
+        else {
+            return JobStatus.Dispute
+        } */
     }
 
     /* toCreateParam(password: string) {
