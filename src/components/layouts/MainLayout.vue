@@ -118,20 +118,20 @@ export default class MainLayout extends Vue {
         {
           label: 'Logout',
           icon: 'pi pi-pw pi-power-off',
-          to: '/login'
-          // command: () => this.logout(),
+          // to: '/login'
+          command: () => this.logout(),
         },
       ]
     },
   ];
   itemRefs: Ref[] = [];
 
-  /* logout() {
+  logout() {
     window.localStorage.setItem("token", "");
     window.location.href = `/login?redirect=${window.location.pathname}`
     // this.$router.push({ name: "login", query: { redirect: this.$route.path } });
 
-  } */
+  }
   
   mounted() {
 
@@ -147,7 +147,7 @@ export default class MainLayout extends Vue {
       {
         label: 'Logout',
         icon: 'pi pi-pw pi-power-off',
-        to: '/',
+        // to: '/',
       },
     ];
   }

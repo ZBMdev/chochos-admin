@@ -44,10 +44,9 @@
 import { defineComponent } from 'vue';
 import AdminService from '@/services/AdminService';
 import AuthNav from '@/components/elements/AuthNav.vue';
-import LButton from '@/components/elements/LButton.vue'
 
 export default defineComponent({
-  components: { AuthNav, LButton },
+  components: { AuthNav },
   name: 'Login',
   data() {
     return {
@@ -77,11 +76,7 @@ export default defineComponent({
           // redirect to previous link
           const redirectTo = this.$route.query.redirect as string || '/dashboard';
           // this.$router.push(redirectTo);
-          // I'm using this because I need the page to refresh
-          // const redirectTo = this.$route.query.redirect as string || '/';
-          // const redirectTo = this.$route.query.redirect as  || ('dashboard');
-          // window.location.href = redirectTo;
-          // this.$router.push('dashboard');
+          window.location.href = redirectTo;
         })
         .finally(() => {
           this.isLoading = false;

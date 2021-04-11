@@ -7,9 +7,9 @@ import PrimeVue from 'primevue/config'
 import Accordion from 'primevue/accordion';
 import AccordionTab from 'primevue/accordiontab';
 import Avatar from 'primevue/avatar';
+import BlockUI from 'primevue/blockui';
 import Button from 'primevue/button';
 import firebase from 'firebase/app';
-import Password from 'primevue/password';
 
 import Card from 'primevue/card';
 
@@ -19,9 +19,9 @@ import Chips from 'primevue/chips';
 
 import Column from 'primevue/column';
 import ColumnGroup from 'primevue/columngroup';
-// import ConfirmDialog from 'primevue/confirmdialog';
-// import ConfirmPopup from 'primevue/confirmpopup';
-// import ConfirmationService from 'primevue/confirmationservice';
+import ConfirmDialog from 'primevue/confirmdialog';
+import ConfirmPopup from 'primevue/confirmpopup';
+import ConfirmationService from 'primevue/confirmationservice';
 import ContextMenu from 'primevue/contextmenu';
 import DataTable from 'primevue/datatable';
 import DataView from 'primevue/dataview';
@@ -40,8 +40,10 @@ import InputMask from 'primevue/inputmask';
 import InputNumber from 'primevue/inputnumber';
 import InputSwitch from 'primevue/inputswitch';
 import InputText from 'primevue/inputtext';
+import LButton from '@/components/elements/LButton.vue';
 
 import ProgressSpinner from 'primevue/progressspinner';
+import Password from 'primevue/password';
 
 import Message from 'primevue/message';
 import MultiSelect from 'primevue/multiselect';
@@ -53,6 +55,7 @@ import TabPanel from 'primevue/tabpanel';
 import TabView from 'primevue/tabview';
 import Tag from 'primevue/tag';
 import Textarea from 'primevue/textarea';
+import Timeline from 'primevue/timeline';
 import Tree from 'primevue/tree';
 import TreeTable from 'primevue/treetable';
 import Toast from 'primevue/toast';
@@ -80,7 +83,6 @@ firebase.initializeApp(firebaseConfig);
 
 
 import PageHeading from '@/components/elements/PageHeading.vue';
-import LButton from '@/components/elements/LButton.vue';
 
 router.beforeEach(function (to, from, next) {
     window.scrollTo(0, 0);
@@ -116,8 +118,8 @@ app.component('Chips', Chips);
 
 app.component('Column', Column);
 app.component('ColumnGroup', ColumnGroup);
-// app.component('ConfirmDialog', ConfirmDialog);
-// app.component('ConfirmPopup', ConfirmPopup);
+app.component('ConfirmDialog', ConfirmDialog);
+app.component('ConfirmPopup', ConfirmPopup);
 app.component('ContextMenu', ContextMenu);
 app.component('DataTable', DataTable);
 app.component('DataView', DataView);
@@ -137,7 +139,9 @@ app.component('InputNumber', InputNumber);
 app.component('InputSwitch', InputSwitch);
 app.component('InputText', InputText);
 
+app.component('LButton', LButton);
 app.component('ProgressSpinner', ProgressSpinner);
+app.component('Password', Password);
 
 app.component('Message', Message);
 app.component('MultiSelect', MultiSelect);
@@ -149,6 +153,7 @@ app.component('TabPanel', TabPanel);
 app.component('TabView', TabView);
 app.component('Tag', Tag);
 app.component('Textarea', Textarea);
+app.component('Timeline', Timeline);
 app.component('Tree', Tree);
 app.component('TreeTable', TreeTable)
 app.component('Toast', Toast);

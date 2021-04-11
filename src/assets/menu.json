@@ -6,11 +6,6 @@
 				"label": "Home",
 				"icon": "pi pi-home",
 				"to": "/"
-			},
-			{
-				"label": "Analytics",
-				"icon": "pi pi-chart-bar",
-				"to": "/analytics"
 			}
 		]
 	},

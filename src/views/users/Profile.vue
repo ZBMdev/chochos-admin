@@ -1,6 +1,6 @@
 <template>
   <PageHeading title="Profile" />
-  <ProgressSpinner v-if="loading" />
+  <ProgressSpinner style="display:flex; justify-content: center" v-if="loading" />
   <div v-else class="p-grid">
     <div class="p-col-12 p-md-6">
       <Card class="p-text-center">

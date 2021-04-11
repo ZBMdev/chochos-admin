@@ -4,27 +4,29 @@
       title="All Products"
       :subtitle="`${totalRecords} products in total`"
     />
-    <ProgressSpinner v-if="isLoading" />
+    <ProgressSpinner style="display:flex; justify-content: center" v-if="isLoading" />
     <Card v-else>
       <template #content>
         <DataTable
-          dataKey="id"
           class="p-datatable-responsive p-datatable-sm"
+          ref="products-dt"
           :value="products"
+          v-model:selection="selectedProducts"
+          dataKey="id"
           :paginator="true"
-          :rows="10"
+          :rows="rowstoDisplay"
           :rowsPerPageOptions="[10, 20, 50, 100, 200]"
           currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
           paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
           :lazy="true"
-          paginatorPosition="both"
           :totalRecords="totalRecords"
-          :loading="isLoading"
+          :loading="loading"
           :first="firstRecordIndex"
           :rowHover="true"
           :scrollable="true"
           responsiveLayout="scroll"
-          :filters="filters"
+          @page="onPage($event)"
+          @sort="onSort($event)"
         >
           <template #header>
             <div class="table-header">
@@ -50,6 +52,7 @@
             style="min-width: 12rem"
             headerStyle="min-width:12rem;"
             header="Name"
+            filterField="name"
             filterMatchMode="contains"
             ref="name"
           >
@@ -133,19 +136,6 @@
               >
             </template>
           </Column>
-          <Column
-            :exportable="false"
-            style="width:4rem;"
-            headerStyle="min-width:4rem;"
-          >
-            <template #body="slotProps">
-              <Button
-                icon="pi pi-pencil"
-                class="p-button-rounded p-button-success p-mr-2"
-                @click="$router.push('/products/' + slotProps.data.id)"
-              />
-            </template>
-          </Column>
         </DataTable>
       </template>
     </Card>
@@ -181,9 +171,7 @@ export default class ProductList extends Vue {
   statuses = [StockStatus.INSTOCK, StockStatus.LOWSTOCK, StockStatus.OUTOFSTOCK];
   filters = {
     name: "",
-    price: undefined,
-    rating: undefined,
-    status: "",
+    unitPrice: undefined
   };
   lazyParams: Partial<ProductLazyParameters> = {};
   firstRecordIndex = 0;
@@ -275,7 +263,7 @@ export default class ProductList extends Vue {
   onFilter(event: any) {
     if (event.keyCode === 13) {
       this.loading = true;
-      this.lazyParams = { ...this.lazyParams, ...this.filters, maxPrice: this.filters.price, minPrice: this.filters.price };
+      this.lazyParams = { ...this.lazyParams, ...this.filters, maxPrice: this.filters.unitPrice, minPrice: this.filters.unitPrice };
       this.loadLazyData();
     }
   }

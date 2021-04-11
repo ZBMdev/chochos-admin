@@ -3,7 +3,7 @@
     <PageHeading
       title="All Skills"
     />
-    <ProgressSpinner v-if="isLoading" />
+    <ProgressSpinner style="display:flex; justify-content: center" v-if="isLoading" />
     <Card v-else>
       <template #content>
         <DataTable

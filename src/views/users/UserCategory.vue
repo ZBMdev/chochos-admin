@@ -1,4 +1,18 @@
 <template>
+  <h3> Customer Category </h3>
+</template>
+
+<script>
+export default {
+
+}
+</script>
+
+<style>
+
+</style>
+
+<!--<template>
   <div>
     <PageHeading
       title="Customers Category"
@@ -391,4 +405,4 @@ export default class UserCategoryList extends Vue {
   font-size: 12px;
   letter-spacing: 0.3px;
 }
-</style>
+</style> -->

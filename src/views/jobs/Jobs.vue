@@ -4,7 +4,7 @@
       title="All Jobs"
       :subtitle="`${totalRecords} jobs in total`"
     />
-    <ProgressSpinner v-if="isLoading" />
+    <ProgressSpinner style="display:flex; justify-content: center" v-if="isLoading" />
     <Card v-else>
       <template #content>
         <DataTable

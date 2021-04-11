@@ -146,7 +146,7 @@
 import { defineComponent } from 'vue'
 import FancyCard from '@/components/dashboard/FancyCard.vue'
 // import Chart from 'primevue/chart'
-import { DashboardSummary, TimeSummary } from '@/types/dashboard';
+// import { DashboardSummary, TimeSummary } from '@/types/dashboard';
 import DashboardService from '@/services/DashboardService';
 import ArtisanService from '@/services/ArtisanService';
 import CustomerService from '@/services/CustomerService';
@@ -165,12 +165,12 @@ export default defineComponent({
   
   mounted() {
     this.summaryLoading = true;
-    (new DashboardService()).getSummary()
+    /* (new DashboardService()).getSummary()
       .then((data) => {
         this.summary = data;
       }).finally(() => {
         this.summaryLoading = false;
-      });
+      }); */
 
     (new ArtisanService()).getSummary()
       .then((data) => {
@@ -200,24 +200,24 @@ export default defineComponent({
         this.summaryLoading = false;
       });  
 
-    this.timeLoading = true;
+    /* this.timeLoading = true;
     (new DashboardService()).getTime()
       .then((data) => {
         this.time = data;
       }).finally(() => {
         this.timeLoading = false;
-      });
+      }); */
   },
   data() {
     return {
       summaryLoading: false,
-      summary: {} as DashboardSummary,
+      // summary: {} as DashboardSummary,
       vendor: {} as VendorSummary,
       artisan: {} as ArtisanSummary,
       customer: {} as CustomerSummary,
       job: {} as JobsSummary,
       timeLoading: false,
-      time: {} as TimeSummary,
+      // time: {} as TimeSummary,
     }
   }
 })
