@@ -60,7 +60,7 @@ export default class Job extends Model {
         // (this.status = 1) ? JobStatus.PaymentSuccessful : (this.status = 1) ? JobStatus.PaymentSuccessful : (this.status = 1) ? JobStatus.PaymentSuccessful :
         // (this.status = 1) ? JobStatus.PaymentSuccessful;
 
-        return (this.status = 0) ? JobStatus.New : (this.status = 0) ? JobStatus.PaymentSuccessful : JobStatus.Completed;
+        return (this.status > 3) ? JobStatus.New : (this.status > 0) ? JobStatus.PaymentSuccessful : JobStatus.Completed;
 
         /* let job = this.status;
         if (job = 0) {

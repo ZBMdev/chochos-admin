@@ -27,12 +27,11 @@ export { API } */
 import { APIErrorResponse } from '@/types/api';
 import Axios, { AxiosError } from 'axios';
 import handleError from "./handleError";
-import store from "@/store"
+// import store from "@/store"
 
 const API = { ...Axios }
 
-store.dispatch("Admin/getToken");
-// use this if you don't have the local server "https://cors-anywhere.herokuapp.com/http://46.101.48.195:90/v1";
+// store.dispatch("Admin/getToken");
 
 API.defaults.baseURL = "https://cors-anywhere.herokuapp.com/https://chochos-list.herokuapp.com/api";
 API.defaults.headers.post["Content-Type"] = "application/json";
