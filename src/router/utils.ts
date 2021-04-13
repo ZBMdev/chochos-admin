@@ -3,7 +3,7 @@ const APP_TITLE = "Chochos Admin";
 import { intersection } from 'lodash';
 // import Role from '@/models/Role';
 import { AdminData } from '@/types/admin';
-import getUser from '@/utils/users';
+import getUser from '@/utils/admin';
 
 export const setPageTitle = (to: RouteLocationNormalized, from: RouteLocationNormalized) => {
 
