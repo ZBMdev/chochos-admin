@@ -2,11 +2,83 @@ import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 import Dashboard from '../views/Dashboard.vue'
 import Analytics from '../views/Analytics.vue'
 import MainLayout from '../components/layouts/MainLayout.vue'
+import OtherLayout from '../components/layouts/OtherLayout.vue'
 import Profile from '../views/users/Profile.vue'
+import Login from '../views/auth/Login.vue'
+import { hasAccess, setPageTitle } from './utils'
+
+/**
+ * A few things to note:
+ * - Every route is guarded by default except you specify the meta 'noAuth'
+ * - You can prevent logged in users from accessing a page by making 'guestOnly' = true
+ */
 
 const appTitle = "Chochos Admin";
 
 const routes: Array<RouteRecordRaw> = [
+  {
+    path: '/auth',
+    component: OtherLayout,
+    children: [
+      // route will become /auth/login if we remove the '/' at the begining of each path
+      {
+        path: '/login',
+        name: 'login',
+        component: () => import('../views/auth/Login.vue'),
+        meta: {
+          title: "Sign in",
+          noAuth: true,
+          guestOnly: true,
+        }
+      },
+      {
+        path: '/reset-password/init',
+        name: 'init-reset-password',
+        component: () => import('../views/auth/InitResetPassword.vue'),
+        meta: {
+          title: "Request password reset",
+          noAuth: true,
+          guestOnly: true,
+        }
+      },
+      {
+        path: '/reset-password',
+        name: 'reset-password',
+        component: () => import('../views/auth/ResetPassword.vue'),
+        meta: {
+          title: "Reset",
+          noAuth: true,
+          guestOnly: true,
+        }
+      },
+    ]
+  },
+
+
+  /* {
+    path: '/login',
+    name: 'login',
+    component: () => import('../views/auth/Login.vue'),
+    meta: {
+      title: "Sign in",
+    }
+  },
+  {
+    path: '/reset-password/init',
+    name: 'init-reset-password',
+    component: () => import('../views/auth/InitResetPassword.vue'),
+    meta: {
+      title: "Request password reset",
+    }
+  },
+  {
+    path: '/reset-password',
+    name: 'reset-password',
+    component: () => import('../views/auth/ResetPassword.vue'),
+    meta: {
+      title: "Reset",
+    }
+  }, */
   { 
     path: '/',
     component: MainLayout,
@@ -63,11 +135,67 @@ const routes: Array<RouteRecordRaw> = [
         }
       },
       {
+        path: '/occupations',
+        name: 'Occupations',
+        component: () => import('../views/jobs/Occupations.vue'),
+        meta: {
+          title: `Occupations`,
+        }
+      },
+      {
         path: '/categories',
         name: 'Categories',
         component: () => import('../views/products/Categories.vue'),
         meta: {
-          title: `Categories`,
+          title: `Product Categories`,
+        }
+      },
+      {
+        path: '/skills',
+        name: 'Skills',
+        component: () => import('../views/users/Skills.vue'),
+        meta: {
+          title: `Skills`,
+        }
+      },
+      {
+        path: '/artisan-category',
+        name: 'ArtisanCategory',
+        component: () => import('../views/users/ArtisanCategories.vue'),
+        meta: {
+          title: `Artisans`,
+        }
+      },
+      {
+        path: '/customer-category',
+        name: 'CustomerCategory',
+        component: () => import('../views/users/UserCategory.vue'),
+        meta: {
+          title: `Customers`,
+        }
+      },
+      {
+        path: '/jobs',
+        name: 'jobs',
+        component: () => import('../views/jobs/Jobs.vue'),
+        meta: {
+          title: `All Products`,
+        }
+      },
+      {
+        path: '/job-requests',
+        name: 'jobRequests',
+        component: () => import('../views/jobs/JobRequests.vue'),
+        meta: {
+          title: `Job Requests`,
+        }
+      },
+      {
+        path: '/jobs-delivered',
+        name: 'jobsDelivered',
+        component: () => import('../views/jobs/JobsDelivered.vue'),
+        meta: {
+          title: `Jobs Delivered`,
         }
       },
       {
@@ -93,15 +221,7 @@ const routes: Array<RouteRecordRaw> = [
         meta: {
           title: `New Order`,
         }
-      },/*
-      {
-        path: '/banners',
-        name: 'banners',
-        component: () => import('../views/promotions/Banners.vue'),
-        meta: {
-          title: `Banners`,
-        }
-      }, */
+      },
       {
         path: '/customers',
         name: 'customers',
@@ -166,9 +286,20 @@ const routes: Array<RouteRecordRaw> = [
     ]
   },
   {
+    path: '/unauthorised',
+    name: 'unauthorised',
+    component: () => import('../views/403.vue'),
+    meta: {
+      noAuth: true,
+    }
+  },
+  {
     path: '/:pathMatch(.*)*',
     name: 'NotFound',
-    component: () => import('../views/404.vue')
+    component: () => import('../views/404.vue'),
+    meta: {
+      noAuth: true,
+    }
   }
 ]
 
@@ -187,47 +318,44 @@ const router = createRouter({
   },
 })
 
+router.afterEach((to, from) => {
+  const toDepth = to.path.split('/').length
+  const fromDepth = from.path.split('/').length
+  to.meta.transitionName = toDepth < fromDepth ? 'slide-right' : 'slide-left'
+})
+
 
 // This callback runs before every route change, including on page load.
 router.beforeEach((to, from, next) => {
-  // This goes through the matched routes from last to first, finding the closest route with a title.
-  // eg. if we have /some/deep/nested/route and /some, /deep, and /nested have titles, nested's will be chosen.
-  const nearestWithTitle = to.matched.slice().reverse().find(r => r.meta && r.meta.title);
+  const userIsLoggedOut = !window.localStorage.getItem("token");
+  const routeIsGaurded = !to.meta.noAuth;
+  const routeIsGuestOnly = !!to.meta.guestOnly;
 
-  // Find the nearest route element with meta tags.
-  const nearestWithMeta = to.matched.slice().reverse().find(r => r.meta && r.meta.metaTags);
-  // eslint-disable-next-line
-  const previousNearestWithMeta = from.matched.slice().reverse().find(r => r.meta && r.meta.metaTags);
+  setPageTitle(to, from);
 
-  // If a route with a title was found, set the document (page) title to that value.
-  if (nearestWithTitle) document.title = `${nearestWithTitle.meta.title} | ${appTitle}`;
+  window.scrollTo(window.scrollX, 0);
 
-  // Remove any stale meta tags from the document using the key attribute we set below.
-  Array.from(document.querySelectorAll('[data-vue-router-controlled]')).map((el) => {
-    if (el.parentNode) { return el.parentNode.removeChild(el); }
-    return el;
-  });
+  if (routeIsGaurded) {
+    if (userIsLoggedOut) {
+      return next({ name: "login", query: { redirect: to.path } });
+    }
+    // console.log(to.fullPath, hasAccess(to.meta.permit))
+    if (!hasAccess(to.meta.permit)) {
+      return next({ name: "unauthorised", query: { page: to.path } })
+    }
 
-  // Skip rendering meta tags if there are none.
-  if (!nearestWithMeta) return next();
+    return next()
 
-  // Turn the meta tag definitions into actual elements in the head.
-  nearestWithMeta.meta.metaTags.map((tagDef: Record<string, string>) => {
-    const tag = document.createElement('meta');
+  } else {
 
-    Object.keys(tagDef).forEach(key => {
-      tag.setAttribute(key, tagDef[key]);
-    });
+    // this is so that you can't access the guestOnly except you are logged out
+    if (routeIsGuestOnly && !userIsLoggedOut) {
+      return next({ name: "dashboard" })
+    }
 
-    // We use this to track which meta tags we create, so we don't interfere with other ones.
-    tag.setAttribute('data-vue-router-controlled', '');
+    return next()
 
-    return tag;
-  })
-    // Add the meta tags to the document head.
-    .forEach((tag: any) => document.head.appendChild(tag));
-
-  next();
+  }
 });
 
 export default router
