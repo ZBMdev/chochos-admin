@@ -3,7 +3,7 @@ const APP_TITLE = "Chochos Admin";
 import { intersection } from 'lodash';
 // import Role from '@/models/Role';
 import { AdminData } from '@/types/admin';
-import getUser from '@/utils/admin';
+import getUser from '@/utils/users';
 
 export const setPageTitle = (to: RouteLocationNormalized, from: RouteLocationNormalized) => {
 
@@ -46,8 +46,7 @@ export const setPageTitle = (to: RouteLocationNormalized, from: RouteLocationNor
   return
 }
 
-//export const hasAccess = async (permit: string[]) => {
-export const hasAccess = async (permit: any[]) => {
+export const hasAccess = async (permit: string[]) => {
     if (!permit) { return true; }
     const user = await getUser();
     if (!user) { return false; }

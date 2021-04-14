@@ -75,7 +75,7 @@ import { defineComponent } from "vue";
 import AdminService from "@/services/AdminService";
 import { useToast } from 'primevue/usetoast';
 import { AdminsData, AdminCreateParam, AdminChangePassword } from "@/types/admin";
-import getUser from "@/utils/admin";
+import getUser from "@/utils/users";
 import getInitials from "@/utils/getInitials";
 import DynamicForm from "@/components/elements/DynamicForm.vue";
 import { profileFormSchema, passwordFormSchema } from '@/models/Admin';

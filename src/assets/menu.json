@@ -44,11 +44,6 @@
 				"to": "/artisan-category"
 			},
 			{
-				"label": "Customers",
-				"icon": "pi pi-users",
-				"to": "/customer-category"
-			},
-			{
 				"label": "Skills",
 				"icon": "pi pi-key",
 				"to": "/skills"
