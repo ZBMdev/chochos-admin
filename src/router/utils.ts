@@ -46,7 +46,8 @@ export const setPageTitle = (to: RouteLocationNormalized, from: RouteLocationNor
   return
 }
 
-export const hasAccess = async (permit: string[]) => {
+//export const hasAccess = async (permit: string[]) => {
+export const hasAccess = async (permit: any[]) => {
     if (!permit) { return true; }
     const user = await getUser();
     if (!user) { return false; }

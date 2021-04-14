@@ -345,12 +345,13 @@ export default class ProductList extends Vue {
 }
 
 .product-badge.status-New {
-  background: #c0c0c0;
-  color: #eaf1ea;
+  background: #8089da;
+  color: #0d0a2b;
 }
-.product-badge.status-PaymentSucessful {
+.product-badge.status-PaymentSuccessful {
   background: #feedaf;
-  color: #e1f061;
+  /* color: #e1f061; */
+  color: #443602
 }
 .product-badge.status-PaymentFailed {
   background: #ffcdd2;

@@ -55,30 +55,8 @@ export default class Job extends Model {
     }
 
     get jobStatus() {
-        // return (this.status > 10) ? JobStatus.INSTOCK : (this.status > 0) ? StockStatus.LOWSTOCK : StockStatus.OUTOFSTOCK;
-        // return (this.status = 0) ? JobStatus.New : (this.status = 1) ? JobStatus.PaymentSuccessful : (this.status = 1) ? JobStatus.PaymentSuccessful :
-        // (this.status = 1) ? JobStatus.PaymentSuccessful : (this.status = 1) ? JobStatus.PaymentSuccessful : (this.status = 1) ? JobStatus.PaymentSuccessful :
-        // (this.status = 1) ? JobStatus.PaymentSuccessful;
-
-        return (this.status > 3) ? JobStatus.New : (this.status > 0) ? JobStatus.PaymentSuccessful : JobStatus.Completed;
-
-        /* let job = this.status;
-        if (job = 0) {
-            return JobStatus.New;
-        } else if ( job = 1 ) {
-            return JobStatus.PaymentSuccessful;
-        } else if ( job = 2 ) {
-            return JobStatus.PaymentFailed;
-        } else if ( job = 3 ) {
-            return JobStatus.Started;
-        } else if ( job = 4 ) {
-            return JobStatus.Paused;
-        } else if ( job = 5 ) {
-            return JobStatus.Completed;
-        }
-        else {
-            return JobStatus.Dispute
-        } */
+        return (this.status === 0) ? JobStatus.New : (this.status === 1) ? JobStatus.PaymentSuccessful : (this.status === 2) ? JobStatus.PaymentFailed :
+          (this.status === 3) ? JobStatus.Started : (this.status === 4) ? JobStatus.Paused : (this.status === 5) ? JobStatus.Completed : JobStatus.Dispute;
     }
 
     /* toCreateParam(password: string) {
