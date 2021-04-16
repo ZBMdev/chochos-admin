@@ -19,6 +19,11 @@
 				"label": "All Products",
 				"icon": "pi pi-th-large",
 				"to": "/products"
+			},
+			{
+				"label": "Categories",
+				"icon": "pi pi-tags",
+				"to": "/categories"
 			}
 		]
 	},
@@ -26,27 +31,17 @@
 		"separator": true
 	},
 	{
-		"label": "Categories",
+		"label": "Occupation",
 		"items": [
 			{
-				"label": "Occupations",
+				"label": "All Occupations",
 				"icon": "pi pi-briefcase",
 				"to": "/occupations"
 			},
 			{
-				"label": "Products",
+				"label": "Categories",
 				"icon": "pi pi-tags",
-				"to": "/categories"
-			},
-			{
-				"label": "Artisans",
-				"icon": "pi pi-user",
 				"to": "/artisan-category"
-			},
-			{
-				"label": "Skills",
-				"icon": "pi pi-key",
-				"to": "/skills"
 			}
 		]
 	},
@@ -80,6 +75,11 @@
 		"label": "Users",
 		"items": [
 			{
+				"label": "All Users",
+				"icon": "pi pi-users",
+				"to": "/users-category"
+			},
+			{
 				"label": "Customers",
 				"icon": "pi pi-users",
 				"to": "/customers"
@@ -95,8 +95,13 @@
 				"to": "/vendors"
 			},
 			{
+				"label": "Skills",
+				"icon": "pi pi-key",
+				"to": "/skills"
+			},
+			{
 				"label": "Administrators",
-				"icon": "pi pi-user",
+				"icon": "pi pi-user-edit",
 				"to": "/admins"
 			}
 		]

@@ -87,3 +87,8 @@ export interface UserCategoryCreate{
     officialPhoneNumber:      number;
 }
 
+export enum usersType {
+    Customer= "Customer",
+    Artisan = "Artisan",
+    Vendor = "Vendor"
+}

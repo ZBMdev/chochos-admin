@@ -1,4 +1,4 @@
-import { UserCategoryData, UserCategoryCreate, PhcNbillImageURL } from "@/types/customer";
+import { UserCategoryData, UserCategoryCreate, PhcNbillImageURL, usersType } from "@/types/customer";
 // import { format } from "timeago.js";
 import Model from "./Model";
 
@@ -36,6 +36,10 @@ export default class UserCategory extends Model {
 
     get createdAt() {
         return this.formatDate(this.created_on)
+    }
+
+    get userType() {
+        return (this.userCategory === 0) ? usersType.Customer : (this.userCategory === 1) ? usersType.Artisan : usersType.Vendor;
     }
 
     toCreateParam(password: string) {

@@ -223,6 +223,14 @@ const routes: Array<RouteRecordRaw> = [
         }
       },
       {
+        path: '/users-category',
+        name: 'users-category',
+        component: () => import('../views/users/UsersCategory.vue'),
+        meta: {
+          title: `All Users`,
+        }
+      },
+      {
         path: '/customers',
         name: 'customers',
         component: () => import('../views/users/Customers.vue'),

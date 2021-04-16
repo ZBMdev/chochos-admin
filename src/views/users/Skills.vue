@@ -12,16 +12,15 @@
           :value="skills"
           :paginator="true"
           :rows="10"
-          :rowsPerPageOptions="[10, 20, 50, 100, 200]"
+          currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
           paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
-          :lazy="true"
+          :totalRecords="totalRecords"
+          :rowsPerPageOptions="[10,20,50, 100, 200]"
+          :first="firstRecordIndex"
           responsiveLayout="scroll"
           :scrollable="true"
           :rowHover="true"
           @row-click="editCategory($event.data)"
-          :totalRecords="totalRecords"
-          :loading="loading"
-          :first="firstRecordIndex"
         >
         <template #header>
             <div class="table-header p-d-flex">
