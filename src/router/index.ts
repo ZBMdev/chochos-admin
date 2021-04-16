@@ -5,7 +5,7 @@ import MainLayout from '../components/layouts/MainLayout.vue'
 import OtherLayout from '../components/layouts/OtherLayout.vue'
 import Profile from '../views/users/Profile.vue'
 import Login from '../views/auth/Login.vue'
-import { hasAccess, setPageTitle } from './utils'
+// import { hasAccess, setPageTitle } from './utils'
 
 /**
  * A few things to note:
@@ -326,44 +326,47 @@ const router = createRouter({
   },
 })
 
-router.afterEach((to, from) => {
-  const toDepth = to.path.split('/').length
-  const fromDepth = from.path.split('/').length
-  to.meta.transitionName = toDepth < fromDepth ? 'slide-right' : 'slide-left'
-})
-
 
 // This callback runs before every route change, including on page load.
 router.beforeEach((to, from, next) => {
-  const userIsLoggedOut = !window.localStorage.getItem("token");
-  const routeIsGaurded = !to.meta.noAuth;
-  const routeIsGuestOnly = !!to.meta.guestOnly;
+  // This goes through the matched routes from last to first, finding the closest route with a title.
+  // eg. if we have /some/deep/nested/route and /some, /deep, and /nested have titles, nested's will be chosen.
+  const nearestWithTitle = to.matched.slice().reverse().find(r => r.meta && r.meta.title);
 
-  setPageTitle(to, from);
+  // Find the nearest route element with meta tags.
+  const nearestWithMeta = to.matched.slice().reverse().find(r => r.meta && r.meta.metaTags);
+  // eslint-disable-next-line
+  const previousNearestWithMeta = from.matched.slice().reverse().find(r => r.meta && r.meta.metaTags);
 
-  window.scrollTo(window.scrollX, 0);
+  // If a route with a title was found, set the document (page) title to that value.
+  if (nearestWithTitle) document.title = `${nearestWithTitle.meta.title} | ${appTitle}`;
 
-  if (routeIsGaurded) {
-    if (userIsLoggedOut) {
-      return next({ name: "login", query: { redirect: to.path } });
-    }
-    // console.log(to.fullPath, hasAccess(to.meta.permit))
-    if (!hasAccess(to.meta.permit)) {
-      return next({ name: "unauthorised", query: { page: to.path } })
-    }
+  // Remove any stale meta tags from the document using the key attribute we set below.
+  Array.from(document.querySelectorAll('[data-vue-router-controlled]')).map((el) => {
+    if (el.parentNode) { return el.parentNode.removeChild(el); }
+    return el;
+  });
 
-    return next()
+  // Skip rendering meta tags if there are none.
+  if (!nearestWithMeta) return next();
 
-  } else {
+  // Turn the meta tag definitions into actual elements in the head.
+  nearestWithMeta.meta.metaTags.map((tagDef: Record<string, string>) => {
+    const tag = document.createElement('meta');
 
-    // this is so that you can't access the guestOnly except you are logged out
-    if (routeIsGuestOnly && !userIsLoggedOut) {
-      return next({ name: "dashboard" })
-    }
+    Object.keys(tagDef).forEach(key => {
+      tag.setAttribute(key, tagDef[key]);
+    });
 
-    return next()
+    // We use this to track which meta tags we create, so we don't interfere with other ones.
+    tag.setAttribute('data-vue-router-controlled', '');
 
-  }
+    return tag;
+  })
+    // Add the meta tags to the document head.
+    .forEach((tag: any) => document.head.appendChild(tag));
+
+  next();
 });
 
 export default router
