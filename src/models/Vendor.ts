@@ -4,7 +4,7 @@ import Model from "./Model";
 
 export default class Vendor extends Model {
     fullName!:         string;
-    id!:               number;
+    // id!:               number;
     lastName!:         string;
     firstName!:        string;
     email!:            string;

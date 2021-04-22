@@ -54,7 +54,7 @@
 			{
 				"label": "Jobs Requests",
 				"icon": "pi pi-send",
-				"to": "/jobs-delivered"
+				"to": "/job-requests"
 			},
 			{
 				"label": "Jobs",

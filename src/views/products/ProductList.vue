@@ -362,6 +362,9 @@ export default class ProductList extends Vue {
           responsiveLayout="scroll"
           :scrollable="true"
           :rowHover="true"
+          @page="onPage($event)"
+          @sort="onSort($event)"
+          paginatorPosition="both"
         >
           <template #header>
             <div class="table-header">
@@ -415,8 +418,8 @@ export default class ProductList extends Vue {
             header="Price"
             filterField="unitPrice"
             filterMatchMode="contains"
-            style="min-width: 4rem"
-            headerStyle="min-width:4rem;"
+            style="min-width: 12rem"
+            headerStyle="min-width:12rem;"
           >
             <template #body="slotProps">
               <span class="p-column-title">Price</span>
@@ -428,8 +431,8 @@ export default class ProductList extends Vue {
             header="Vendor ID"
             filterField="userId"
             filterMatchMode="contains"
-            style="min-width: 4rem"
-            headerStyle="min-width:4rem;"
+            style="min-width: 12rem"
+            headerStyle="min-width:12rem;"
           >
             <template #body="slotProps">
               <span class="p-column-title">Vendor</span>
@@ -672,3 +675,356 @@ export default class ProductList extends Vue {
   letter-spacing: 0.3px;
 }
 </style>
+
+
+
+<!--
+<template>
+  <div class="product-list">
+    <PageHeading
+      title="All Products"
+      :subtitle="`${totalRecords} products in total`"
+    />
+    <ProgressSpinner style="display:flex; justify-content: center" v-if="isLoading" />
+    <Card v-else>
+      <template #content>
+        <DataTable
+          dataKey="id"
+          class="p-datatable-responsive p-datatable-sm"
+          :value="products"
+          :paginator="true"
+          :rows="10"
+          currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
+          paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
+          :totalRecords="totalRecords"
+          :loading="loading"
+          :rowsPerPageOptions="[10,20, 50, 100, 200]"
+          :lazy="true"
+          :first="firstRecordIndex"
+          responsiveLayout="scroll"
+          :scrollable="true"
+          :rowHover="true"
+          @page="onPage($event)"
+          @sort="onSort($event)"
+          paginatorPosition="both"
+          v-model:selection="selectedProducts"
+          v-model:filters="filters"
+          filterDisplay="menu"
+          :globalFilterFields="['name']"
+        >
+          <template #header>
+            <div class="table-header">
+              Products
+              <span class="p-input-icon-left">
+                <i class="pi pi-search" />
+                <InputText 
+                  v-model="filters['global'].value"
+                  placeholder="Keyword Search"
+                />
+              </span>
+            </div>
+          </template>
+          <template #empty>
+            No products found.
+          </template>
+          <template #loading>
+            Loading products data. Please wait.
+          </template>
+          <Column
+            field="name"
+            style="min-width: 12rem"
+            headerStyle="min-width:12rem;"
+            header="Name"
+            filterMatchMode="contains"
+            sortable
+            filterField="name"
+            sortField="name"
+          >
+            <template #body="slotProps">
+              {{ slotProps.data.name }}
+            </template>
+            <template #filter="{filterModel}">
+              <InputText
+                type="text"
+                v-model="filterModel.value"
+                class="p-column-filter"
+                placeholder="Search by name"/>
+            </template>
+          </Column>
+          <Column
+            header="Image"
+            style="min-width: 6rem"
+            headerStyle="min-width:6rem;"
+          >
+            <template #body="slotProps">
+              <span class="p-column-title">Image</span>
+              <img
+                :src="slotProps.data.mainImage"
+                :alt="slotProps.data.name"
+                class="product-image"
+              />
+            </template>
+          </Column>
+          <Column
+            ref="unitPrice"
+            field="unitPrice"
+            header="Price"
+            filterField="unitPrice"
+            filterMatchMode="contains"
+            style="min-width: 12rem"
+            headerStyle="min-width:12rem;"
+          >
+            <template #body="slotProps">
+              <span class="p-column-title">Price</span>
+              {{ formatCurrency(slotProps.data.unitPrice) }}
+            </template>
+          </Column>
+          <Column
+            field="userId"
+            header="Vendor ID"
+            filterField="userId"
+            filterMatchMode="contains"
+            style="min-width: 12rem"
+            headerStyle="min-width:12rem;"
+          >
+            <template #body="slotProps">
+              <span class="p-column-title">Vendor</span>
+              {{ slotProps.data.userId }}
+            </template>
+          </Column>
+          <Column
+            field="rating"
+            header="Reviews"
+            filterField="rating"
+            filterMatchMode="contains"
+            style="min-width: 10rem"
+            headerStyle="min-width:10rem;"
+          >
+            <template #body="slotProps">
+              <span class="p-column-title">Reviews</span>
+              <Rating
+                :modelValue="slotProps.data.rating"
+                :readonly="true"
+                :cancel="false"
+              />
+            </template>
+          </Column>
+          <Column
+            header="Status"
+            filterField="quantity"
+            filterMatchMode="contains"
+            style="min-width: 8rem"
+            headerStyle="min-width:8rem;"
+          >
+            <template #body="slotProps">
+              <span class="p-column-title">Status</span>
+              <span
+                :class="
+                  'product-badge status-' +
+                    slotProps.data.stockAvailability.toLowerCase()
+                "
+                >{{ slotProps.data.stockAvailability }}</span
+              >
+            </template>
+          </Column>
+        </DataTable>
+      </template>
+    </Card>
+  </div>
+</template>
+
+<script lang="ts">
+import { Vue } from 'vue-class-component';
+import Product from '@/models/Product'
+import ProductService from '@/services/ProductService';
+import { ProductData, StockStatus } from '@/types/product';
+import qs from 'qs';
+import {FilterMatchMode,FilterOperator} from 'primevue/api';
+
+interface ProductLazyParameters {
+  page:       number;
+  limit:  number;
+  name: string;   
+  maxPrice: string;
+  minPrice: string;
+}
+
+export default class ProductList extends Vue {
+  products: Product[] = [];
+  selectedProducts: Product[] = [];
+  filterValue = '';
+  loading = false;
+  generalLoading = false;
+  totalRecords = 0;
+  service: ProductService = new ProductService();
+  statuses = [StockStatus.INSTOCK, StockStatus.LOWSTOCK, StockStatus.OUTOFSTOCK];
+  filters = {
+    global: {value: null, matchMode: FilterMatchMode.CONTAINS},
+    name: {operator: FilterOperator.AND, constraints: [{value: null, matchMode: FilterMatchMode.STARTS_WITH}]},
+                
+  };
+  lazyParams: Partial<ProductLazyParameters> = {};
+  firstRecordIndex = 0;
+  rowstoDisplay = 10;
+
+  created() {
+    // watch the params of the route to fetch the data again
+    this.$watch(
+      () => this.$route.params,
+      () => {
+        this.getData();
+      },
+      // fetch the data when the view is created and the data is
+      // already being observed
+      { immediate: true }
+    )
+  }
+
+  getData() {
+    this.generalLoading = true
+    this.loading = true;
+    this.lazyParams = { page: 1, limit: this.rowstoDisplay }
+    this.loadLazyData();
+  }
+
+  formatCurrency(value: number) {
+    return value.toLocaleString('en-NG', { style: 'currency', currency: 'NGN' });
+  }
+
+  /**
+   *  filter event is not triggered in lazy mode instead use the event you prefer on your 
+   * form elements such as input, change, blur to make a remote call by passing the filters 
+   * property to update the displayed data. 
+   */
+  // eslint-disable-next-line
+  filterProducts(event: any) {
+    // if (event.keyCode === 13) {
+    this.loading = true;
+    if (this.filterValue) {
+      this.lazyParams = { name: this.filterValue, limit: 1000000000000, }
+      this.searchData();
+    }
+    // }
+  }
+
+  searchData() {
+    this.loading = true;
+    this.service.search(`${qs.stringify(this.lazyParams)}`)
+      .then(data => {
+        this.products = data.items.map((prod) => new Product(prod));
+        this.totalRecords = data.totalCount;
+        this.firstRecordIndex = 0;
+        this.loading = false;
+        this.generalLoading = false;
+      });
+  }
+
+  loadLazyData() {
+    this.loading = true;
+    this.service.getAllPaginated(`${qs.stringify(this.lazyParams)}`)
+      .then(data => {
+        this.products = data.items.map((prod) => new Product(prod));
+        this.totalRecords = data.totalCount;
+        this.firstRecordIndex = data.page > 1 ? data.limit * data.page - 1 : 0;
+        this.rowstoDisplay = data.limit;
+        this.loading = false;
+        this.generalLoading = false;
+      });
+  }
+
+  // eslint-disable-next-line
+  onPage(event: any) {
+    //event.page: New page number
+    //event.first: Index of first record
+    //event.rows: Number of rows to display in new page
+    //event.pageCount: Total number of pages
+    // console.log(event);
+    this.lazyParams = { ...event.originalEvent, page: event.page + 1, limit: event.rows } as ProductLazyParameters;
+    this.loadLazyData();
+  }
+
+  // eslint-disable-next-line
+  onSort(event: any) {
+    this.lazyParams = { ...event.originalEvent, page: event.page + 1, limit: event.rows } as ProductLazyParameters;
+    this.loadLazyData();
+  }
+
+  // eslint-disable-next-line
+  onFilter(event: any) {
+    if (event.keyCode === 13) {
+      this.loading = true;
+      // this.lazyParams = { ...this.lazyParams, ...this.filters, maxPrice: this.filters.unitPrice, minPrice: this.filters.unitPrice };
+      this.loadLazyData();
+    }
+  }
+
+}
+</script>
+
+
+<style scoped>
+.table-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.product-image {
+  width: 50px;
+  height: 3rem;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+  object-fit: cover;
+  object-position: center;
+}
+.p-datatable-responsive-demo .p-datatable-tbody > tr > td .p-column-title {
+  display: none;
+}
+
+@media screen and (max-width: 40em) {
+  .p-datatable.p-datatable-responsive-demo .p-datatable-thead > tr > th,
+  .p-datatable.p-datatable-responsive-demo .p-datatable-tfoot > tr > td {
+    display: none !important;
+  }
+  .p-datatable.p-datatable-responsive-demo .p-datatable-tbody > tr > td {
+    text-align: left;
+    display: block;
+    border: 0 none !important;
+    width: 100% !important;
+    float: left;
+    clear: left;
+  }
+  .p-datatable.p-datatable-responsive-demo
+    .p-datatable-tbody
+    > tr
+    > td
+    .p-column-title {
+    padding: 0.4rem;
+    min-width: 30%;
+    display: inline-block;
+    margin: -0.4em 1em -0.4em -0.4rem;
+    font-weight: bold;
+  }
+}
+
+.product-badge.status-instock {
+  background: #c8e6c9;
+  color: #256029;
+}
+.product-badge.status-lowstock {
+  background: #feedaf;
+  color: #8a5340;
+}
+.product-badge.status-outofstock {
+  background: #ffcdd2;
+  color: #c63737;
+}
+.product-badge {
+  border-radius: 2px;
+  padding: 0.25em 0.5rem;
+  text-transform: uppercase;
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 0.3px;
+}
+</style>
+-->

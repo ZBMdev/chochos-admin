@@ -254,7 +254,6 @@ export default class CustomerList extends Vue {
           :rowsPerPageOptions="[10, 20, 50, 100, 200]"
           currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
           paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
-          
           responsiveLayout="scroll"
           :scrollable="true"
           paginatorPosition="both"
@@ -262,6 +261,7 @@ export default class CustomerList extends Vue {
           :loading="isLoading"
           :first="firstRecordIndex"
           :rowHover="true"
+          :lazy="true"
         >
           <template #header>
             <div class="table-header p-d-flex">

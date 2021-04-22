@@ -1,7 +1,7 @@
 <template>
   <div>
     <PageHeading
-      title="All Jobs"
+      title="Job Requests" 
       :subtitle="`${totalRecords} jobs in total`"
     />
     <ProgressSpinner style="display:flex; justify-content: center" v-if="isLoading" />

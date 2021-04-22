@@ -6,7 +6,7 @@ import { AxiosResponse } from 'axios';
 import Service from './Service';
 
 export default class AdminService extends Service<AdminData, AdminUpdateParam>{
-    url = "/v1/users";
+    url = "/admin";
    // url = "/views/auth/";
     constructor(url?: string) {
         super(url);
@@ -28,7 +28,7 @@ export default class AdminService extends Service<AdminData, AdminUpdateParam>{
      *Create
      */
     public createadmin(payload: AdminCreateParam){
-        return API.post('/admin/createadmin', payload)
+        return API.post('/admin/', payload)
             .then(({ data }: AxiosResponse<APIResponse<AdminCreateParam>>) => {
                 return data.data;
             }).catch((error) => {
