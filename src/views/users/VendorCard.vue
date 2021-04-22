@@ -1,5 +1,5 @@
 <template>
-  <PageHeading title=`${vendor.fullName} Profile` />
+  <PageHeading title=" Vendor's Profile" />
   <ProgressSpinner style="display:flex; justify-content: center" v-if="loading" />
   <div v-else class="p-grid">
     <div class="p-col-12 p-md-6">
