@@ -22,18 +22,6 @@
       </div>
       <div class="p-field p-fluid">
         <label>
-          Role
-        </label>
-        <Dropdown
-          :options="roles"
-          optionLabel="name"
-          optionValue="id"
-          @input="syncAdmin"
-          v-model="admin.role_id"
-        />
-      </div>
-      <div class="p-field p-fluid">
-        <label>
           Password
         </label>
         <InputText @input="syncAdmin" v-model="admin.password"></InputText>
@@ -64,7 +52,7 @@ export default defineComponent({
         username: '',
         email: '',
         /* eslint-disable */
-        role_id: null,
+        // role_id: null,
         password: '',
       }),
     }

@@ -25,10 +25,10 @@
           <!-- 
           scrollHeight="flex"
           scrollDirection="both"-->
-          <Column field="name" headerStyle="width: 3rem;">
-            <template #body="{data}">
+          <Column headerStyle="width: 3rem;">
+            <template #body={data}>
               <Avatar
-                :label="data.name.charAt(0)"
+                :label="`${data.firstName.charAt(0)}${data.lastName.charAt(0)}`"
                 class="p-mr-2"
                 style="background-color:#c8e6c9;color:#256029"
                 shape="circle"
@@ -39,6 +39,20 @@
             field="name"
             header="Name"
             headerStyle="width: 200px;"
+          >
+            <template #body="slotProps">
+              {{ slotProps.data.name }}
+            </template>
+          </Column>
+          <Column
+            field="firstName"
+            header="First Name"
+            headerStyle="width: 250px;"
+          ></Column>
+          <Column
+            field="lastName"
+            header="Surname"
+            headerStyle="width: 250px;"
           ></Column>
           <Column
             field="email"
@@ -46,31 +60,13 @@
             headerStyle="width: 250px;"
           ></Column>
           <Column
-            field="role.name"
-            header="Role"
-            headerStyle="width: 150px;"
-          ></Column>
-          <Column
             field="username"
             header="Username"
             headerStyle="width: 150px;"
           ></Column>
-          <Column field="activated" header="Status" headerStyle="width: 100px;">
-            <template #body="slotProps">
-              <span v-if="slotProps.data.activated" class="item-activated">
-                active
-              </span>
-              <span v-else class="item-deactivated"> inactive </span>
-            </template>
-          </Column>
           <Column headerStyle="width: 100px;">
             <template #body="{data}">
               <Button icon="pi pi-pencil" @click="editAdmin(data)" />
-              <!-- <Button
-                icon="pi pi-trash"
-                class="p-button-warning"
-                @click="confrimDelete(data)"
-              /> -->
             </template>
           </Column>
         </DataTable>
@@ -82,12 +78,50 @@
       v-model:visible="displayCreateForm"
       class="p-fluid p-dialog-sm"
       :style="{ width: '450px' }"
+      :breakpoints="{'960px': '75vw', '640px': '100vw'}"
     >
       <template #header>
         <h3>Admin Details</h3>
       </template>
-
-      <AdminCreate v-model="newAdmin" @admin-created="getData" />
+      <div>
+        <div class="p-field p-fluid">
+          <label>
+            First Name
+          </label>
+          <InputText
+            v-model="admins.firstName"
+          >
+          </InputText>
+        </div>
+        <div class="p-field p-fluid">
+          <label>
+            Last Name
+          </label>
+          <InputText
+            v-model="admins.lastName"
+          >
+          </InputText>
+        </div>
+        <div class="p-field p-fluid">
+          <label>
+            Username
+          </label>
+          <InputText
+            v-model="admins.username"
+          >
+          </InputText>
+        </div>
+        <div class="p-field p-fluid">
+          <label>
+            Email
+          </label>
+          <InputText
+            v-model="admins.email"
+          >
+          </InputText>
+        </div>
+        <Button @click="createAdmin" label="Submit"></Button>
+      </div>      
     </Dialog>
 
     <Dialog
@@ -95,12 +129,57 @@
       v-model:visible="editDialog"
       class="p-fluid p-dialog-sm"
       :style="{ width: '450px' }"
+      :breakpoints="{'960px': '75vw', '640px': '100vw'}"
     >
       <template #header>
         <h3>Admin Details</h3>
       </template>
-
-      <AdminEdit v-model="admin" @admin-updated="getData" />
+      <div class="p-d-flex p-jc-center p-ai-center ">
+          <Avatar
+            :label="`${admin.firstName.charAt(0).toUpperCase()}${admin.lastName.charAt(0).toUpperCase()}`" 
+            class="p-mr-2"
+            style="margin-top: 10px; background-color:#c8e6c9; color:#256029; min-width:6rem; min-height:6rem; font-size:4rem;"
+            shape="circle"
+          />
+        </div>
+      <div>
+        <div class="p-field p-fluid">
+          <label>
+            First Name
+          </label>
+          <InputText
+            v-model="admin.firstName"
+          >
+          </InputText>
+        </div>
+        <div class="p-field p-fluid">
+          <label>
+            Last Name
+          </label>
+          <InputText
+            v-model="admin.lastName"
+          >
+          </InputText>
+        </div>
+        <div class="p-field p-fluid">
+          <label>
+            Username
+          </label>
+          <InputText
+            v-model="admin.username"
+          >
+          </InputText>
+        </div>
+        <div class="p-field p-fluid">
+          <label>
+            Email
+          </label>
+          <InputText
+            v-model="admin.email"
+          >
+          </InputText>
+        </div>
+      </div>      
     </Dialog>
 
     <Dialog
@@ -139,12 +218,12 @@
 import { defineComponent } from 'vue'
 import AdminService from '@/services/AdminService'
 import { AdminData, AdminCreateParam } from '@/types/admin'
-import AdminCreate from "@/components/users/AdminCreate.vue";
-import AdminEdit from "@/components/users/AdminEdit.vue";
+// import AdminCreate from "@/components/users/AdminCreate.vue";
+// import AdminEdit from "@/components/users/AdminEdit.vue";
 import { useToast } from 'primevue/usetoast';
 
 export default defineComponent({
-  components: { AdminCreate, AdminEdit },
+  // components: { AdminCreate, AdminEdit },
   data() {
     return {
       loading: false,
@@ -186,6 +265,19 @@ export default defineComponent({
           this.toast.add({ severity: "info", detail: "deleted successfully" })
         })
         .finally(() => { this.loading = false; });
+    },
+    createAdmin() {
+      this.service.create(this.admin)
+        .then((admin) => {
+          this.toast.add({
+            severity: "success",
+            summary: "Successful",
+            detail: "Admin was created successfully",
+            life: 3000
+          });
+          console.log(admin)
+          this.$emit("admin-created", admin);
+        })
     },
   },
 })

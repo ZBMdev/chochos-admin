@@ -6,36 +6,18 @@ import { string, object, ref } from 'yup';
 import { FormSchema } from '@/types/dynamicForm';
 
 export default class Admin extends Model {
-  fullName!:           string;
-  id!:                 number;
-  lastName!:           string;
-  firstName!:          string;
-  email!:              string;
-  password!:           string;
+  id!:                number;
+  firstName!:        string;
+  lastName!:         string;
+  email!:            string;
+  username!:         string;
+  password!:         string;
   oldPassword!:        string;
-  username!:           string;
-  userCategory!:       number;
-  longitude!:          number;
-  latitude!:           number;
-  rating!:             number;
-  totalRatingValue!:   number;
-  totalRatingCount!:   number;
-  address!:            string;
-  mobile!:             string;
-  isValidated!:        null;
-  isActive!:           boolean;
+  login_type!:         string;
   push_token!:         string;
-  photoUrl!:           string;
-  last_login!:         Date;
-  updated_on!:         Date;
-  created_on!:         Date;
-  deletionDate!:       null;
-  passwordUpdated_on!: Date;
-  refreshToken!:       null;
-  about!:              null;
-  languages!:          string;
-  categoryId!:         number;
-  skills!:             any[];
+  last_login_date!:        Date;
+  updated_At!:         Date;
+  created_At!:         Date;
 
     constructor(data?: Partial<AdminsData>) {
         super();
@@ -44,6 +26,9 @@ export default class Admin extends Model {
         }
     }
 
+    get name() {
+      return `${this.firstName} ${this.lastName}`.trim();
+    }
 
     toCreateParam() {
         return {
@@ -51,8 +36,7 @@ export default class Admin extends Model {
           password: this.password,
           firstName: this.firstName,
           lastName: this.lastName,
-          username: this.username,
-          categoryId: this.categoryId  
+          username: this.username
         } as RegisterObject;
     }
       

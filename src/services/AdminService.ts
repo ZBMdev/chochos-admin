@@ -6,7 +6,7 @@ import { AxiosResponse } from 'axios';
 import Service from './Service';
 
 export default class AdminService extends Service<AdminData, AdminUpdateParam>{
-    url = "/admin";
+    url = "/admins";
    // url = "/views/auth/";
     constructor(url?: string) {
         super(url);

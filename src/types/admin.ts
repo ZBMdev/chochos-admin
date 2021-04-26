@@ -9,14 +9,17 @@
 
 export interface AdminData {
     id: number;
-    name: string;
+    firstName: string;
+    lastName: string;
     email: string;
     username: string;
+    password: string;
+    oldPassword: string;
     login_type: string;
     push_token: string;
     last_login_date: Date;
     activated: boolean;
-    role_id: number;
+    // role_id: number;
     // role: RoleData;
     updated_at: Date;
     created_at: Date;
@@ -70,13 +73,11 @@ export interface LoginData {
 }
 
 export interface RegisterObject{
-    email:	string;
-    password:	string;
-    firstName:	string;
-    lastName:	string;
-    fullName:	string;
-    username:	string;
-    categoryId:	number;
+    firstName: string;
+    lastName: string;
+    email: string;
+    username: string;
+    password: string;
 }
 
 export interface LoginObject {
@@ -95,6 +96,21 @@ export interface Admins {
 }
 
 export interface AdminsData {
+    id: number;
+    firstName: string;
+    lastName: string;
+    email: string;
+    username: string;
+    password: string;
+    oldPassword: string;
+    login_type: string;
+    push_token: string;
+    last_login_date: Date;
+    updated_at: Date;
+    created_at: Date;
+}
+
+/* export interface AdminsData {
     fullName:           string;
     id:                 number;
     lastName:           string;
@@ -126,3 +142,5 @@ export interface AdminsData {
     categoryId:         number;
     skills:             any[];
 }
+*/
+
