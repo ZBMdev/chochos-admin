@@ -54,7 +54,7 @@
             style="min-width: 14rem"
             headerStyle="min-width: 14rem"
             header="Name"
-            :sortable="true"
+            sortable
             filterMode="contains"
           >
             <template #body="slotProps">
@@ -74,7 +74,7 @@
             style="min-width: 14rem"
             headerStyle="min-width: 14rem"
             header="Username"
-            :sortable="true"
+            sortable
             filterMode="contains"
           >
             <template #body="slotProps">
@@ -94,7 +94,7 @@
             style="min-width: 14rem"
             headerStyle="min-width: 14rem"
             header="Email"
-            :sortable="true"
+            sortable
             filterMode="contains"
           >
             <template #body="slotProps">
@@ -114,7 +114,7 @@
             style="min-width: 14rem"
             headerStyle="min-width: 14rem"
             header="About"
-            :sortable="true"
+            sortable
             filterMode="contains"
           >
             <template #body="slotProps">
@@ -129,7 +129,7 @@
             headerStyle="min-width: 10rem"
             header="Last active"
             sortField="last_login_date"
-            :sortable="true"
+            sortable
           >
             <template #body="slotProps">
               {{ slotProps.data.lastLogin }}
@@ -165,7 +165,7 @@
             style="min-width: 10rem"
             headerStyle="min-width: 10rem"
             header="Languages"
-            :sortable="true"
+            sortable
           >
             <template #body="slotProps">
               {{ slotProps.data.languages }}
@@ -176,7 +176,7 @@
             style="min-width: 14rem"
             headerStyle="min-width: 14rem"
             header="Address"
-            :sortable="true"
+            sortable
           >
             <template #body="slotProps">
               {{ slotProps.data.address}}
@@ -285,17 +285,24 @@ export default class Artisans extends Vue {
         <DataTable
           class="p-datatable-responsive p-datatable-sm"
           :value="artisans"
-          :paginator="true" :rows="10"
-            paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
-            :rowsPerPageOptions="[10,20,50, 100, 200]" responsiveLayout="scroll"
-            currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
+          :paginator="true"
+          :rows="10"
+          v-model:filters="filters"
+          filterDisplay="row" 
+          :globalFilterFields="['fullName','username','email','address', 'languages']"
+          paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
+          :rowsPerPageOptions="[10,20,50, 100, 200]"
+          currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
+          :scrollable="true"
+          :rowHover="true"
+          responsiveLayout="scroll"
         >
           <template #header>
             <div class="table-header p-d-flex">
               <span class="p-input-icon-left">
                 <i class="pi pi-search" />
                 <InputText
-                  v-model="filters['global']"
+                  v-model="filters['global'].value"
                   placeholder="Search..."
                 />
               </span>
@@ -322,19 +329,11 @@ export default class Artisans extends Vue {
             style="min-width: 14rem"
             headerStyle="min-width: 14rem"
             header="Name"
-            :sortable="true"
-            filterMode="contains"
+            sortable
+            filterMatchMode="contains"
           >
             <template #body="slotProps">
               {{ slotProps.data.fullName }}
-            </template>
-            <template #filter>
-              <InputText
-                type="text"
-                v-model="filters['name']"
-                class="p-column-filter"
-                placeholder="Search by name"
-              />
             </template>
           </Column>
           <Column
@@ -342,19 +341,11 @@ export default class Artisans extends Vue {
             style="min-width: 14rem"
             headerStyle="min-width: 14rem"
             header="Username"
-            :sortable="true"
+            sortable
             filterMode="contains"
           >
             <template #body="slotProps">
               {{ slotProps.data.username }}
-            </template>
-            <template #filter>
-              <InputText
-                type="text"
-                v-model="filters['username']"
-                class="p-column-filter"
-                placeholder="Search by username"
-              />
             </template>
           </Column>
           <Column
@@ -362,19 +353,11 @@ export default class Artisans extends Vue {
             style="min-width: 14rem"
             headerStyle="min-width: 14rem"
             header="Email"
-            :sortable="true"
+            sortable
             filterMode="contains"
           >
             <template #body="slotProps">
               {{ slotProps.data.email }}
-            </template>
-            <template #filter>
-              <InputText
-                type="text"
-                v-model="filters['email']"
-                class="p-column-filter"
-                placeholder="Search by email"
-              />
             </template>
           </Column>
           <Column
@@ -382,7 +365,7 @@ export default class Artisans extends Vue {
             style="min-width: 14rem"
             headerStyle="min-width: 14rem"
             header="About"
-            :sortable="true"
+            sortable
             filterMode="contains"
           >
             <template #body="slotProps">
@@ -397,18 +380,10 @@ export default class Artisans extends Vue {
             headerStyle="min-width: 10rem"
             header="Last active"
             sortField="last_login_date"
-            :sortable="true"
+            sortable
           >
             <template #body="slotProps">
               {{ slotProps.data.lastLogin }}
-            </template>
-            <template #filter>
-              <InputText
-                type="text"
-                v-model="filters['last_login']"
-                class="p-column-filter"
-                placeholder="Search by last active"
-              />
             </template>
           </Column>
           <Column
@@ -433,7 +408,7 @@ export default class Artisans extends Vue {
             style="min-width: 10rem"
             headerStyle="min-width: 10rem"
             header="Languages"
-            :sortable="true"
+            sortable
           >
             <template #body="slotProps">
               {{ slotProps.data.languages }}
@@ -444,18 +419,10 @@ export default class Artisans extends Vue {
             style="min-width: 14rem"
             headerStyle="min-width: 14rem"
             header="Address"
-            :sortable="true"
+            sortable
           >
             <template #body="slotProps">
               {{ slotProps.data.address}}
-            </template>
-            <template #filter>
-              <InputText
-                type="text"
-                v-model="filters['address']"
-                class="p-column-filter"
-                placeholder="Search by address"
-              />
             </template>
           </Column>
         </DataTable>
@@ -470,6 +437,7 @@ import MainLayout from '@/components/layouts/MainLayout.vue';
 import Artisan from '@/models/Artisan';
 import ArtisanService from '@/services/ArtisanService';
 import { useToast } from 'primevue/usetoast';
+import {FilterMatchMode} from 'primevue/api';
 import qs from 'qs';
 // import { toast } from '@/utils/helper';
 
@@ -477,6 +445,8 @@ interface ArtisanLazyParameters {
   page: number;
   limit: number;
   name: string;
+  pageSize:   number;
+  totalCount: number;
 }
 
 @Options({
@@ -490,7 +460,13 @@ export default class Artisans extends Vue {
   totalRecords = 0;
   service: ArtisanService = new ArtisanService();
   selectedArtisans: Artisan[] = [];
-  filters: Record<string, unknown> = {};
+  filters = {
+    'global': {value: null, matchMode: FilterMatchMode.CONTAINS},
+    'name': {value: null, matchMode: FilterMatchMode.STARTS_WITH}
+  };
+  matchModeOptions =  [
+    {label: 'Starts With', value: FilterMatchMode.STARTS_WITH}
+  ]
   submitted = false;
   toast = useToast();
   lazyParams: Partial<ArtisanLazyParameters> = {};

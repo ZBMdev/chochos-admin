@@ -12,6 +12,9 @@
           :value="skills"
           :paginator="true"
           :rows="10"
+          v-model:filters="filters"
+          filterDisplay="row" 
+          :globalFilterFields="['name','description']"
           currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
           paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
           :totalRecords="totalRecords"
@@ -27,7 +30,7 @@
               <span class="p-input-icon-left">
                 <i class="pi pi-search" />
                 <InputText
-                  v-model="filters['global']"
+                  v-model="filters['global'].value"
                   placeholder="Search..."
                 />
               </span>
@@ -62,14 +65,6 @@
             :sortable="true"
             filterMode="contains"
           >
-            <template #filter>
-              <InputText
-                type="text"
-                v-model="filters['name']"
-                class="p-column-filter"
-                placeholder="Search by name"
-              />
-            </template>
             <template #body="slotProps">
               {{ slotProps.data.name }}
             </template>
@@ -186,6 +181,7 @@ import SkillsService from '@/services/SkillsService';
 import { SkillsData } from '@/types/skills'
 import SkillsEdit from "@/components/category/SkillsEdit.vue";
 import { useToast } from 'primevue/usetoast';
+import {FilterMatchMode} from 'primevue/api';
 import qs from 'qs';
 
 interface SkillsLazyParameters {
@@ -207,11 +203,12 @@ export default class SkillsList extends Vue {
   generalLoading = false;
   service: SkillsService = new SkillsService();
   filters = {
-    name: "",
-    price: undefined,
-    rating: undefined,
-    status: "",
+    'global': {value: null, matchMode: FilterMatchMode.CONTAINS},
+    'name': {value: null, matchMode: FilterMatchMode.STARTS_WITH}
   };
+  matchModeOptions =  [
+    {label: 'Starts With', value: FilterMatchMode.STARTS_WITH}
+  ]
   submitted = false;
   toast = useToast();
   lazyParams: Partial<SkillsLazyParameters> = {};

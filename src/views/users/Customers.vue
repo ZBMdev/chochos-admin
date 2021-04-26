@@ -239,7 +239,7 @@ export default class CustomerList extends Vue {
   <div>
     <PageHeading
       title="Customers" 
-      :subtitle="`${totalRecords} users in total`"
+      :subtitle="`${totalRecords} customers in total`"
     />
     <ProgressSpinner style="display:flex; justify-content: center" v-if="isLoading" />
     <Card v-else>
@@ -251,34 +251,35 @@ export default class CustomerList extends Vue {
           :value="customers"
           :paginator="true"
           :rows="10"
+          v-model:filters="filters"
+          filterDisplay="row" 
+          :globalFilterFields="['fullName','username', 'email','address', 'languages']"
           :rowsPerPageOptions="[10, 20, 50, 100, 200]"
           currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
           paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
           responsiveLayout="scroll"
           :scrollable="true"
+          :rowHover="true"
           paginatorPosition="both"
           :totalRecords="totalRecords"
-          :loading="isLoading"
           :first="firstRecordIndex"
-          :rowHover="true"
-          :lazy="true"
         >
           <template #header>
             <div class="table-header p-d-flex">
               <span class="p-input-icon-left">
                 <i class="pi pi-search" />
                 <InputText
-                  v-model="filters['global']"
+                  v-model="filters['global'].value"
                   placeholder="Search..."
                 />
               </span>
             </div>
           </template>
           <template #empty>
-            No user found.
+            No customer found.
           </template>
           <template #loading>
-            Loading users data. Please wait.
+            Loading customers data. Please wait.
           </template>
           <Column
             field="name"
@@ -301,14 +302,6 @@ export default class CustomerList extends Vue {
             :sortable="true"
             filterMode="contains"
           >
-            <template #filter>
-              <InputText
-                type="text"
-                v-model="filters['fullName']"
-                class="p-column-filter"
-                placeholder="Search by name"
-              />
-            </template>
             <template #body="slotProps">
               {{ slotProps.data.fullName }}
             </template>
@@ -321,14 +314,6 @@ export default class CustomerList extends Vue {
             :sortable="true"
             filterMode="contains"
           >
-            <template #filter>
-              <InputText
-                type="text"
-                v-model="filters['username']"
-                class="p-column-filter"
-                placeholder="Search by username"
-              />
-            </template>
             <template #body="slotProps">
               {{ slotProps.data.username }}
             </template>
@@ -341,14 +326,6 @@ export default class CustomerList extends Vue {
             :sortable="true"
             filterMode="contains"
           >
-            <template #filter>
-              <InputText
-                type="text"
-                v-model="filters['email']"
-                class="p-column-filter"
-                placeholder="Search by email"
-              />
-            </template>
             <template #body="slotProps">
               {{ slotProps.data.email }}
             </template>
@@ -361,14 +338,6 @@ export default class CustomerList extends Vue {
             :sortable="true"
             filterMode="contains"
           >
-            <template #filter>
-              <InputText
-                type="text"
-                v-model="filters['address']"
-                class="p-column-filter"
-                placeholder="Search by address"
-              />
-            </template>
             <template #body="slotProps">
               {{ slotProps.data.address }}
             </template>
@@ -381,14 +350,6 @@ export default class CustomerList extends Vue {
             :sortable="true"
             filterMode="contains"
           >
-            <template #filter>
-              <InputText
-                type="text"
-                v-model="filters['languages']"
-                class="p-column-filter"
-                placeholder="Search by languages"
-              />
-            </template>
             <template #body="slotProps">
               {{ slotProps.data.languages }}
             </template>
@@ -405,6 +366,7 @@ import MainLayout from '@/components/layouts/MainLayout.vue';
 import Customer from '@/models/Customer';
 import CustomerService from '@/services/CustomerService';
 import { useToast } from 'primevue/usetoast';
+import {FilterMatchMode} from 'primevue/api';
 import qs from 'qs';
 // import { toast } from '@/utils/helper';
 
@@ -426,7 +388,13 @@ export default class CustomerList extends Vue {
   datasource: Customer[] = [];
   service: CustomerService = new CustomerService();
   selectedCustomers: Customer[] = [];
-  filters: Record<string, unknown> = {};
+  filters = {
+    'global': {value: null, matchMode: FilterMatchMode.CONTAINS},
+    'name': {value: null, matchMode: FilterMatchMode.STARTS_WITH}
+  };
+  matchModeOptions =  [
+    {label: 'Starts With', value: FilterMatchMode.STARTS_WITH}
+  ]
   submitted = false;
   toast = useToast();
   lazyParams: Partial<CustomerLazyParameters> = {};

@@ -13,7 +13,9 @@
           v-model:selection="selectedUsers"
           dataKey="id"
           :rows="10"
-          :filters="filters"
+          v-model:filters="filters"
+          filterDisplay="row" 
+          :globalFilterFields="['user_id','occupation','userType', 'address']"
           :paginator="true"
           paginatorPosition="both"
           paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
@@ -28,7 +30,7 @@
               <span class="p-input-icon-left">
                 <i class="pi pi-search" />
                 <InputText
-                  v-model="filters['global']"
+                  v-model="filters['global'].value"
                   placeholder="Search..."
                 />
               </span>
@@ -129,6 +131,7 @@ import UserCategoryService from '@/services/UserCategoryService';
 import { useToast } from 'primevue/usetoast';
 import qs from 'qs';
 import { UserCategoryData } from '@/types/customer';
+import {FilterMatchMode} from 'primevue/api';
 
 interface UserCategoryLazyParameters {
   page: number;
@@ -151,7 +154,13 @@ export default class UserCatList extends Vue {
   datasource: UserCategory[] = [];
   service: UserCategoryService = new UserCategoryService();
   selectedUsers: UserCategory[] = [];
-  filters: Record<string, unknown> = {};
+  filters = {
+    'global': {value: null, matchMode: FilterMatchMode.CONTAINS},
+    'name': {value: null, matchMode: FilterMatchMode.STARTS_WITH}
+  };
+  matchModeOptions =  [
+    {label: 'Starts With', value: FilterMatchMode.STARTS_WITH}
+  ]
   submitted = false;
   toast = useToast();
   lazyParams: Partial<UserCategoryLazyParameters> = {};

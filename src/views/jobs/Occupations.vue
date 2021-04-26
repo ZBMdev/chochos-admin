@@ -208,16 +208,31 @@ export default class SkillsList extends Vue {
           :value="occupations"
           :paginator="true"
           :rows="10"
+          v-model:filters="filters"
+          filterDisplay="row" 
+          :globalFilterFields="['name']"
           paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
           :rowsPerPageOptions="[10,20,50, 100, 200]"
           responsiveLayout="scroll"
           :scrollable="true"
           :rowHover="true"
         >
+          <template #header>
+            <div class="table-header">
+              <span class="p-input-icon-left">
+                <i class="pi pi-search" />
+                <InputText
+                  v-model="filters['global'].value"
+                  placeholder="Search occupations"
+                />
+              </span>
+            </div>
+          </template>
           <Column
             field="name"
             style="min-width: 14rem"
             header="Name"
+            sortable
           >
             <template #body="slotProps">
               {{ slotProps.data.name }}
@@ -258,6 +273,7 @@ import { Options, Vue } from 'vue-class-component';
 import Occupation from '@/models/Occupation'
 import OccupationService from '@/services/OccupationService';
 import { OccupationData } from '@/types/occupation'
+import {FilterMatchMode} from 'primevue/api';
 import qs from 'qs';
 
 interface OccupationLazyParameters {
@@ -274,11 +290,12 @@ export default class SkillsList extends Vue {
   generalLoading = false;
   service: OccupationService = new OccupationService();
   filters = {
-    name: "",
-    price: undefined,
-    rating: undefined,
-    status: "",
+    'global': {value: null, matchMode: FilterMatchMode.CONTAINS},
+    'name': {value: null, matchMode: FilterMatchMode.STARTS_WITH}
   };
+  matchModeOptions =  [
+    {label: 'Starts With', value: FilterMatchMode.STARTS_WITH}
+  ]
   lazyParams: Partial<OccupationLazyParameters> = {};
   firstRecordIndex = 0;
   rowstoDisplay = 10;

@@ -13,7 +13,9 @@
           v-model:selection="selectedVendors"
           dataKey="id"
           :rows="10"
-          :filters="filters"
+          v-model:filters="filters"
+          filterDisplay="row" 
+          :globalFilterFields="['fullName','username','email', 'languages', 'address']"
           :paginator="true"
           paginatorPosition="both"
           paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
@@ -22,13 +24,14 @@
           :scrollable="true"
           :rowHover="true"
           responsiveLayout="scroll"
+          @row-click="openVendor($event.data)"
         >
           <template #header>
             <div class="table-header p-d-flex">
               <span class="p-input-icon-left">
                 <i class="pi pi-search" />
                 <InputText
-                  v-model="filters['global']"
+                  v-model="filters['global'].value"
                   placeholder="Search..."
                 />
               </span>
@@ -132,6 +135,107 @@
         </DataTable>
       </template>
     </Card>
+
+    <Dialog
+      v-model:visible="vendorDialog"
+      :breakpoints="{'960px': '75vw', '640px': '100vw'}"
+      :style="{width: '50vw'}"
+      header="Vendor Details"
+      :modal="true"
+      class="p-fluid"
+    >
+      <div>
+        <!-- <div v-if="vendor.photoUrl === ''" class="p-field p-fluid  p-jc-center p-ai-center "> -->
+        <div v-if="vendor.photoUrl == ''" class="p-d-flex p-jc-center p-ai-center ">
+          <img
+            :src="vendor.photoUrl"
+            style="max-width:8rem; max-height:8rem; font-size:4rem; border-radius: 50%; display: flex; justify-content: center; align-items: center"
+            alt="">
+        </div>
+        <div v-else class="p-d-flex p-jc-center p-ai-center ">
+          <Avatar
+            :label="`${vendor.firstName.charAt(0).toUpperCase()}${vendor.lastName.charAt(0).toUpperCase()}`" 
+            class="p-mr-2"
+            style="margin-top: 10px; background-color:#c8e6c9; color:#256029; min-width:6rem; min-height:6rem; font-size:4rem;"
+            shape="circle"
+          />
+        </div>
+        <div class="p-field p-fluid">
+          <label>
+            Name
+          </label>
+          <InputText
+            v-model="vendor.fullName"
+          >
+          </InputText>
+        </div>
+        <div class="p-field p-fluid">
+          <label>
+            Username
+          </label>
+          <InputText
+            v-model="vendor.username"
+          >
+          </InputText>
+        </div>
+        <div class="p-field p-fluid">
+          <label>
+            Email
+          </label>
+          <InputText
+            v-model="vendor.email"
+          >
+          </InputText>
+        </div>
+        <div class="p-field p-fluid">
+          <label>
+            Address
+          </label>
+          <InputText
+            v-model="vendor.address"
+          >
+          </InputText>
+        </div>
+        <div class="p-field p-fluid">
+          <label>
+            Mobile
+          </label>
+          <InputText
+            v-model="vendor.mobile"
+          >
+          </InputText>
+        </div>
+        <div class="p-field p-fluid">
+          <label>
+            Reviews
+          </label>
+          <Rating
+            :modelValue="vendor.rating"
+            :readonly="true"
+            :cancel="false"
+            :stars="5"
+          />
+        </div>
+        <div class="p-field p-fluid">
+          <label>
+            Languages
+          </label>
+          <InputText
+            v-model="vendor.languages"
+          >
+          </InputText>
+        </div>
+        <div class="p-field p-fluid">
+          <label>
+            Last Login
+          </label>
+          <InputText
+            v-model="vendor.lastLogin"
+          >
+          </InputText>
+        </div>
+      </div>      
+    </Dialog>
   </div>
 </template>
 
@@ -140,8 +244,11 @@ import { Options, Vue } from 'vue-class-component';
 import MainLayout from '@/components/layouts/MainLayout.vue';
 import Vendor from '@/models/Vendor';
 import VendorService from '@/services/VendorService';
+import VendorBox from "@/components/users/VendorBox.vue";
 import { useToast } from 'primevue/usetoast';
+import {FilterMatchMode} from 'primevue/api';
 import qs from 'qs';
+import Dialog from 'primevue/dialog';
 // import { toast } from '@/utils/helper';
 
 interface VendorLazyParameters {
@@ -151,16 +258,24 @@ interface VendorLazyParameters {
 }
 
 @Options({
-  components: { MainLayout, },
+  components: { MainLayout, VendorBox, Dialog },
 })
 export default class Vendors extends Vue {
   isLoading = false;
   vendors: Vendor[] = [];
+  vendor!: Vendor;
   datasource: Vendor[] = [];
+  vendorDialog = false;
   totalRecords = 0;
   service: VendorService = new VendorService();
   selectedVendors: Vendor[] = [];
-  filters: Record<string, unknown> = {};
+  filters = {
+    'global': {value: null, matchMode: FilterMatchMode.CONTAINS},
+    'name': {value: null, matchMode: FilterMatchMode.STARTS_WITH}
+  };
+  matchModeOptions =  [
+    {label: 'Starts With', value: FilterMatchMode.STARTS_WITH}
+  ]
   submitted = false;
   toast = useToast();
   lazyParams: Partial<VendorLazyParameters> = {};
@@ -199,6 +314,12 @@ export default class Vendors extends Vue {
       this.toast.add({ severity: "error", summary: "There was an error fetching the vendors", detail: "Please check your internet connection and refresh the page" })
       console.log(e);
     });
+  }
+
+  openVendor(vendor: Vendor) {
+    this.vendor = vendor;
+    this.vendorDialog = true;
+    console.log("It will soon work....")
   }
 
 }

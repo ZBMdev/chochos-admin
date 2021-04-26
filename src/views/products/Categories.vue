@@ -10,7 +10,9 @@
         <DataTable
           class="p-datatable-responsive  p-datatable-sm"
           :value="categories"
-          :filters="filters"
+          v-model:filters="filters"
+          filterDisplay="row" 
+          :globalFilterFields="['name']"
           responsiveLayout="scroll"
           scrollable="true"
           :rowHover="true"
@@ -21,7 +23,7 @@
               <span class="p-input-icon-left">
                 <i class="pi pi-search" />
                 <InputText
-                  v-model="filters['global']"
+                  v-model="filters['global'].value"
                   placeholder="Search..."
                 />
               </span>
@@ -48,17 +50,8 @@
             style="min-width: 14rem"
             headerStyle="min-width: 14rem"
             header="Name"
-            :sortable="true"
-            filterMode="contains"
+            sortable
           >
-            <template #filter>
-              <InputText
-                type="text"
-                v-model="filters['name']"
-                class="p-column-filter"
-                placeholder="Search by name"
-              />
-            </template>
             <template #body="slotProps">
               {{ slotProps.data.name }}
             </template>
@@ -177,6 +170,7 @@ import { useToast } from 'primevue/usetoast';
 import BombsightService from '@/services/BombsightService';
 import CategoryEdit from "@/components/products/CategoryEdit.vue";
 import qs from 'qs';
+import {FilterMatchMode} from 'primevue/api';
 
 interface CategoriesLazyParameters {
   page:       number;
@@ -197,8 +191,13 @@ export default class ProductList extends Vue {
   deleteCategoriesDialog = false;
   category!: Category;
   selectedCategories: Category[] = [];
-  filterValue = '';
-  filters: Record<string, unknown> = {};
+  filters = {
+    'global': {value: null, matchMode: FilterMatchMode.CONTAINS},
+    'name': {value: null, matchMode: FilterMatchMode.STARTS_WITH}
+  };
+  matchModeOptions =  [
+    {label: 'Starts With', value: FilterMatchMode.STARTS_WITH}
+  ];
   submitted = false;
   isLoading = false;
   generalLoading = false;

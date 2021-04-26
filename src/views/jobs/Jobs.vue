@@ -13,6 +13,9 @@
           :value="jobs"
           :paginator="true"
           :rows="10"
+          v-model:filters="filters"
+          filterDisplay="row" 
+          :globalFilterFields="['customerName','executorName','customerAddress', 'productsAmount', 'start_date']"
           :rowsPerPageOptions="[10, 20, 50, 100, 200]"
           currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
           paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
@@ -29,7 +32,7 @@
               <span class="p-input-icon-left">
                 <i class="pi pi-search" />
                 <InputText
-                  v-model="filters['global']"
+                  v-model="filters['global'].value"
                   placeholder="Search..."
                 />
               </span>
@@ -46,17 +49,8 @@
             style="min-width: 14rem"
             headerStyle="min-width: 14rem"
             header="Customer"
-            :sortable="true"
             filterMode="contains"
           >
-            <template #filter>
-              <InputText
-                type="text"
-                v-model="filters['CustomerName']"
-                class="p-column-filter"
-                placeholder="Search by name"
-              />
-            </template>
             <template #body="slotProps">
               {{ slotProps.data.customerName }}
             </template>
@@ -66,17 +60,8 @@
             style="min-width: 14rem"
             headerStyle="min-width: 14rem"
             header="Executor"
-            :sortable="true"
             filterMode="contains"
           >
-            <template #filter>
-              <InputText
-                type="text"
-                v-model="filters['name']"
-                class="p-column-filter"
-                placeholder="Search by name"
-              />
-            </template>
             <template #body="slotProps">
               {{ slotProps.data.executorName }}
             </template>
@@ -86,17 +71,8 @@
             style="min-width: 14rem"
             headerStyle="min-width: 14rem"
             header="Address"
-            :sortable="true"
             filterMode="contains"
           >
-            <template #filter>
-              <InputText
-                type="text"
-                v-model="filters['address']"
-                class="p-column-filter"
-                placeholder="Search by address"
-              />
-            </template>
             <template #body="slotProps">
               {{ slotProps.data.customerAddress }}
             </template>
@@ -178,6 +154,7 @@ import { Vue } from 'vue-class-component';
 import Job from '@/models/Job'
 import JobService from '@/services/JobService';
 import { JobData } from '@/types/jobs'
+import {FilterMatchMode} from 'primevue/api';
 import qs from 'qs';
 
 interface JobLazyParameters {
@@ -197,11 +174,12 @@ export default class ProductList extends Vue {
   totalRecords = 0;
   service: JobService = new JobService();
   filters = {
-    name: "",
-    price: undefined,
-    rating: undefined,
-    status: "",
+    'global': {value: null, matchMode: FilterMatchMode.CONTAINS},
+    'name': {value: null, matchMode: FilterMatchMode.STARTS_WITH}
   };
+  matchModeOptions =  [
+    {label: 'Starts With', value: FilterMatchMode.STARTS_WITH}
+  ]
   lazyParams: Partial<JobLazyParameters> = {};
   firstRecordIndex = 0;
   rowstoDisplay = 10;
@@ -230,33 +208,6 @@ export default class ProductList extends Vue {
     return value.toLocaleString('en-NG', { style: 'currency', currency: 'NGN' });
   }
 
-  /**
-   *  filter event is not triggered in lazy mode instead use the event you prefer on your 
-   * form elements such as input, change, blur to make a remote call by passing the filters 
-   * property to update the displayed data. 
-   */
-  // eslint-disable-next-line
-  /* filterProducts(event: any) {
-    // if (event.keyCode === 13) {
-    this.loading = true;
-    if (this.filterValue) {
-      this.lazyParams = { name: this.filterValue, limit: 1000000000000, }
-      this.searchData();
-    }
-    // }
-  }
-
-  searchData() {
-    this.loading = true;
-    this.service.search(`${qs.stringify(this.lazyParams)}`)
-      .then(data => {
-        this.products = data.items.map((prod) => new Product(prod));
-        this.totalRecords = data.totalCount;
-        this.firstRecordIndex = 0;
-        this.loading = false;
-        this.generalLoading = false;
-      });
-  } */
 
   loadLazyData() {
     this.isLoading = true;
@@ -270,32 +221,6 @@ export default class ProductList extends Vue {
         this.generalLoading = false;
       });
   }
-
-  // eslint-disable-next-line
-  onPage(event: any) {
-    //event.page: New page number
-    //event.first: Index of first record
-    //event.rows: Number of rows to display in new page
-    //event.pageCount: Total number of pages
-    // console.log(event);
-    this.lazyParams = { ...event.originalEvent, page: event.page + 1, limit: event.rows } as JobLazyParameters;
-    this.loadLazyData();
-  }
-
-  // eslint-disable-next-line
-  onSort(event: any) {
-    this.lazyParams = { ...event.originalEvent, page: event.page + 1, limit: event.rows } as JobLazyParameters;
-    this.loadLazyData();
-  }
-
-  // eslint-disable-next-line
-  /* onFilter(event: any) {
-    if (event.keyCode === 13) {
-      this.loading = true;
-      this.lazyParams = { ...this.lazyParams, ...this.filters, maxPrice: this.filters.price, minPrice: this.filters.price };
-      this.loadLazyData();
-    }
-  } */
 
 }
 </script>

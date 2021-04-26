@@ -14,7 +14,9 @@
           dataKey="id"
           :paginator="true"
           :rows="10"
-          :filters="filters"
+          v-model:filters="filters"
+          filterDisplay="row" 
+          :globalFilterFields="['name']"
           paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
           :rowsPerPageOptions="[10, 20, 50, 100, 200]"
           currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
@@ -28,7 +30,7 @@
               <span class="p-input-icon-left">
                 <i class="pi pi-search" />
                 <InputText
-                  v-model="filters['global']"
+                  v-model="filters['global'].value"
                   placeholder="Search..."
                 />
               </span>
@@ -66,14 +68,6 @@
           >
             <template #body="slotProps">
               {{ slotProps.data.name }}
-            </template>
-            <template #filter>
-              <InputText
-                type="text"
-                v-model="filters['name']"
-                class="p-column-filter"
-                placeholder="Search by name"
-              />
             </template>
           </Column>
           <Column
@@ -202,6 +196,7 @@ import ArtisanCategoryService from '@/services/ArtisanCategoryService';
 import { ArtisanCategoryData } from '@/types/artisanCategory'
 import ArtisanEdit from "@/components/category/ArtisanEdit.vue";
 import { useToast } from 'primevue/usetoast';
+import {FilterMatchMode} from 'primevue/api';
 import qs from 'qs';
 // import { toast } from '@/utils/helper';
 
@@ -224,7 +219,13 @@ export default class ArtisanList extends Vue {
   totalRecords = 0;
   service: ArtisanCategoryService = new ArtisanCategoryService();
   selectedArtisans: ArtisanCategory[] = [];
-  filters: Record<string, unknown> = {};
+  filters = {
+    'global': {value: null, matchMode: FilterMatchMode.CONTAINS},
+    'name': {value: null, matchMode: FilterMatchMode.STARTS_WITH}
+  };
+  matchModeOptions =  [
+    {label: 'Starts With', value: FilterMatchMode.STARTS_WITH}
+  ]
   submitted = false;
   toast = useToast();
   lazyParams: Partial<ArtisanCatLazyParameters> = {};
