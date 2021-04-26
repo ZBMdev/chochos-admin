@@ -35,7 +35,7 @@
               />
             </template>
           </Column>
-          <Column
+          <!-- <Column
             field="name"
             header="Name"
             headerStyle="width: 200px;"
@@ -43,7 +43,7 @@
             <template #body="slotProps">
               {{ slotProps.data.name }}
             </template>
-          </Column>
+          </Column> -->
           <Column
             field="firstName"
             header="First Name"
