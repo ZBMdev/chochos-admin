@@ -60,11 +60,6 @@
 				"label": "Jobs",
 				"icon": "pi pi-briefcase",
 				"to": "/jobs"
-			},
-			{
-				"label": "All Orders",
-				"icon": "pi pi-shopping-cart",
-				"to": "/orders"
 			}
 		]
 	},
