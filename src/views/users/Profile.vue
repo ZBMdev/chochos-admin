@@ -86,7 +86,7 @@ export default defineComponent({
   data() {
     return {
       admin: {
-        fullName: '',
+        firstName: '',
         username: '',
         push_token: ' ',
         email: ''
@@ -164,7 +164,7 @@ export default defineComponent({
     this.user = await getUser();
 
     if (this.user) {
-      this.admin.fullName = this.user.fullName,
+      this.admin.firstName = this.user.firstName,
       this.admin.username = this.user.username,
       this.admin.email = this.user.email
       // this.admin.role_id = this.user.role_id
