@@ -263,6 +263,7 @@ export default class CustomerList extends Vue {
           paginatorPosition="both"
           :totalRecords="totalRecords"
           :first="firstRecordIndex"
+          @row-click="openCustomer($event.data)"
         >
           <template #header>
             <div class="table-header p-d-flex">
@@ -357,6 +358,93 @@ export default class CustomerList extends Vue {
         </DataTable>
       </template>
     </Card>
+
+    <Dialog
+      v-model:visible="customerDialog"
+      :breakpoints="{'960px': '75vw', '640px': '100vw'}"
+      :style="{width: '50vw'}"
+      header="Customer's Details"
+      :modal="true"
+      class="p-fluid"
+    >
+      <div>
+        <div class="p-d-flex p-jc-center p-ai-center ">
+          <Avatar
+              v-if="customer.photoUrl === '' || customer.photoUrl === null " 
+              icon="pi pi-user"
+              class="p-mr-2"
+              style="background-color:#c8e6c9;color:#256029;width:8rem;height:8rem;font-size:4rem;"
+              shape="circle"
+            />
+            <Avatar 
+              v-else-if="customer.fullName"
+              :label="customer.fullName.charAt(0).toUpperCase()"
+              class="p-mr-2"
+              style="background-color:#c8e6c9;color:#256029;width:8rem;height:8rem;font-size:4rem;"
+              shape="circle"
+            />
+            <img v-else
+              :src="customer.photoUrl"
+              :alt="customer.photoUrl"
+              style="width:8rem;height:8rem;font-size:4rem;"
+            />
+        </div>
+        <div class="p-field p-fluid">
+          <label>
+            Name
+          </label>
+          <InputText
+            v-model="customer.fullName"
+          >
+          </InputText>
+        </div>
+        <div class="p-field p-fluid">
+          <label>
+            Username
+          </label>
+          <InputText
+            v-model="customer.username"
+          >
+          </InputText>
+        </div>
+        <div class="p-field p-fluid">
+          <label>
+            Email
+          </label>
+          <InputText
+            v-model="customer.email"
+          >
+          </InputText>
+        </div>
+        <div class="p-field p-fluid">
+          <label>
+            Address
+          </label>
+          <InputText
+            v-model="customer.address"
+          >
+          </InputText>
+        </div>
+        <div class="p-field p-fluid">
+          <label>
+            Mobile
+          </label>
+          <InputText
+            v-model="customer.mobile"
+          >
+          </InputText>
+        </div>
+        <div class="p-field p-fluid">
+          <label>
+            Languages
+          </label>
+          <InputText
+            v-model="customer.languages"
+          >
+          </InputText>
+        </div>
+      </div>      
+    </Dialog>
   </div>
 </template>
 
@@ -385,6 +473,7 @@ export default class CustomerList extends Vue {
   isLoading = false;
   totalRecords = 0;
   customers: Customer[] = [];
+  customer!: Customer;
   datasource: Customer[] = [];
   service: CustomerService = new CustomerService();
   selectedCustomers: Customer[] = [];
@@ -395,6 +484,7 @@ export default class CustomerList extends Vue {
   matchModeOptions =  [
     {label: 'Starts With', value: FilterMatchMode.STARTS_WITH}
   ]
+  customerDialog = false;
   submitted = false;
   toast = useToast();
   lazyParams: Partial<CustomerLazyParameters> = {};
@@ -434,7 +524,11 @@ export default class CustomerList extends Vue {
       console.log(e);
     });
   }
-
+  
+  openCustomer(customer: Customer) {
+    this.customer = customer;
+    this.customerDialog = true;
+  }
 }
 </script>
 

@@ -145,21 +145,29 @@
       class="p-fluid"
     >
       <div>
-        <!-- <div v-if="vendor.photoUrl === ''" class="p-field p-fluid  p-jc-center p-ai-center "> -->
-        <div v-if="vendor.photoUrl == ''" class="p-d-flex p-jc-center p-ai-center ">
-          <img
-            :src="vendor.photoUrl"
-            style="max-width:8rem; max-height:8rem; font-size:4rem; border-radius: 50%; display: flex; justify-content: center; align-items: center"
-            alt="">
-        </div>
-        <div v-else class="p-d-flex p-jc-center p-ai-center ">
-          <Avatar
-            :label="`${vendor.firstName.charAt(0).toUpperCase()}${vendor.lastName.charAt(0).toUpperCase()}`" 
-            class="p-mr-2"
-            style="margin-top: 10px; background-color:#c8e6c9; color:#256029; min-width:6rem; min-height:6rem; font-size:4rem;"
-            shape="circle"
-          />
-        </div>
+        <div
+            class="p-d-flex p-jc-center p-ai-center p-pt-4 p-pl-4 p-pr-4 p-pb-0"
+          >
+            <Avatar
+              v-if="vendor.photoUrl === '' || vendor.photoUrl === null " 
+              icon="pi pi-user"
+              class="p-mr-2"
+              style="background-color:#c8e6c9;color:#256029;width:8rem;height:8rem;font-size:4rem;"
+              shape="circle"
+            />
+            <Avatar 
+              v-else-if="vendor.fullName"
+              :label="vendor.fullName.charAt(0).toUpperCase()"
+              class="p-mr-2"
+              style="background-color:#c8e6c9;color:#256029;width:8rem;height:8rem;font-size:4rem;"
+              shape="circle"
+            />
+            <img v-else
+              :src="vendor.photoUrl"
+              :alt="vendor.photoUrl"
+              style="width:8rem;height:8rem;font-size:4rem;"
+            />
+          </div>
         <div class="p-field p-fluid">
           <label>
             Name
@@ -319,7 +327,6 @@ export default class Vendors extends Vue {
   openVendor(vendor: Vendor) {
     this.vendor = vendor;
     this.vendorDialog = true;
-    console.log("It will soon work....")
   }
 
 }

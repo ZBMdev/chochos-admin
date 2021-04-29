@@ -1,33 +1,33 @@
 <template>
-  <PageHeading :title="`${vendor.fullName}'s Profile`"  />
+  <PageHeading :title="`${artisan.fullName}'s Profile`"  />
   <ProgressSpinner style="display:flex; justify-content: center" v-if="loading" />
   <div v-else class="p-d-flex p-jc-center p-ai-center">
     <div class="p-col-12 p-md-6">
       <Card
         class="p-text-center"
-        :value="vendor"
+        :value="artisan"
       >
         <template #header>
           <div
             class="p-d-flex p-jc-center p-ai-center p-pt-4 p-pl-4 p-pr-4 p-pb-0"
           >
             <Avatar
-              v-if="vendor.photoUrl === '' || vendor.photoUrl === null " 
+              v-if="artisan.photoUrl === '' || artisan.photoUrl === null " 
               icon="pi pi-user"
               class="p-mr-2"
               style="background-color:#c8e6c9;color:#256029;width:8rem;height:8rem;font-size:4rem;"
               shape="circle"
             />
             <Avatar 
-              v-else-if="vendor.fullName"
-              :label="vendor.fullName.charAt(0).toUpperCase()"
+              v-else-if="artisan.fullName"
+              :label="artisan.fullName.charAt(0).toUpperCase()"
               class="p-mr-2"
               style="background-color:#c8e6c9;color:#256029;width:8rem;height:8rem;font-size:4rem;"
               shape="circle"
             />
             <img v-else
-              :src="vendor.photoUrl"
-              :alt="vendor.photoUrl"
+              :src="artisan.photoUrl"
+              :alt="artisan.photoUrl"
               style="width:8rem;height:8rem;font-size:4rem;"
             />
           </div>
@@ -35,19 +35,19 @@
         <template #content>
           <div class="p-text-left">
             <p>
-              Name: <b>{{ vendor?.fullName }}</b>
+              Name: <b>{{ artisan?.fullName }}</b>
             </p>
             <p>
-              Username: <b>{{ "@" + vendor?.username }}</b>
+              Username: <b>{{ "@" + artisan?.username }}</b>
             </p>
             <p>
-              Email: <b>{{ vendor?.email }}</b>
+              Email: <b>{{ artisan?.email }}</b>
             </p>
             <p>
-              Products: <b>{{ vendor?.about }}</b>
+              Products: <b>{{ artisan?.about }}</b>
             </p>
             <p>
-              Address: <b>{{ vendor?.address }}</b>
+              Address: <b>{{ artisan?.address }}</b>
             </p>
           </div>
         </template>
@@ -60,9 +60,9 @@
 import { defineComponent } from "vue";
 import { Options, Vue } from 'vue-class-component';
 import MainLayout from '@/components/layouts/MainLayout.vue';
-import Vendor from '@/models/Vendor';
-import VendorService from '@/services/VendorService';
-import { VendorData } from '@/types/vendors'
+import Artisan from '@/models/Artisan';
+import ArtisanService from '@/services/ArtisanService';
+import { ArtisanData } from '@/types/artisan'
 import BombsightService from '@/services/BombsightService';
 import { useToast } from 'primevue/usetoast';
 import qs from 'qs';
@@ -71,25 +71,24 @@ import DynamicForm from "@/components/elements/DynamicForm.vue";
 import { profileFormSchema, passwordFormSchema } from '@/models/Admin';
 
 
-@Options<VendorCard>({
+@Options<ArtisanCard>({
   components: { DynamicForm  },
 })
 
-export default class VendorCard extends Vue {
+export default class ArtisanCard extends Vue {
 
   isLoading = false;
-  vendors: Vendor[] = [];
-  vendor = reactive(new Vendor({})) as Vendor;
-  datasource: Vendor[] = [];
+  artisans: Artisan[] = [];
+  artisan = reactive(new Artisan({})) as Artisan;
+  datasource: Artisan[] = [];
   totalRecords = 0;
-  service: VendorService = new VendorService();
-  selectedVendors: Vendor[] = [];
+  service: ArtisanService = new ArtisanService();
+  selectedArtisans: Artisan[] = [];
   filters: Record<string, unknown> = {};
   submitted = false;
   toast = useToast();
   imageService = new BombsightService();
   imageLoading = false;
-  // lazyParams: Partial<VendorLazyParameters> = {};
   firstRecordIndex = 0;
   rowstoDisplay = 10;  
 
@@ -114,32 +113,21 @@ export default class VendorCard extends Vue {
   }
 
   getData() {
-    this.getVendor();
+    this.getArtisan();
   }
 
-  getVendor() {
+  getArtisan() {
     this.isLoading = true;
     this.service.getOne(+this.$route.params.id)
-      .then((vendorData) => {
-        this.setVendor(new Vendor(vendorData));
+      .then((artisanData) => {
+        this.setArtisan(new Artisan(artisanData));
         this.isLoading = false;
       });
   }
 
-  setVendor(value: Vendor) {
-    this.vendor = reactive(value) as Vendor;
+  setArtisan(value: Artisan) {
+    this.artisan = reactive(value) as Artisan;
   }
 }
 </script>
-
-
-
-
-
-
-
-
-
-
-
 

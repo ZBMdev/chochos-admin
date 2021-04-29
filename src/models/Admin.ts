@@ -6,18 +6,14 @@ import { string, object, ref } from 'yup';
 import { FormSchema } from '@/types/dynamicForm';
 
 export default class Admin extends Model {
-  id!:                number;
+  adminId!:          number;
   firstName!:        string;
   lastName!:         string;
   email!:            string;
   username!:         string;
   password!:         string;
-  oldPassword!:        string;
-  login_type!:         string;
-  push_token!:         string;
-  last_login_date!:        Date;
-  updated_At!:         Date;
-  created_At!:         Date;
+  updated_At!:       Date;
+  created_At!:       Date;
 
     constructor(data?: Partial<AdminsData>) {
         super();

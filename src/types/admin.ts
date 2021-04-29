@@ -14,32 +14,32 @@ export interface AdminData {
     email: string;
     username: string;
     password: string;
-    oldPassword: string;
+    /* oldPassword: string;
     login_type: string;
     push_token: string;
     last_login_date: Date;
     activated: boolean;
-    // role_id: number;
-    // role: RoleData;
+    role_id: number;
+    role: RoleData; */
     updated_at: Date;
     created_at: Date;
 }
 
 export interface AdminCreateParam{
-    name:            string;
+    firstName:       string;
+    lastName:       string;
     email:           string;
     username:        string;
     password:        string;
-    role_id:        number;
 }
 
 export interface AdminUpdateParam{
-    id?: number
-    activated?: boolean;
-    name: string;
-    username: string;
-    push_token: string;
-    role_id?:        number;
+    // id?:            number;
+    id:             number;
+    firstName:      string;
+    lastName:       string;
+    email:          string;
+    username:       string;
 }
 
 export interface AdminLoginParam {
@@ -102,10 +102,6 @@ export interface AdminsData {
     email: string;
     username: string;
     password: string;
-    oldPassword: string;
-    login_type: string;
-    push_token: string;
-    last_login_date: Date;
     updated_at: Date;
     created_at: Date;
 }

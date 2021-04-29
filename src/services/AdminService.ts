@@ -28,8 +28,21 @@ export default class AdminService extends Service<AdminData, AdminUpdateParam>{
      *Create
      */
     public createadmin(payload: AdminCreateParam){
-        return API.post('/admin/', payload)
+        return API.post('/admins', payload)
             .then(({ data }: AxiosResponse<APIResponse<AdminCreateParam>>) => {
+                return data.data;
+            }).catch((error) => {
+                console.error("AdminService.ts >>>>>>>", error.message.error)
+            })
+    }
+
+
+    /**
+     *Update
+     */
+    public updateadmin(id: number, payload: AdminUpdateParam,  query?: string){
+        return API.put(`admins/${id}${query ? '?' + query : ''}`, payload)
+            .then(({ data }: AxiosResponse<APIResponse<AdminUpdateParam>>) => {
                 return data.data;
             }).catch((error) => {
                 console.error("AdminService.ts >>>>>>>", error.message.error)
@@ -53,7 +66,7 @@ export default class AdminService extends Service<AdminData, AdminUpdateParam>{
     *Change Password
     */
     public changepassword(id: number, payload: AdminChangePassword){
-       return API.post(`/admin/${id}/change-password`, payload)
+       return API.post(`/admins/${id}/change-password`, payload)
            .then(({ data }: AxiosResponse<APIResponse<LoginData>>) => {
                return data.data;
            }).catch((error) => {
@@ -64,7 +77,7 @@ export default class AdminService extends Service<AdminData, AdminUpdateParam>{
   
 
     public resetPassword(payload: AdminResetPassParam) {
-        return API.post('/reset-password', payload)
+        return API.post('/admins/reset-password', payload)
             .then(({ data }: AxiosResponse<APIResponse<LoginData>>) => {
                 return data.data;
             }).catch((error) => {

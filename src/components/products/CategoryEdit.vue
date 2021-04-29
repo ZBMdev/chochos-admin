@@ -27,67 +27,7 @@
         {{ errors["description"] }}
       </small>
     </div>
-
-    <div class="p-field">
-      <label class="p-mb-3">Parent Category</label>
-      <Dropdown
-        :options="categories"
-        v-model="parent_id"
-        optionLabel="name"
-        optionValue="id"
-        placeholder="Select Category"
-        :filter="true"
-        :class="{ 'p-invalid': errors['parent_id'] }"
-      />
-      <small class="p-invalid" v-if="errors['parent_id']">
-        {{ errors["parent_id"] }}
-      </small>
-    </div>
-    <div class="p-d-flex p-fluid">
-      <div class="p-col p-d-flex p-field">
-        <label for="is_activated">
-          <InputSwitch
-            id="is_activated"
-            class="p-mr-2"
-            v-model="is_activated"
-            :class="{ 'p-invalid': errors['is_activated'] }"
-          />
-          Activated
-        </label>
-        <small class="p-invalid" v-if="errors['is_activated']">
-          {{ errors["is_activated"] }}
-        </small>
-      </div>
-      <div class="p-col p-d-flex p-field">
-        <label for="is_featured">
-          <InputSwitch
-            id="is_featured"
-            class="p-mr-2"
-            v-model="is_featured"
-            :class="{ 'p-invalid': errors['is_featured'] }"
-          />
-          Featured
-        </label>
-        <small class="p-invalid" v-if="errors['is_featured']">
-          {{ errors["is_featured"] }}
-        </small>
-      </div>
-    </div>
-    <div class="p-field">
-      <label for="description">Tags</label>
-      <Chips
-        id="description"
-        v-model="tags"
-        required="true"
-        separator=","
-        :addOnBlur="true"
-        :allowDuplicate="false"
-        :class="{ 'p-invalid': errors['tags'] }"
-      />
-      <small class="p-invalid" v-if="errors['tags']">
-        {{ errors["tags"] }}
-      </small>
-    </div>
+    
     <div class="p-d-flex p-field">
       <LButton
         icon="pi pi-save"
@@ -160,7 +100,7 @@ export default defineComponent({
       }
 
       if (props.category?.id) {
-        service.put(props.category?.id, values)
+        service.update(props.category?.id, values)
           .then((category) => {
             context.emit("updated", category);
             toast.add({ severity: "success", summary: "Successfull!", detail: "Category updated", life: 3000 });

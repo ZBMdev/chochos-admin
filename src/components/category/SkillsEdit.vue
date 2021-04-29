@@ -115,10 +115,11 @@ export default defineComponent({
       }
 
       if (props.category?.id) {
-        service.put(props.category?.id, values)
+        service.update(props.category?.id, values)
           .then((category) => {
             context.emit("updated", category);
             toast.add({ severity: "success", summary: "Successfull!", detail: "Category updated", life: 3000 });
+            location.reload();
           })
           .finally(() => {
             isSubmitting.value = false;

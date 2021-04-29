@@ -38,9 +38,6 @@ const API = { ...Axios }
 API.defaults.baseURL = "http://localhost:8083/api";
 API.defaults.headers.post["Content-Type"] = "application/json";
 API.defaults.headers["Authorization"] = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7InR5cGUiOiJ1c2VyIiwiX2lkIjo0OCwiZW1haWwiOiJxd2VydHl1c2VyQGdtYWlsLmNvbSIsInVzZXJDYXRlZ29yeSI6MCwiaGFzV29ya2VyUHJvZmlsZSI6ZmFsc2UsIm1vYmlsZSI6IiIsImNhdGVnb3J5SWQiOm51bGx9LCJpYXQiOjE2MTY5NDk1ODYsImV4cCI6MTYyMTEyNTU4Nn0.W_NUr3ir67OgxhDKikeXI8KTDN46ni1-F798xz7ckoA";
-// API.defaults.headers.common['Access-Control-Allow-Origin'] = 'true';
-// API.defaults.headers['Access-Control-Allow-Origin'] = '*';
-// API.defaults.headers["Authorization"] = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZW1haWwiOiJkYW1teUBnbWFpbC5jb20iLCJyb2xlX2lkIjoxLCJuYW1lIjoiRGFtbXkgb2xvbGFkZSIsImlhdCI6MTYxNTczNTAzN30.o48owLVmKQhMIULz_8bL30bCIERPNGSxVlb9J3CbnC4";
 // store.dispatch("Admin/getUser");
 Axios.interceptors.response.use(
     function (response) {

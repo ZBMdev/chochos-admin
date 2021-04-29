@@ -231,11 +231,27 @@ const routes: Array<RouteRecordRaw> = [
         }
       },
       {
+        path: '/customers/:id',
+        name: 'customer-profile',
+        component: () => import('../components/users/CustomerCard.vue'),
+        meta: {
+          title: `Customer Profile`,
+        }
+      },
+      {
         path: '/artisans',
         name: 'artisans',
         component: () => import('../views/users/Artisans.vue'),
         meta: {
           title: `All Artisans`,
+        }
+      },
+      {
+        path: '/artisans/:id',
+        name: 'artisan-profile',
+        component: () => import('../components/users/ArtisanCard.vue'),
+        meta: {
+          title: `Artisan Profile`,
         }
       },
       {
@@ -260,6 +276,14 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import('../views/users/AdminList.vue'),
         meta: {
           title: `Administrators`,
+        }
+      },
+      {
+        path: '/admins/:id',
+        name: 'edit-admin',
+        component: () => import('../views/users/AdminEdit.vue'),
+        meta: {
+          title: `Edit Admin`,
         }
       },
       {

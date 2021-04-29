@@ -41,14 +41,6 @@
                   class="p-button-success p-mr-2"
                   @click="openNew"
                 />
-
-                <Button
-                  label="Delete"
-                  icon="pi pi-trash"
-                  class="p-button-danger"
-                  @click="confirmDeleteSelected"
-                  :disabled="!selectedCategories || !selectedCategories.length"
-                />
               </div>
             </div>
           </template>
@@ -84,12 +76,12 @@
             <template #body="slotProps">
               <Button
                 icon="pi pi-pencil"
-                class="p-button-rounded p-button-success p-mr-2"
+                class="p-button-raised p-button-success p-mr-2"
                 @click="editCategory(slotProps.data)"
               />
               <Button
                 icon="pi pi-trash"
-                class="p-button-rounded p-button-warning"
+                class="p-button-raised p-button-danger p-ml-2"
                 @click="confirmDeleteCategory(slotProps.data)"
               />
             </template>
@@ -284,7 +276,6 @@ export default class SkillsList extends Vue {
     this.category = new Skills({});
     this.submitted = false;
     this.categoryDialog = true;
-    console.log("It will soon work")
   }
 
   confirmDeleteCategory(category: Skills) {

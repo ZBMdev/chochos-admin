@@ -1,53 +1,61 @@
 <template>
-  <PageHeading :title="`${vendor.fullName}'s Profile`"  />
+  <PageHeading :title="`${customer.fullName}'s Profile`" />
   <ProgressSpinner style="display:flex; justify-content: center" v-if="loading" />
-  <div v-else class="p-d-flex p-jc-center p-ai-center">
+  <div v-else class="p-grid">
     <div class="p-col-12 p-md-6">
       <Card
         class="p-text-center"
-        :value="vendor"
+        :value="customer"
       >
         <template #header>
           <div
             class="p-d-flex p-jc-center p-ai-center p-pt-4 p-pl-4 p-pr-4 p-pb-0"
           >
             <Avatar
-              v-if="vendor.photoUrl === '' || vendor.photoUrl === null " 
-              icon="pi pi-user"
-              class="p-mr-2"
-              style="background-color:#c8e6c9;color:#256029;width:8rem;height:8rem;font-size:4rem;"
-              shape="circle"
+                v-if="customer.photoUrl === '' || customer.photoUrl === null " 
+                icon="pi pi-user"
+                class="p-mr-2"
+                style="background-color:#c8e6c9;color:#256029;width:8rem;height:8rem;font-size:4rem;"
+                shape="circle"
             />
             <Avatar 
-              v-else-if="vendor.fullName"
-              :label="vendor.fullName.charAt(0).toUpperCase()"
-              class="p-mr-2"
-              style="background-color:#c8e6c9;color:#256029;width:8rem;height:8rem;font-size:4rem;"
-              shape="circle"
+                v-else-if="customer.fullName"
+                :label="customer.fullName.charAt(0).toUpperCase()"
+                class="p-mr-2"
+                style="background-color:#c8e6c9;color:#256029;width:8rem;height:8rem;font-size:4rem;"
+                shape="circle"
             />
             <img v-else
-              :src="vendor.photoUrl"
-              :alt="vendor.photoUrl"
-              style="width:8rem;height:8rem;font-size:4rem;"
+                :src="customer.photoUrl"
+                :alt="customer.photoUrl"
+                style="width:8rem;height:8rem;font-size:4rem;"
             />
           </div>
+        </template>
+        <template #body="slotProps">
+            <span v-bind="fullName">
+                 {{ customer.fullName}}
+            </span>
+            <p>
+              Full Name: <b>{{ slotProps.data.fullName }}</b> 
+            </p>
         </template>
         <template #content>
           <div class="p-text-left">
             <p>
-              Name: <b>{{ vendor?.fullName }}</b>
+              Name: <b>{{ customer?.fullName }}</b>
             </p>
             <p>
-              Username: <b>{{ "@" + vendor?.username }}</b>
+              Username: <b>{{ "@" + customer?.username }}</b>
             </p>
             <p>
-              Email: <b>{{ vendor?.email }}</b>
+              Email: <b>{{ customer?.email }}</b>
             </p>
             <p>
-              Products: <b>{{ vendor?.about }}</b>
+              Products: <b>{{ customer?.about }}</b>
             </p>
             <p>
-              Address: <b>{{ vendor?.address }}</b>
+              Address: <b>{{ customer?.address }}</b>
             </p>
           </div>
         </template>
@@ -60,36 +68,36 @@
 import { defineComponent } from "vue";
 import { Options, Vue } from 'vue-class-component';
 import MainLayout from '@/components/layouts/MainLayout.vue';
-import Vendor from '@/models/Vendor';
-import VendorService from '@/services/VendorService';
-import { VendorData } from '@/types/vendors'
+import Customer from '@/models/Customer';
+import CustomerService from '@/services/CustomerService';
+import { CustomerData } from '@/types/customer'
 import BombsightService from '@/services/BombsightService';
 import { useToast } from 'primevue/usetoast';
 import qs from 'qs';
 import { reactive } from 'vue';
 import DynamicForm from "@/components/elements/DynamicForm.vue";
 import { profileFormSchema, passwordFormSchema } from '@/models/Admin';
+/* eslint-disable */
 
-
-@Options<VendorCard>({
+@Options<CustomerCard>({
   components: { DynamicForm  },
 })
 
-export default class VendorCard extends Vue {
+export default class CustomerCard extends Vue {
 
   isLoading = false;
-  vendors: Vendor[] = [];
-  vendor = reactive(new Vendor({})) as Vendor;
-  datasource: Vendor[] = [];
+  customers: Customer[] = [];
+  customer = reactive(new Customer({})) as Customer;
+  datasource: Customer[] = [];
   totalRecords = 0;
-  service: VendorService = new VendorService();
-  selectedVendors: Vendor[] = [];
+  service: CustomerService = new CustomerService();
+  selectedCustomers: Customer[] = [];
   filters: Record<string, unknown> = {};
   submitted = false;
   toast = useToast();
   imageService = new BombsightService();
   imageLoading = false;
-  // lazyParams: Partial<VendorLazyParameters> = {};
+  // lazyParams: Partial<CustomerLazyParameters> = {};
   firstRecordIndex = 0;
   rowstoDisplay = 10;  
 
@@ -114,20 +122,20 @@ export default class VendorCard extends Vue {
   }
 
   getData() {
-    this.getVendor();
+    this.getCustomer();
   }
 
-  getVendor() {
+  getCustomer() {
     this.isLoading = true;
     this.service.getOne(+this.$route.params.id)
-      .then((vendorData) => {
-        this.setVendor(new Vendor(vendorData));
+      .then((customerData) => {
+        this.setCustomer(new Customer(customerData));
         this.isLoading = false;
       });
   }
 
-  setVendor(value: Vendor) {
-    this.vendor = reactive(value) as Vendor;
+  setCustomer(value: Customer) {
+    this.customer = reactive(value) as Customer;
   }
 }
 </script>
