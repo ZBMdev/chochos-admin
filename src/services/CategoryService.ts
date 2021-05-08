@@ -27,5 +27,4 @@ export default class CategoryService extends Service<CategoryData, CategoryCreat
                 throw error;
             });
     }
-
 }

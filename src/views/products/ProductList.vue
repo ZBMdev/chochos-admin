@@ -2,7 +2,6 @@
   <div class="product-list">
     <PageHeading
       title="All Products"
-      :subtitle="`${totalRecords} products in total`"
     />
     <ProgressSpinner style="display:flex; justify-content: center" v-if="isLoading" />
     <Card v-else>
@@ -29,7 +28,8 @@
           paginatorPosition="both"
         >
           <template #header>
-            <div class="table-header">
+            <!-- <div class="table-header"> -->
+            <div class="p-mb-4">  
               Products
               <span class="p-input-icon-left">
                 <i class="pi pi-search" />

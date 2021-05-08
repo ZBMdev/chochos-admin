@@ -6,6 +6,16 @@
 				"label": "Home",
 				"icon": "pi pi-home",
 				"to": "/"
+			},
+			{
+				"label": "Trial",
+				"icon": "pi pi-home",
+				"to": "/trial"
+			},
+			{
+				"label": "Trial2",
+				"icon": "pi pi-home",
+				"to": "/trial2"
 			}
 		]
 	},
@@ -69,6 +79,11 @@
 	{
 		"label": "Users",
 		"items": [
+			{
+				"label": "New Users",
+				"icon": "pi pi-user-plus",
+				"to": "/new-users"
+			},
 			{
 				"label": "All Users",
 				"icon": "pi pi-users",

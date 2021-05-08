@@ -103,6 +103,22 @@ const routes: Array<RouteRecordRaw> = [
         }
       },
       {
+        path: '/trial',
+        name: 'Trial',
+        component: () => import('../views/users/Trial.vue'),
+        meta: {
+          title: `Trial`,
+        }
+      },
+      {
+        path: '/trial2',
+        name: 'Trial2',
+        component: () => import('../views/users/Trial2.vue'),
+        meta: {
+          title: `Trial2`,
+        }
+      },
+      {
         path: '/analytics',
         name: 'analytics',
         component: Analytics,
@@ -212,6 +228,14 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import('../views/orders/OrderEdit.vue'),
         meta: {
           title: `New Order`,
+        }
+      },
+      {
+        path: '/new-users',
+        name: 'NewUsers',
+        component: () => import('../views/users/NewUsers.vue'),
+        meta: {
+          title: `New Users`,
         }
       },
       {

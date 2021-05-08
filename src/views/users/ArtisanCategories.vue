@@ -26,7 +26,7 @@
           @row-click="editCategory($event.data)"
         >
           <template #header>
-            <div class="table-header p-d-flex">
+            <div class="table-header .flex">
               <span class="p-input-icon-left">
                 <i class="pi pi-search" />
                 <InputText
@@ -71,9 +71,7 @@
             filterMode="contains"
           >
             <template #body="slotProps">
-              <span
-                v-html="`${slotProps.data.description.substr(0, 25)}...`"
-              ></span>
+                {{ slotProps.data.description }}
             </template>
           </Column>
           <Column

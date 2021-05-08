@@ -27,7 +27,7 @@
         {{ errors["description"] }}
       </small>
     </div>
-    
+
     <div class="p-d-flex p-field">
       <LButton
         icon="pi pi-save"
@@ -41,6 +41,7 @@
   </div>
 </template>
 
+
 <script lang="ts">
 import { defineComponent, ref } from "vue";
 import { useForm, useField } from "vee-validate";
@@ -49,8 +50,6 @@ import BombsightService from '@/services/BombsightService';
 import CategoryService from '@/services/CategoryService';
 import { useToast } from 'primevue/usetoast';
 import { CategoryCreateParam, CategoryData } from '@/types/category';
-
-/* eslint-disable */
 
 export default defineComponent({
   props: {
@@ -62,16 +61,13 @@ export default defineComponent({
     const schema = yup.object({
       name: yup.string().required().label('Category name'),
       description: yup.string().label('Description'),
-      is_activated: yup.bool().label('Activated'),
     });
 
-    const formValues = { ...props.category } as Record<keyof CategoryCreateParam, any>;
-    const { errors, handleSubmit, setFieldValue } = useForm({ validationSchema: schema, initialValues: formValues });
+    const formValues = {  ...props.category } as Record<keyof CategoryCreateParam, any>;
+    const { errors, handleSubmit, setFieldValue } = useForm({ validationSchema: schema, initialValues: formValues, });
 
     const { value: name } = useField<string>("name");
     const { value: description } = useField<string>("description");
-    const { value: is_activated } = useField<boolean>("is_activated");
-    const { value: parent_id } = useField<number>("parent_id");
 
     const toast = useToast();
     const file = ref<File>();
@@ -89,7 +85,7 @@ export default defineComponent({
       const service = new CategoryService();
       const imageService = new BombsightService();
 
-      let values = { ...formValues }
+      let values = { ...formValues}
 
       if (file.value) {
         const formData = new FormData();
@@ -100,7 +96,7 @@ export default defineComponent({
       }
 
       if (props.category?.id) {
-        service.update(props.category?.id, values)
+        service.put(props.category?.id, values)
           .then((category) => {
             context.emit("updated", category);
             toast.add({ severity: "success", summary: "Successfull!", detail: "Category updated", life: 3000 });
@@ -116,7 +112,6 @@ export default defineComponent({
         service.create(values)
           .then((newCategory) => {
             context.emit("created", newCategory);
-            props.categories.push(props.category);
             toast.add({ severity: "success", summary: "Successfull!", detail: "Category created", life: 3000 });
           })
           .finally(() => {
@@ -138,8 +133,6 @@ export default defineComponent({
       errors,
       name,
       description,
-      is_activated,
-      parent_id
     };
   }
 });
