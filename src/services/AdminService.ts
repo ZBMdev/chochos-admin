@@ -15,11 +15,11 @@ export default class AdminService extends Service<AdminData, AdminUpdateParam>{
      * Register
      */
     public login(payload: AdminLoginParam) {
-        return API.post('/login', payload)
+        return API.post('/auth/login', payload)
             .then(({ data }: AxiosResponse<APIResponse<LoginData>>) => {
                 return data.data;
             }).catch((error) => {
-                console.error("Login error >>>>>", error.message, error)
+                console.error("Login error >>>>>", error.message, error);
                 throw error;
             });
     }

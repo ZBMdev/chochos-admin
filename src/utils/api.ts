@@ -34,8 +34,8 @@ const API = { ...Axios }
 // store.dispatch("Admin/getToken");
 
 // API.defaults.baseURL = "https://cors-anywhere.herokuapp.com/https://chochos-list.herokuapp.com/api";
-// API.defaults.baseURL = "https://chochos-list.herokuapp.com/api";
-API.defaults.baseURL = "http://localhost:8083/api";
+API.defaults.baseURL = "https://chochos-list.herokuapp.com/api";
+// API.defaults.baseURL = "http://localhost:8083/api";
 API.defaults.headers.post["Content-Type"] = "application/json";
 API.defaults.headers["Authorization"] = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjp7InR5cGUiOiJ1c2VyIiwiX2lkIjo0OCwiZW1haWwiOiJxd2VydHl1c2VyQGdtYWlsLmNvbSIsInVzZXJDYXRlZ29yeSI6MCwiaGFzV29ya2VyUHJvZmlsZSI6ZmFsc2UsIm1vYmlsZSI6IiIsImNhdGVnb3J5SWQiOm51bGx9LCJpYXQiOjE2MTY5NDk1ODYsImV4cCI6MTYyMTEyNTU4Nn0.W_NUr3ir67OgxhDKikeXI8KTDN46ni1-F798xz7ckoA";
 // store.dispatch("Admin/getUser");

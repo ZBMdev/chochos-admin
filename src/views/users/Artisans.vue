@@ -94,8 +94,7 @@
             filterMode="contains"
           >
             <template #body="slotProps">
-              <span
-                v-html="`${slotProps.data.about.substr(0, 15)}...`"
+              <span v-if="slotProps.data.about != null" v-html="`${slotProps.data.about?.substr(0, 15)}...`"
               ></span>
             </template>
           </Column>
