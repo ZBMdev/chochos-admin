@@ -396,9 +396,9 @@ router.beforeEach((to, from, next) => {
       return next({ name: "login", query: { redirect: to.path } });
     }
     // console.log(to.fullPath, hasAccess(to.meta.permit))
-    if (!hasAccess(to.meta.permit)) {
-      return next({ name: "unauthorised", query: { page: to.path } })
-    }
+    // if (!hasAccess(to.meta.permit)) {
+    //   return next({ name: "unauthorised", query: { page: to.path } })
+    // }
  
     return next()
 

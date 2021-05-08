@@ -1,4 +1,4 @@
-import { RouteLocationNormalized } from 'vue-router';
+import {RouteLocationNormalized, RouteRecordNormalized} from 'vue-router';
 const APP_TITLE = "Chochos Admin";
 import { intersection } from 'lodash';
 // import Role from '@/models/Role';
@@ -9,7 +9,7 @@ export const setPageTitle = (to: RouteLocationNormalized, from: RouteLocationNor
 
   // This goes through the matched routes from last to first, finding the closest route with a title.
   // eg. if we have /some/deep/nested/route and /some, /deep, and /nested have titles, nested's will be chosen.
-  const nearestWithTitle = to.matched.slice().reverse().find(r => r.meta && r.meta.title);
+  const nearestWithTitle: RouteRecordNormalized | undefined = to.matched.slice().reverse().find(r => r.meta && r.meta.title);
 
   // Find the nearest route element with meta tags.
   const nearestWithMeta = to.matched.slice().reverse().find(r => r.meta && r.meta.metaTags);
@@ -28,8 +28,9 @@ export const setPageTitle = (to: RouteLocationNormalized, from: RouteLocationNor
   // Skip rendering meta tags if there are none.
   if (!nearestWithMeta) return;
 
+  // Todo(Lekan): Emmanuel should investigate the reason why this lines bellow are needed
   // Turn the meta tag definitions into actual elements in the head.
-  nearestWithMeta.meta.metaTags.map((tagDef: Record<string, string>) => {
+  /*nearestWithMeta.metaTags.map((tagDef: Record<string, string>) => {
     const tag = document.createElement('meta');
 
     Object.keys(tagDef).forEach(key => {
@@ -42,7 +43,7 @@ export const setPageTitle = (to: RouteLocationNormalized, from: RouteLocationNor
     return tag;
   })
     // Add the meta tags to the document head.
-    .forEach((tag: any) => document.head.appendChild(tag));
+    .forEach((tag: any) => document.head.appendChild(tag));*/
   return
 }
 
