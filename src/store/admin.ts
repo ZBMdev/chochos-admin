@@ -1,22 +1,22 @@
 import AdminService from '@/services/AdminService';
-import { AdminData } from '@/types/admin';
+import { AdminsData } from '@/types/admin';
 import { ActionContext as BaseActionContext, } from 'vuex';
 
 type ActionContext = BaseActionContext<AdminState, AdminState>;
 export interface AdminState {
-  user: AdminData;
+  user: AdminsData;
   token: string;
 }
 
 export default {
   namespaced: true,
   state: {
-    user: {} as AdminData,
+    user: {} as AdminsData,
     token: "",
   },
   getters: {
     getInitial(state: AdminState) {
-      return () => state.user.name ? state.user.name.charAt(0).toUpperCase(): "";
+      return () => state.user.firstName ? state.user.firstName.charAt(0).toUpperCase(): "";
     },
     async getUser(state: AdminState) {
       // if (state.user) {
@@ -27,7 +27,7 @@ export default {
     },
   },
   mutations: {
-    setUser(state: AdminState, user: AdminData){
+    setUser(state: AdminState, user: AdminsData){
       state.user = user
     },
     setToken(state: AdminState, token: string){

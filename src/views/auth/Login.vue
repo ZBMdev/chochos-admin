@@ -68,7 +68,6 @@ export default defineComponent({
         email: this.email,
         password: this.password
       };
-      console.log(data)
 
       this.service.login(data)
         .then((loginData) => {

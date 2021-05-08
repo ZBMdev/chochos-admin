@@ -25,7 +25,7 @@
           <Column headerStyle="width: 3rem;">
             <template #body={data}>
               <Avatar
-                :label="`${data.firstName.charAt(0)}${data.lastName.charAt(0)}`"
+                :label="`${data.firstName.charAt(0).toUpperCase()}${data.lastName.charAt(0).toUpperCase()}`"
                 class="p-mr-2"
                 style="background-color:#c8e6c9;color:#256029"
                 shape="circle"

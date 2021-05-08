@@ -14,10 +14,10 @@ export interface AdminData {
     email: string;
     username: string;
     password: string;
-    /* oldPassword: string;
-    login_type: string;
+    oldPassword: string;
     push_token: string;
-    last_login_date: Date;
+    /* last_login_date: Date;
+    login_type: string;
     activated: boolean;
     role_id: number;
     role: RoleData; */
@@ -102,6 +102,8 @@ export interface AdminsData {
     email: string;
     username: string;
     password: string;
+    oldPassword: string;
+    push_token:  string;
     updated_at: Date;
     created_at: Date;
 }

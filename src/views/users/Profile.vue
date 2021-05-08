@@ -17,7 +17,7 @@
           </div>
         </template>
         <template #title>
-          {{ user?.fullName }}
+          {{ user?.firstName }} {{ user?.lastName }}
         </template>
         <template #content>
           <div class="p-text-left">
@@ -87,10 +87,10 @@ export default defineComponent({
     return {
       admin: {
         firstName: '',
+        lastName: '',
         username: '',
         push_token: ' ',
         email: ''
-        // role_id: undefined as number | undefined,
       },
       change_password: {
         old_password: '',

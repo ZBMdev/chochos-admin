@@ -1,7 +1,7 @@
 <template>
   <PageHeading :title="`${customer.fullName}'s Profile`" />
   <ProgressSpinner style="display:flex; justify-content: center" v-if="loading" />
-  <div v-else class="p-grid">
+  <div v-else class="p-col-12 p-md-6">
     <div class="p-col-12 p-md-6">
       <Card
         class="p-text-center"
@@ -11,24 +11,25 @@
           <div
             class="p-d-flex p-jc-center p-ai-center p-pt-4 p-pl-4 p-pr-4 p-pb-0"
           >
-            <Avatar
-                v-if="customer.photoUrl === '' || customer.photoUrl === null " 
-                icon="pi pi-user"
-                class="p-mr-2"
-                style="background-color:#c8e6c9;color:#256029;width:8rem;height:8rem;font-size:4rem;"
-                shape="circle"
+            <img 
+              v-if="customer.photoUrl !== '' || customer.photoUrl !== null " 
+                :src="customer.photoUrl"
+                :alt="customer.photoUrl"
+                style="width:8rem;height:8rem;font-size:4rem; border-radius: 50%;"
             />
             <Avatar 
-                v-else-if="customer.fullName"
+                v-else-if="customer.fullName !== '' || customer.fullName !== null "
                 :label="customer.fullName.charAt(0).toUpperCase()"
                 class="p-mr-2"
                 style="background-color:#c8e6c9;color:#256029;width:8rem;height:8rem;font-size:4rem;"
                 shape="circle"
             />
-            <img v-else
-                :src="customer.photoUrl"
-                :alt="customer.photoUrl"
-                style="width:8rem;height:8rem;font-size:4rem;"
+            <Avatar
+                v-else 
+                icon="pi pi-user"
+                class="p-mr-2"
+                style="background-color:#c8e6c9;color:#256029;width:8rem;height:8rem;font-size:4rem;"
+                shape="circle"
             />
           </div>
         </template>

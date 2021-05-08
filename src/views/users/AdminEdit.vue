@@ -50,20 +50,6 @@
                 />
               </div>
               <div class="p-field p-fluid p-mb-4">
-                <label for="password">Password</label>
-                <Password
-                  class="p-inputtext-md product-title"
-                  id="password"
-                  type="text"
-                  :required="true"
-                  v-model="admin.password"
-                  toggleMask
-                  :feedback="false"
-                  placeholder="*******"
-                >
-                </Password>
-              </div>
-              <div class="p-field p-fluid p-mb-4">
                 <label for="email">Email</label>
                 <InputText
                   class="p-inputtext-md product-title"

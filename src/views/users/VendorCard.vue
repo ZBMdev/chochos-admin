@@ -11,24 +11,44 @@
           <div
             class="p-d-flex p-jc-center p-ai-center p-pt-4 p-pl-4 p-pr-4 p-pb-0"
           >
-            <Avatar
-              v-if="vendor.photoUrl === '' || vendor.photoUrl === null " 
-              icon="pi pi-user"
-              class="p-mr-2"
-              style="background-color:#c8e6c9;color:#256029;width:8rem;height:8rem;font-size:4rem;"
-              shape="circle"
+            <!-- <img v-if="vendor.photoUrl !== '' || vendor.photoUrl !== null || vendor.photoUrl !== string " 
+              :src="vendor.photoUrl"
+              :alt="vendor.photoUrl"
+              style="width:8rem; height:8rem; font-size:4rem; border-radius: 50%;"
             />
             <Avatar 
-              v-else-if="vendor.fullName"
+              v-else-if="vendor.fullName !== '' || vendor.fullName !== null "
               :label="vendor.fullName.charAt(0).toUpperCase()"
               class="p-mr-2"
               style="background-color:#c8e6c9;color:#256029;width:8rem;height:8rem;font-size:4rem;"
               shape="circle"
             />
-            <img v-else
+            <Avatar
+              v-else
+              icon="pi pi-user"
+              class="p-mr-2"
+              style="background-color:#c8e6c9;color:#256029;width:8rem;height:8rem;font-size:4rem;"
+              shape="circle"
+            /> -->
+            <Avatar 
+              v-if="vendor.photoUrl === '' || vendor.photoUrl === null || vendor.photoUrl === 'string' " 
+              :label="vendor.fullName.charAt(0).toUpperCase()"
+              class="p-mr-2"
+              style="background-color:#c8e6c9;color:#256029;width:8rem;height:8rem;font-size:4rem;"
+              shape="circle"
+            />
+            <img
+              v-else-if="vendor.fullName" 
               :src="vendor.photoUrl"
               :alt="vendor.photoUrl"
-              style="width:8rem;height:8rem;font-size:4rem;"
+              style="width:8rem; height:8rem; font-size:4rem; border-radius: 50%;"
+            />
+            <Avatar
+              v-else
+              icon="pi pi-user"
+              class="p-mr-2"
+              style="background-color:#c8e6c9;color:#256029;width:8rem;height:8rem;font-size:4rem;"
+              shape="circle"
             />
           </div>
         </template>

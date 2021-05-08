@@ -54,7 +54,7 @@
             <Avatar
               class=""
               style="background-color:#9c27b0; color: #ffffff"
-              label="C"
+              :label="initial"
               shape="circle"
             />
           </Button>
@@ -82,10 +82,11 @@ import Avatar from 'primevue/avatar';
 import Menu from 'primevue/menu';
 import { MenuItem } from '@/types/elements'
 import { Ref } from 'vue'
+// import logo from '@/assets/images/logo.svg';
 
 @Options<MainLayout>({
   components: { Navbar, Avatar, Menu },
-  //components: { Avatar, Menu },
+
   props: {
     title: String,
     subtitle: String,
@@ -102,10 +103,11 @@ export default class MainLayout extends Vue {
   title!: string
   subtitle!: string
   visibleLeft = false;
+  // logo: logo;
   notificationMenu: Partial<MenuItem>[] = [];
   userMenu: Partial<MenuItem>[] = [
     {
-      label: 'Busola Okeowo',
+      label: '',
       items: [
         {
           label: 'Profile',
@@ -132,9 +134,20 @@ export default class MainLayout extends Vue {
     // this.$router.push({ name: "login", query: { redirect: this.$route.path } });
 
   }
+
+  get user() {
+    return this.$store.getters["Admin/getUser"];
+  }
+  get initial() {
+    return this.$store.getters["Admin/getInitial"]();
+  }
   
   mounted() {
-
+    this.userMenu[0].label = this.user?.name
+    // eslint-disable-next-line
+    // @ts-ignore
+    this.emitter.on("logout", this.logout);
+    
     this.notificationMenu = [
       {
         label: 'Profile',

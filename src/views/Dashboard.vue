@@ -129,16 +129,6 @@
         </div> -->
       </div>
     </div>
-
-    <!-- Others -->
-    <div class="p-grid">
-      <div class="p-col-12 p-md-6">
-        <Artisans />
-      </div>
-      <div class="p-col-12 p-md-6">
-        <Vendors />
-      </div>
-    </div>
   </div>
 </template>
 
@@ -152,15 +142,15 @@ import ArtisanService from '@/services/ArtisanService';
 import CustomerService from '@/services/CustomerService';
 import VendorService from '@/services/VendorService';
 import JobService from '@/services/JobService';
-import Artisans from '@/views/users/ArtisanList.vue'
-import Vendors from '@/views/users/VendorList.vue'
+// import Artisans from '@/views/users/ArtisanList.vue'
+// import Vendors from '@/views/users/VendorList.vue'
 import { VendorSummary } from '@/types/vendors'
 import { ArtisanSummary } from '@/types/artisan'
 import { CustomerSummary } from '@/types/customer'
 import { JobsSummary } from '@/types/jobs';
 
 export default defineComponent({
-  components: { FancyCard, Artisans, Vendors },
+  components: { FancyCard },
   name: "Dashboard",
   
   mounted() {
