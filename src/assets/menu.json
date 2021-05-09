@@ -6,16 +6,62 @@
 				"label": "Home",
 				"icon": "pi pi-home",
 				"to": "/"
+			}
+		]
+	},
+	{
+		"separator": true
+	},
+	{
+		"label": "Users",
+		"items": [
+			{
+				"label": "All Users",
+				"icon": "pi pi-users",
+				"to": "/users-category"
 			},
 			{
-				"label": "Trial",
-				"icon": "pi pi-home",
-				"to": "/trial"
+				"label": "Customers",
+				"icon": "pi pi-users",
+				"to": "/customers"
 			},
 			{
-				"label": "Trial2",
-				"icon": "pi pi-home",
-				"to": "/trial2"
+				"label": "Artisans",
+				"icon": "pi pi-users",
+				"to": "/artisans"
+			},
+			{
+				"label": "Vendors",
+				"icon": "pi pi-users",
+				"to": "/vendors"
+			},
+			{
+				"label": "Skills",
+				"icon": "pi pi-key",
+				"to": "/skills"
+			},
+			{
+				"label": "Administrators",
+				"icon": "pi pi-user-edit",
+				"to": "/admins"
+			}
+		]
+	},
+	{
+		"separator": true
+	},
+	{
+		"label": "Transactions",
+		"items": [
+			{
+				"label": "Jobs Requests",
+				"icon": "pi pi-send",
+				"to": "/job-requests"
+			},
+			{
+				"label": "Jobs",
+				"icon": "pi pi-briefcase",
+				"to": "/jobs"
 			}
 		]
 	},
@@ -52,67 +98,6 @@
 				"label": "Categories",
 				"icon": "pi pi-tags",
 				"to": "/artisan-category"
-			}
-		]
-	},
-	{
-		"separator": true
-	},
-	{
-		"label": "Transactions",
-		"items": [
-			{
-				"label": "Jobs Requests",
-				"icon": "pi pi-send",
-				"to": "/job-requests"
-			},
-			{
-				"label": "Jobs",
-				"icon": "pi pi-briefcase",
-				"to": "/jobs"
-			}
-		]
-	},
-	{
-		"separator": true
-	},
-	{
-		"label": "Users",
-		"items": [
-			{
-				"label": "New Users",
-				"icon": "pi pi-user-plus",
-				"to": "/new-users"
-			},
-			{
-				"label": "All Users",
-				"icon": "pi pi-users",
-				"to": "/users-category"
-			},
-			{
-				"label": "Customers",
-				"icon": "pi pi-users",
-				"to": "/customers"
-			},
-			{
-				"label": "Artisans",
-				"icon": "pi pi-users",
-				"to": "/artisans"
-			},
-			{
-				"label": "Vendors",
-				"icon": "pi pi-users",
-				"to": "/vendors"
-			},
-			{
-				"label": "Skills",
-				"icon": "pi pi-key",
-				"to": "/skills"
-			},
-			{
-				"label": "Administrators",
-				"icon": "pi pi-user-edit",
-				"to": "/admins"
 			}
 		]
 	},
