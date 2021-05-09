@@ -1,4 +1,4 @@
-import { APIResponse } from '@/types/api';
+import { APIResponse, PaginatedResponse } from '@/types/api';
 import { API } from '@/utils/api';
 import { AxiosResponse } from 'axios';
 import { ArtisanData, ArtisanRegisterParams, ArtisanSummary } from '@/types/artisan'
@@ -11,6 +11,15 @@ export default class ArtisanService extends Service<ArtisanData, ArtisanRegister
     allArtisans = qs.stringify({
         limit: 1000000
     });
+
+    public createArtisan(payload: ArtisanRegisterParams){
+        return API.post('/artisans', payload)
+            .then(({ data }: AxiosResponse<APIResponse<PaginatedResponse<ArtisanRegisterParams>>>) => {
+                return data.data;
+            }).catch((error) => {
+                console.error("AdminService.ts >>>>>>>", error.message.error)
+            })
+    }
 
     async getSummary(query?: string) {
         return API.get(`${this.url}`)

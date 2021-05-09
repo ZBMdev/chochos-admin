@@ -28,7 +28,7 @@
                   label="New"
                   icon="pi pi-plus"
                   class="p-button-success p-mr-2"
-                  @click="openArtisan"
+                  @click="openNew"
                 />
               </div>
               <span class="p-input-icon-left">
@@ -160,32 +160,26 @@
       </template>
     </Card>
 
-    <!-- <Dialog
+    <Dialog
+      v-model:visible="categoryDialog"
+      :style="{ width: '450px' }"
+      header="Artisan Details"
+      :modal="true"
+      class="p-fluid"
+    >
+      <ArtisanCreate
+        :artisan="artisan"
+        :artisans="artisans.filter(cat => cat.id !== artisan.id)"
+        @updated="afterUpdateCategory"
+        @created="afterCreateCategory"
+      />
+    </Dialog>
+        
+    <Dialog
       v-model:visible="newArtisanDialog"
       :breakpoints="{'960px': '75vw', '640px': '100vw'}"
       :style="{width: '50vw'}"
       header="New Artisan"
-      :modal="true"
-      class="p-fluid"
-    >
-      <div>
-        <div class="card">
-          <Steps :model="items" :readonly="true" />
-        </div>
-
-        <router-view v-slot="{Component}" :formData="formObject" @prevPage="prevPage($event)" @nextPage="nextPage($event)" @complete="complete">
-          <keep-alive>
-            <component :is="Component" />
-          </keep-alive>
-        </router-view>
-      </div>
-    </Dialog> -->
-    
-    <Dialog
-      v-model:visible="artisanDialog"
-      :breakpoints="{'960px': '75vw', '640px': '100vw'}"
-      :style="{width: '50vw'}"
-      header="Artisan Details"
       :modal="true"
       class="p-fluid"
     >
@@ -235,11 +229,65 @@
           >
           </InputText>
         </div>
+        <Button @click="saveArtisan" label="Submit"></Button>
       </div> 
-      <template #footer>
-        <Button label="Cancel" icon="pi pi-times" class="p-button-text" @click="hideDialog"/>
-        <Button label="Save" icon="pi pi-check" class="p-button-text" @click="saveArtisan" />
-      </template>     
+    </Dialog>
+
+    <Dialog
+      v-model:visible="artisanDialog"
+      :breakpoints="{'960px': '75vw', '640px': '100vw'}"
+      :style="{width: '50vw'}"
+      header="Artisan Details"
+      :modal="true"
+      class="p-fluid"
+    >
+      <div>
+        <div class="p-field p-fluid">
+          <label>
+           Firstname
+          </label>
+          <InputText
+            v-model="artisan.firstName"
+          >
+          </InputText>
+        </div>
+        <div class="p-field p-fluid">
+          <label>
+           Lastname
+          </label>
+          <InputText
+            v-model="artisan.lastName"
+          >
+          </InputText>
+        </div>
+        <div class="p-field p-fluid">
+          <label>
+            Email
+          </label>
+          <InputText
+            v-model="artisan.email"
+          >
+          </InputText>
+        </div>
+        <div class="p-field p-fluid">
+          <label>
+            Username
+          </label>
+          <InputText
+            v-model="artisan.username"
+          >
+          </InputText>
+        </div>
+        <div class="p-field p-fluid">
+          <label>
+            Address
+          </label>
+          <InputText
+            v-model="artisan.address"
+          >
+          </InputText>
+        </div>
+      </div> 
     </Dialog>
   </div> 
 </template>
@@ -248,10 +296,11 @@
 import { Options, Vue } from 'vue-class-component';
 import MainLayout from '@/components/layouts/MainLayout.vue';
 import Artisan from '@/models/Artisan';
-import { ArtisanRegisterParams} from '@/types/artisan'
+import { ArtisanRegisterParams, ArtisanData } from '@/types/artisan'
 import ArtisanService from '@/services/ArtisanService';
 import { useToast } from 'primevue/usetoast';
 import {FilterMatchMode} from 'primevue/api';
+import ArtisanCreate from "@/views/users/ArtisanCreate.vue";
 import qs from 'qs';
 // import { toast } from '@/utils/helper';
 
@@ -264,7 +313,7 @@ interface ArtisanLazyParameters {
 }
 
 @Options({
-  components: { MainLayout, },
+  components: { MainLayout, ArtisanCreate},
 }) 
 
 export default class Artisans extends Vue {
@@ -274,6 +323,8 @@ export default class Artisans extends Vue {
   datasource: Artisan[] = [];
   newArtisan = {} as ArtisanRegisterParams;
   artisanDialog = false;
+  categoryDialog = false;
+  newArtisanDialog = false;
   totalRecords = 0;
   service: ArtisanService = new ArtisanService();
   selectedArtisans: Artisan[] = [];
@@ -324,10 +375,22 @@ export default class Artisans extends Vue {
     });
   }
 
-  /* openArtisan(artisan: Artisan) {
-    this.artisan = artisan;
-    this.artisanDialog = true;
-  } */
+  afterUpdateCategory(justUpdated: ArtisanData) {
+    this.artisans[this.findIndexById(justUpdated.id)] = new Artisan(justUpdated);
+  }
+
+  afterCreateCategory(justUpdated: ArtisanData) {
+    this.artisans.push(new Artisan(justUpdated));
+    this.categoryDialog = false;
+  }
+
+  openNew(artisan: Artisan) {
+    this.artisan = new Artisan({});
+    // this.artisan = artisan;
+    // this.newArtisanDialog = true;
+    this.categoryDialog = true;
+    this.submitted = false;
+  }
 
   openArtisan(artisan: Artisan) {
     this.artisan = artisan;
@@ -339,10 +402,15 @@ export default class Artisans extends Vue {
     this.submitted = false;
   }
 
+  findIndexById(id: number): number {
+    return this.artisans.findIndex((cat) => cat.id === id)
+  }
+
   saveArtisan() {
     this.submitted = true;
     console.log(this.newArtisan)
-    /* this.service.create(this.newArtisan)
+
+    this.service.create(this.newArtisan)
       .then((newArtisan) => {
       this.toast.add({
         severity:'success',
@@ -353,7 +421,7 @@ export default class Artisans extends Vue {
       this.$emit("Artisan created", newArtisan);
     }).finally(() => {
       this.artisanDialog = false;
-    }); */
+    });
   }
 }
 </script>

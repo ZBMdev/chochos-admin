@@ -1,8 +1,7 @@
 <template>
   <div>
     <PageHeading
-      title="Job Requests" 
-      :subtitle="`${totalRecords} jobs in total`"
+      title="Job Requests"
     />
     <ProgressSpinner style="display:flex; justify-content: center" v-if="isLoading" />
     <Card v-else>

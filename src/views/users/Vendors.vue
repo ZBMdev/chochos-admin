@@ -1,8 +1,7 @@
 <template>
   <div>
     <PageHeading
-      title="Vendors"
-      :subtitle="`${totalRecords} vendors in total`" />
+      title="Vendors"/>
     <ProgressSpinner style="display:flex; justify-content: center" v-if="isLoading" />
     <Card v-else>
       <template #content>

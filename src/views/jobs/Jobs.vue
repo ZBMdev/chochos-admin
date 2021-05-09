@@ -2,7 +2,6 @@
   <div>
     <PageHeading
       title="All Jobs"
-      :subtitle="`${totalRecords} jobs in total`"
     />
     <ProgressSpinner style="display:flex; justify-content: center" v-if="isLoading" />
     <Card v-else>

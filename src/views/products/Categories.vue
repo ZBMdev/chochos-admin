@@ -2,7 +2,6 @@
   <div>
     <PageHeading
       title="Products Category"
-      :subtitle="`${totalRecords} products in total`"
     />
     <ProgressSpinner style="display:flex; justify-content: center" v-if="isLoading" />
     <Card v-else>
