@@ -1,7 +1,7 @@
 <template>
 <div>
     <PageHeading
-      title="Users Category"
+      title="All Users"
       :subtitle="`${totalRecords} users in total`" />
     <ProgressSpinner style="display:flex; justify-content: center" v-if="isLoading" />
     <Card v-else>

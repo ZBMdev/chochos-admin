@@ -28,8 +28,7 @@
           paginatorPosition="both"
         >
           <template #header>
-            <!-- <div class="table-header"> -->
-            <div class="p-mb-4">  
+            <div class="table-header p-d-flex p-flex-column p-flex-md-row p-jc-md-between">  
               Products
               <span class="p-input-icon-left">
                 <i class="pi pi-search" />

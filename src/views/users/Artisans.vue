@@ -1,8 +1,7 @@
 <template>
   <div>
     <PageHeading
-      title="Artisans"
-      :subtitle="`${totalRecords} artisans in total`" />
+      title="Artisans"/>
     <ProgressSpinner style="display:flex; justify-content: center" v-if="isLoading" />
     <Card v-else>
       <template #content>
@@ -23,7 +22,15 @@
           @row-click="openArtisan($event.data)"
         >
           <template #header>
-            <div class="table-header p-d-flex">
+            <div class="table-header p-d-flex p-flex-column p-flex-md-row p-jc-md-between">
+              <div class="p-mb-2 p-m-md-0 p-as-md-center">
+                <Button
+                  label="New"
+                  icon="pi pi-plus"
+                  class="p-button-success p-mr-2"
+                  @click="openArtisan"
+                />
+              </div>
               <span class="p-input-icon-left">
                 <i class="pi pi-search" />
                 <InputText
@@ -153,6 +160,27 @@
       </template>
     </Card>
 
+    <!-- <Dialog
+      v-model:visible="newArtisanDialog"
+      :breakpoints="{'960px': '75vw', '640px': '100vw'}"
+      :style="{width: '50vw'}"
+      header="New Artisan"
+      :modal="true"
+      class="p-fluid"
+    >
+      <div>
+        <div class="card">
+          <Steps :model="items" :readonly="true" />
+        </div>
+
+        <router-view v-slot="{Component}" :formData="formObject" @prevPage="prevPage($event)" @nextPage="nextPage($event)" @complete="complete">
+          <keep-alive>
+            <component :is="Component" />
+          </keep-alive>
+        </router-view>
+      </div>
+    </Dialog> -->
+    
     <Dialog
       v-model:visible="artisanDialog"
       :breakpoints="{'960px': '75vw', '640px': '100vw'}"
@@ -162,44 +190,21 @@
       class="p-fluid"
     >
       <div>
-        <div
-            class="p-d-flex p-jc-center p-ai-center p-pt-4 p-pl-4 p-pr-4 p-pb-0"
-          >
-            <Avatar
-              v-if="artisan.photoUrl === '' || artisan.photoUrl === null " 
-              icon="pi pi-user"
-              class="p-mr-2"
-              style="background-color:#c8e6c9;color:#256029;width:8rem;height:8rem;font-size:4rem;"
-              shape="circle"
-            />
-            <Avatar 
-              v-else-if="artisan.fullName"
-              :label="artisan.fullName.charAt(0).toUpperCase()"
-              class="p-mr-2"
-              style="background-color:#c8e6c9;color:#256029;width:8rem;height:8rem;font-size:4rem;"
-              shape="circle"
-            />
-            <img v-else
-              :src="artisan.photoUrl"
-              :alt="artisan.photoUrl"
-              style="width:8rem;height:8rem;font-size:4rem;"
-            />
-          </div>
         <div class="p-field p-fluid">
           <label>
-            Name
+           Firstname
           </label>
           <InputText
-            v-model="artisan.fullName"
+            v-model="newArtisan.firstName"
           >
           </InputText>
         </div>
         <div class="p-field p-fluid">
           <label>
-            Username
+           Lastname
           </label>
           <InputText
-            v-model="artisan.username"
+            v-model="newArtisan.lastName"
           >
           </InputText>
         </div>
@@ -208,7 +213,16 @@
             Email
           </label>
           <InputText
-            v-model="artisan.email"
+            v-model="newArtisan.email"
+          >
+          </InputText>
+        </div>
+        <div class="p-field p-fluid">
+          <label>
+            Username
+          </label>
+          <InputText
+            v-model="newArtisan.username"
           >
           </InputText>
         </div>
@@ -217,66 +231,24 @@
             Address
           </label>
           <InputText
-            v-model="artisan.address"
+            v-model="newArtisan.address"
           >
           </InputText>
         </div>
-        <div class="p-field p-fluid">
-          <label>
-            About
-          </label>
-          <InputText
-            v-model="artisan.about"
-          >
-          </InputText>
-        </div>
-        <div class="p-field p-fluid">
-          <label>
-            Mobile
-          </label>
-          <InputText
-            v-model="artisan.mobile"
-          >
-          </InputText>
-        </div>
-        <div class="p-field p-fluid">
-          <label>
-            Languages
-          </label>
-          <InputText
-            v-model="artisan.languages"
-          >
-          </InputText>
-        </div>
-        <div class="p-field p-fluid">
-          <label>
-            Reviews
-          </label>
-          <Rating
-            :modelValue="artisan.rating"
-            :readonly="true"
-            :cancel="false"
-            :stars="5"
-          />
-        </div>
-        <div class="p-field p-fluid">
-          <label>
-            Last Login
-          </label>
-          <InputText
-            v-model="artisan.lastLogin"
-          >
-          </InputText>
-        </div>
-      </div>      
+      </div> 
+      <template #footer>
+        <Button label="Cancel" icon="pi pi-times" class="p-button-text" @click="hideDialog"/>
+        <Button label="Save" icon="pi pi-check" class="p-button-text" @click="saveArtisan" />
+      </template>     
     </Dialog>
-  </div>
+  </div> 
 </template>
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component';
 import MainLayout from '@/components/layouts/MainLayout.vue';
 import Artisan from '@/models/Artisan';
+import { ArtisanRegisterParams} from '@/types/artisan'
 import ArtisanService from '@/services/ArtisanService';
 import { useToast } from 'primevue/usetoast';
 import {FilterMatchMode} from 'primevue/api';
@@ -300,6 +272,7 @@ export default class Artisans extends Vue {
   artisans: Artisan[] = [];
   artisan!: Artisan;
   datasource: Artisan[] = [];
+  newArtisan = {} as ArtisanRegisterParams;
   artisanDialog = false;
   totalRecords = 0;
   service: ArtisanService = new ArtisanService();
@@ -351,11 +324,37 @@ export default class Artisans extends Vue {
     });
   }
 
+  /* openArtisan(artisan: Artisan) {
+    this.artisan = artisan;
+    this.artisanDialog = true;
+  } */
+
   openArtisan(artisan: Artisan) {
     this.artisan = artisan;
     this.artisanDialog = true;
   }
 
+  hideDialog() {
+    this.artisanDialog = false;
+    this.submitted = false;
+  }
+
+  saveArtisan() {
+    this.submitted = true;
+    console.log(this.newArtisan)
+    /* this.service.create(this.newArtisan)
+      .then((newArtisan) => {
+      this.toast.add({
+        severity:'success',
+        summary: 'Successful',
+        detail: 'Artisan Created',
+        life: 3000
+      });
+      this.$emit("Artisan created", newArtisan);
+    }).finally(() => {
+      this.artisanDialog = false;
+    }); */
+  }
 }
 </script>
 
@@ -363,5 +362,13 @@ export default class Artisans extends Vue {
 <style scoped>
 .filter-by {
   min-width: 300px;
+}
+
+::v-deep(b) {
+    display: block;
+}
+
+::v-deep(.p-card-body) {
+    padding: 2rem;
 }
 </style>

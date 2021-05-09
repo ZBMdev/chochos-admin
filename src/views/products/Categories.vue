@@ -19,14 +19,7 @@
           @row-click="editCategory($event.data)"
         >
           <template #header>
-            <div class="table-header p-d-flex p-flex-column p-flex-md-row p-jc-md-between">   
-              <span class="p-input-icon-left">
-                <i class="pi pi-search" />
-                <InputText
-                  v-model="filters['global'].value"
-                  placeholder="Search..."
-                />
-              </span>
+            <div class="table-header p-d-flex p-flex-column p-flex-md-row p-jc-md-between">
               <div class="p-mb-2 p-m-md-0 p-as-md-center">
                 <Button
                   label="New"
@@ -34,7 +27,14 @@
                   class="p-button-success p-mr-2"
                   @click="openNew"
                 />
-              </div>
+              </div>   
+              <span class="p-input-icon-left">
+                <i class="pi pi-search" />
+                <InputText
+                  v-model="filters['global'].value"
+                  placeholder="Search..."
+                />
+              </span>
             </div>
           </template>
           <Column

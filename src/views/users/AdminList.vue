@@ -300,7 +300,7 @@ export default defineComponent({
         })
         .finally(() => {
           this.loading = false;
-          location.reload();
+          // location.reload();
         });
     },
     createAdmin() {
@@ -315,7 +315,7 @@ export default defineComponent({
           this.$emit("Admin-created", newAdmin);
         }).finally(() => {
           this.displayCreateForm = false;
-          location.reload();
+          // location.reload();
         });
     },
 
@@ -324,8 +324,6 @@ export default defineComponent({
       const adminForm = this.editForm;
       this.service.update(admin.id, adminForm)
         .then((admin) => {
-          console.log("It will soon work");
-          console.log(admin);
           this.toast.add({ severity: "info", detail: "Editing successful", life: 3000 })
         })
         .finally(() => {
