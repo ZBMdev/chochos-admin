@@ -8,12 +8,15 @@ import qs from 'qs';
 export default class ArtisanService extends Service<ArtisanData, ArtisanRegisterParams>{
     url = "/artisans";
 
+    url2 = "/admins"
+    url3 = "/auth"
+
     allArtisans = qs.stringify({
         limit: 1000000
     });
 
     public createArtisan(payload: ArtisanRegisterParams){
-        return API.post('/artisans', payload)
+        return API.post(`${this.url3}/register`, payload)
             .then(({ data }: AxiosResponse<APIResponse<PaginatedResponse<ArtisanRegisterParams>>>) => {
                 return data.data;
             }).catch((error) => {

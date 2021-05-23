@@ -1,7 +1,8 @@
 <template>
   <div>
     <PageHeading
-      title="Vendors"/>
+      title="Vendors"
+      :subtitle="`${totalRecords} vendors in total`" />
     <ProgressSpinner style="display:flex; justify-content: center" v-if="isLoading" />
     <Card v-else>
       <template #content>
@@ -26,7 +27,15 @@
           @row-click="openVendor($event.data)"
         >
           <template #header>
-            <div class="table-header p-d-flex">
+            <div class="table-header p-d-flex p-flex-column p-flex-md-row p-jc-md-between">
+              <div class="p-mb-2 p-m-md-0 p-as-md-center">
+                <Button
+                  label="New"
+                  icon="pi pi-plus"
+                  class="p-button-success p-mr-2"
+                  @click="openNew"
+                />
+              </div>
               <span class="p-input-icon-left">
                 <i class="pi pi-search" />
                 <InputText
@@ -134,6 +143,96 @@
         </DataTable>
       </template>
     </Card>
+
+    <Dialog
+      v-model:visible="newVendorDialog"
+      :breakpoints="{'960px': '75vw', '640px': '100vw'}"
+      :style="{width: '50vw'}"
+      header="New Vendor"
+      :modal="true"
+      class="p-fluid"
+    >
+      <div>
+        <div class="p-field p-fluid">
+          <label>
+           Firstname
+          </label>
+          <InputText
+            v-model="newVendor.firstName"
+          >
+          </InputText>
+         </div>
+        <div class="p-field p-fluid">
+          <label>
+           Lastname
+          </label>
+          <InputText
+            v-model="newVendor.lastName"
+            required="true"
+            :class="{'p-invalid': submitted && !newVendor.lastName}"
+          >
+          </InputText>
+          <small class="p-error" v-if="submitted && !newVendor.lastName">Lastname is required.</small>  
+        </div>
+        <div class="p-field p-fluid">
+          <label>
+            Email
+          </label>
+          <InputText
+            v-model="newVendor.email"
+          >
+          </InputText>
+        </div>
+        <div class="p-field p-fluid">
+          <label>
+            Username
+          </label>
+          <InputText
+            v-model="newVendor.username"
+          >
+          </InputText>
+        </div>
+        <div class="p-field p-fluid">
+          <label>
+            Password
+          </label>
+          <Password
+            v-model="newVendor.password"
+            toggleMask
+            :feedback="false"
+            placeholder="*******"
+          >
+          </Password>
+        </div>
+        <!-- <div class="p-field p-fluid">
+          <label>
+            User Category
+          </label>
+          <InputNumber id="integeronly"
+            v-model="newVendor.userCategory"
+            aria-describedby="userCat"/>
+            <small id="userCat" >Type in 2.</small>
+        </div> -->
+
+        <div class="p-field p-fluid">
+          <label>
+            User Category
+          </label>
+          <Dropdown
+            v-model="newVendor.userCategory"
+            :options="userCat"
+            optionLabel="name"
+            optionValue="code"
+            placeholder="Select vendor"
+            required="true"
+            :class="{'p-invalid': submitted && !newVendor.userCategory}"
+          />
+          <small class="p-error" v-if="submitted && !newVendor.userCategory">Selection required.</small>
+        </div>
+
+        <Button @click="saveVendor" label="Submit"></Button>
+      </div> 
+    </Dialog>
 
     <Dialog
       v-model:visible="vendorDialog"
@@ -251,11 +350,13 @@ import { Options, Vue } from 'vue-class-component';
 import MainLayout from '@/components/layouts/MainLayout.vue';
 import Vendor from '@/models/Vendor';
 import VendorService from '@/services/VendorService';
+import { VendorRegisterParams, VendorData } from '@/types/vendors'
 import VendorBox from "@/components/users/VendorBox.vue";
 import { useToast } from 'primevue/usetoast';
 import {FilterMatchMode} from 'primevue/api';
 import qs from 'qs';
 import Dialog from 'primevue/dialog';
+import TrialVue from './Trial.vue';
 // import { toast } from '@/utils/helper';
 
 interface VendorLazyParameters {
@@ -272,7 +373,9 @@ export default class Vendors extends Vue {
   vendors: Vendor[] = [];
   vendor!: Vendor;
   datasource: Vendor[] = [];
+  newVendor = {} as VendorRegisterParams;
   vendorDialog = false;
+  newVendorDialog = false;
   totalRecords = 0;
   service: VendorService = new VendorService();
   selectedVendors: Vendor[] = [];
@@ -288,6 +391,9 @@ export default class Vendors extends Vue {
   lazyParams: Partial<VendorLazyParameters> = {};
   firstRecordIndex = 0;
   rowstoDisplay = 10;
+  userCat = [
+    {name: 'Vendor', code: 2},
+  ]
 
   created() {
     // watch the params of the route to fetch the data again
@@ -322,10 +428,64 @@ export default class Vendors extends Vue {
       console.log(e);
     });
   }
-
+  
+  openNew(vendor: Vendor) {
+    this.newVendorDialog = true;
+    this.submitted = false;
+  }
   openVendor(vendor: Vendor) {
     this.vendor = vendor;
     this.vendorDialog = true;
+  }
+
+  hideDialog() {
+    this.vendorDialog = false;
+    this.submitted = false;
+  }
+
+  findIndexById(id: number): number {
+    return this.vendors.findIndex((ven) => ven.id === id)
+  }
+
+  saveVendor() {
+    /*this.vendors.push(this.newVendor)
+    this.toast.add({
+          severity:'success',
+          summary: 'Successful',
+          detail: 'Vendor Created',
+          life: 3000
+        }); */
+    this.submitted = true;
+    if( this.submitted ) {
+
+        this.toast.add({
+          severity:'success',
+          summary: 'Successful',
+          detail: 'Vendor Created',
+          life: 3000
+        });
+    }
+    else{
+      
+        this.toast.add({
+          severity:'danger',
+          summary: 'Successful',
+          detail: 'Complete the form',
+          life: 3000
+        });
+    }
+    this.service.createVendor(this.newVendor)
+      .then((newVendor) => {
+        // this.newVendorDialog = false;
+        this.$emit("Vendor created", newVendor);
+      }).catch((e) => {
+        this.toast.add({ severity: 'error', summary: e, detail:"Sorry we could not create an vendor at the moment, please try again", life: 3000 });
+      }).finally(() => {
+        this.submitted = true;
+        console.log(this.newVendor)
+      });
+
+      this.newVendorDialog = true;
   }
 
 }

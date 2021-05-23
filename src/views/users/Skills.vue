@@ -9,32 +9,20 @@
         <DataTable
           dataKey="id"
           class="p-datatable-responsive p-datatable-sm"
-          :value="skills"
+          :value="categories"
           :paginator="true"
           :rows="10"
-          v-model:filters="filters"
-          filterDisplay="row" 
-          :globalFilterFields="['name','description']"
           currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
           paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
-          :totalRecords="totalRecords"
           :rowsPerPageOptions="[10,20,50, 100, 200]"
           :first="firstRecordIndex"
           responsiveLayout="scroll"
           :scrollable="true"
           :rowHover="true"
-          @row-click="editCategory($event.data)"
+          
         >
-        <template #header>
-            <div class="table-header p-d-flex p-flex-column p-flex-md-row p-jc-md-between">
-              <div class="p-mb-2 p-m-md-0 p-as-md-center">
-                <Button
-                  label="New"
-                  icon="pi pi-plus"
-                  class="p-button-success p-mr-2"
-                  @click="openNew"
-                />
-              </div>
+          <template #header>
+            <div class="table-header p-d-flex">
               <span class="p-input-icon-left">
                 <i class="pi pi-search" />
                 <InputText
@@ -42,6 +30,14 @@
                   placeholder="Search..."
                 />
               </span>
+              <div class="p-ml-auto">
+                <Button
+                  label="New"
+                  icon="pi pi-plus"
+                  class="p-button-success p-mr-2"
+                  @click="openNew"
+                />
+              </div>
             </div>
           </template>
           <template #empty>
@@ -93,16 +89,59 @@
     <Dialog
       v-model:visible="categoryDialog"
       :style="{ width: '450px' }"
-      header="Category Details"
+      header="Skills Details"
       :modal="true"
       class="p-fluid"
     >
-      <SkillsEdit
-        :category="category"
-        :categories="categories.filter(cat => cat.id !== category.id)"
-        @updated="afterUpdateCategory"
-        @created="afterCreateCategory"
-      />
+      <div class="p-fluid">
+        <div class="p-field">
+          <label for="name">Name</label>
+          <InputText
+            id="name"
+            v-model="category.name"
+            required="true"
+            autofocus
+          />
+          <small class="p-error" v-if="submitted && !category.name">Name is required.</small>
+        </div>
+        <div class="p-field">
+          <label for="description">Description</label>
+          <Textarea
+            id="description"
+            v-model="category.description"
+            required="true"
+            rows="3"
+            cols="20"
+          />
+        </div>
+        
+        <div class="p-d-flex p-field">
+          <LButton
+            icon="pi pi-save"
+            :loading="isSubmitting"
+            @click="saveCategory"
+            label="Save"
+            loadingText="Saving"
+          />
+        </div>
+      </div>
+    </Dialog>
+
+    <Dialog v-model:visible="categoryEditDialog" :style="{width: '450px'}" header="Category Details" :modal="true" class="p-fluid">
+      <div class="p-field">
+        <label for="name">Name</label>
+        <InputText id="name" v-model="category.name" required="true" autofocus :class="{'p-invalid': submitted && !category.name}" />
+        <small class="p-error" v-if="submitted && !category.name">Name is required.</small>
+      </div>
+      <div class="p-field">
+        <label for="description">Description</label>
+        <Textarea id="description" v-model="category.description" required="true" rows="3" cols="20" />
+      </div>
+
+      <template #footer>
+        <Button label="Cancel" icon="pi pi-times" class="p-button-text" @click="hideDialog"/>
+        <Button label="Save" icon="pi pi-check" class="p-button-text" @click="updateCategory" loadingText="Saving" />
+      </template>
     </Dialog>
 
     <Dialog
@@ -164,231 +203,162 @@
   </div>
 </template>
 
-
 <script lang="ts">
+import { ref, onMounted } from 'vue';
 import { Options, Vue } from 'vue-class-component';
 import Skills from '@/models/Skills'
 import Rating from 'primevue/rating';
 import SkillsService from '@/services/SkillsService';
-import { SkillsData } from '@/types/skills'
+import { SkillsData, CreateSkillsParam } from '@/types/skills'
 import SkillsEdit from "@/components/category/SkillsEdit.vue";
 import { useToast } from 'primevue/usetoast';
 import {FilterMatchMode} from 'primevue/api';
 import qs from 'qs';
 
-interface SkillsLazyParameters {
-  page:       number;
-  pageSize:   number;
-  limit:      number;
-  totalCount: number;
-}
+export default{
+    setup() {   
+        const toast = useToast();
+        const dt = ref();
+        const isLoading = ref(false);
+        const categories = ref();
+        const categoryDialog = ref(false);
+        const deleteCategoryDialog = ref(false);
+        const deleteCategoriesDialog = ref(false);
+        const category = ref();
+        const service = ref(new SkillsService());
+        const selectedCategories = ref();
+        const filters = ref({
+          'global': {value: null, matchMode: FilterMatchMode.CONTAINS},
+        });
+        const submitted = ref(false);
+        const lazyParams = ref({});
+        const totalRecords = ref(0);
+        const firstRecordIndex = ref(0);
+        const rowstoDisplay = ref(10);
+        const categoryEditDialog = ref(false);
 
-@Options({
-  components: { SkillsEdit },
-}) 
+        const loadLazyData = () => {
+          isLoading.value = true;
+          service.value.getAll(`${qs.stringify(lazyParams.value)}`)
+            .then(data => {
+              categories.value = data.map((prod) => new Skills(prod));
+              isLoading.value = false;
+            }).catch((e) => {
+            toast.add({ severity: "error", summary: "There was an error fetching skills", detail: "Please check your internet connection and refresh the page" })
+            console.log(e);
+            });
+        };
 
-export default class SkillsList extends Vue {
-  skills: Skills[] = [];
-  selectedCategories: Skills[] = [];
-  filterValue = '';
-  loading = false;
-  generalLoading = false;
-  service: SkillsService = new SkillsService();
-  filters = {
-    'global': {value: null, matchMode: FilterMatchMode.CONTAINS},
-    'name': {value: null, matchMode: FilterMatchMode.STARTS_WITH}
-  };
-  matchModeOptions =  [
-    {label: 'Starts With', value: FilterMatchMode.STARTS_WITH}
-  ]
-  submitted = false;
-  toast = useToast();
-  lazyParams: Partial<SkillsLazyParameters> = {};
-  firstRecordIndex = 0;
-  rowstoDisplay = 10;
-  categories: Skills[] = [];
-  categoryDialog = false;
-  deleteCategoryDialog = false;
-  deleteCategoriesDialog = false;
-  category!: Skills;
+        const findIndexById = (id: number) => {
+          return categories.value.findIndex((cat: { id: number }) => cat.id === id)
+        }
 
-  created() {
-    // watch the params of the route to fetch the data again
-    this.$watch(
-      () => this.$route.params,
-      () => {
-        this.getData();
-      },
-      // fetch the data when the view is created and the data is
-      // already being observed
-      { immediate: true }
-    )
-  }
+        const openNew = () => {
+          category.value = {};
+          submitted.value = false;
+          categoryDialog.value = true;
+        };
 
-  getData() {
-    this.generalLoading = true
-    this.loading = true;
-    this.lazyParams = { page: 1, limit: this.rowstoDisplay }
-    this.loadLazyData();
-  }
+        const hideDialog = () => {
+          categoryDialog.value = false;
+          submitted.value = false;
+        };
 
-  formatCurrency(value: number) {
-    return value.toLocaleString('en-NG', { style: 'currency', currency: 'NGN' });
-  }
+        const saveCategory = () => {
+          submitted.value = true;
+          
+          console.log(category.value)
+          
+          service.value.create(category.value)
+            .then(() => {
+              categories.value.push(category.value);
+              toast.add({
+                severity: "success",
+                summary: "Successful",
+                detail: "Skill was created successfully",
+                life: 3000
+              });
+              console.log(category.value)
+              }).finally(() => {
+                categoryDialog.value = false;
+              });
+        }
 
-  loadLazyData() {
-    this.loading = true;
-    this.service.getAll(`${qs.stringify(this.lazyParams)}`)
-      .then(data => {
-        this.skills = data.map((prod) => new Skills(prod));
-        this.loading = false;
-        this.generalLoading = false;
-      });
-  }
+        const updateCategory = () => {
+          submitted.value = true;
+          service.value.update(category.value.id, category.value)
+            .then(() => {
+              toast.add({
+                severity: "success",
+                summary: "Successful",
+                detail: "Skill was updated successfully",
+                life: 3000
+              });
+            // console.log(category.value)
+            }).finally(() => {
+              categoryEditDialog.value = false;
+            });
+        }
 
-  afterUpdateCategory(justUpdated: SkillsData) {
-    this.categories[this.findIndexById(justUpdated.id)] = new Skills(justUpdated);
-  }
+        const editCategory = (cat: Skills) => {
+          category.value = cat;
+          categoryEditDialog.value = true;
+        };
 
-  afterCreateCategory(justUpdated: SkillsData) {
-    this.categories.push(new Skills(justUpdated));
-    this.categoryDialog = false;
-  }
+        const confirmDeleteCategory = (cat: Skills) => {
+          category.value = cat;
+          deleteCategoryDialog.value = true;
+        };
 
-  get parentCategory() {
-    const parent = this.categories.find((cat) => cat.id === this.category.id);
-    return parent ? parent.id : 0;
-  }
-  set parentCategory(parentId: number) {
-    // eslint-disable-next-line
-    this.category.id = parentId;
-  }
+        const confirmDeleteSelected = ()=>  {
+          deleteCategoriesDialog.value = true;
+        }
 
-  editCategory(category: Skills) {
-    this.category = category;
-    this.categoryDialog = true;
-  }
-  onUpload() {
-    this.toast.add({ severity: 'info', summary: 'Success', detail: 'File Uploaded', life: 3000 });
-  }
-
-  openNew() {
-    this.category = new Skills({});
-    this.submitted = false;
-    this.categoryDialog = true;
-  }
-
-  confirmDeleteCategory(category: Skills) {
-    this.category = category;
-    this.deleteCategoryDialog = true;
-  }
-
-  confirmDeleteSelected() {
-    this.deleteCategoriesDialog = true;
-  }
-
-  hideDialog() {
-    this.categoryDialog = false;
-    this.submitted = false;
-  }
-
-  findIndexById(id: number): number {
-    return this.categories.findIndex((cat) => cat.id === id)
-  }
-
-  deleteSelectedCategories() {
-    this.loading = true;
-    // delete 
-    this.selectedCategories.forEach(async (cat) => {
-      await this.service.delete(cat.id);
-    });
-    this.categories = this.categories.filter(val => !this.selectedCategories.includes(val));
-    this.deleteCategoriesDialog = false;
-    this.selectedCategories = [];
-    this.loading = false;
-    this.toast.add({ severity: 'success', summary: 'Successful', detail: 'Categories Deleted', life: 3000 });
-  }
-
-  deleteCategory() {
-    this.loading = true
-    this.service.delete(this.category.id)
-      .then((message) => {
-        this.categories = this.categories.filter(val => val.id !== this.category.id);
-        this.deleteCategoryDialog = false;
-        this.category = new Skills({});
-        this.toast.add({ severity: 'success', summary: 'Successful', detail: message, life: 3000 });
-      }).catch(() => {
-        this.toast.add({ severity: 'error', summary: 'Error', detail: 'Deleting Failed failed', life: 3000 });
-      }).finally(() => {
-        this.loading = false
-      })
-  }
-
+        const deleteCategory = () =>{
+          isLoading.value = true
+          service.value.delete(category.value.id)
+            .then(() => {
+              categories.value = categories.value.filter((val: { id: any }) => val.id !== category.value.id);
+              deleteCategoryDialog.value = false;
+              category.value = new Skills({});
+              toast.add({ severity: 'success', summary: 'Successful', detail: 'Skill deleted successfully', life: 3000 });
+            }).catch(() => {
+              toast.add({ severity: 'error', summary: 'Error', detail: 'Deleting failed', life: 3000 });
+            }).finally(() => {
+              isLoading.value = false
+            })
+        }
+      
+        const deleteSelectedCategories = ()=> {
+            isLoading.value = true;
+            // delete 
+            selectedCategories.value.forEach(async (cat: { id: number }) => {
+            await service.value.delete(cat.id);
+            });
+            categories.value = categories.value.filter((val: any) => !selectedCategories.value.includes(val));
+            deleteCategoriesDialog.value = false;
+            selectedCategories.value = [];
+            isLoading.value = false;
+            toast.add({ severity: 'success', summary: 'Successful', detail: 'Categories Deleted', life: 3000 });
+        }
+        
+        onMounted(() => {
+           loadLazyData(),
+           saveCategory(),
+           openNew(),
+           hideDialog()
+        })
+        
+        return {
+            dt, categories, categoryDialog, category, isLoading, deleteCategoryDialog,
+            selectedCategories, filters, submitted, deleteCategoriesDialog, deleteSelectedCategories,
+            service,openNew, hideDialog, saveCategory, editCategory, findIndexById, updateCategory, categoryEditDialog,
+            confirmDeleteCategory, confirmDeleteSelected, deleteCategory,
+        }
+    }
 }
 </script>
 
-<style scoped>
-.table-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
+<style>
 
-.product-image {
-  width: 50px;
-  height: 3rem;
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
-  object-fit: cover;
-  object-position: center;
-}
-.p-datatable-responsive-demo .p-datatable-tbody > tr > td .p-column-title {
-  display: none;
-}
-
-@media screen and (max-width: 40em) {
-  .p-datatable.p-datatable-responsive-demo .p-datatable-thead > tr > th,
-  .p-datatable.p-datatable-responsive-demo .p-datatable-tfoot > tr > td {
-    display: none !important;
-  }
-  .p-datatable.p-datatable-responsive-demo .p-datatable-tbody > tr > td {
-    text-align: left;
-    display: block;
-    border: 0 none !important;
-    width: 100% !important;
-    float: left;
-    clear: left;
-  }
-  .p-datatable.p-datatable-responsive-demo
-    .p-datatable-tbody
-    > tr
-    > td
-    .p-column-title {
-    padding: 0.4rem;
-    min-width: 30%;
-    display: inline-block;
-    margin: -0.4em 1em -0.4em -0.4rem;
-    font-weight: bold;
-  }
-}
-
-.product-badge.status-instock {
-  background: #c8e6c9;
-  color: #256029;
-}
-.product-badge.status-lowstock {
-  background: #feedaf;
-  color: #8a5340;
-}
-.product-badge.status-outofstock {
-  background: #ffcdd2;
-  color: #c63737;
-}
-.product-badge {
-  border-radius: 2px;
-  padding: 0.25em 0.5rem;
-  text-transform: uppercase;
-  font-weight: 700;
-  font-size: 12px;
-  letter-spacing: 0.3px;
-}
 </style>

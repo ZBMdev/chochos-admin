@@ -50,7 +50,6 @@ import MultiSelect from 'primevue/multiselect';
 
 import Rating from 'primevue/rating';
 import Sidebar from 'primevue/sidebar';
-import Steps from 'primevue/steps';
 
 import TabPanel from 'primevue/tabpanel';
 import TabView from 'primevue/tabview';
@@ -149,7 +148,6 @@ app.component('MultiSelect', MultiSelect);
 
 app.component('Rating', Rating);
 app.component('Sidebar', Sidebar);
-app.component('Steps', Steps);
 
 app.component('TabPanel', TabPanel);
 app.component('TabView', TabView);

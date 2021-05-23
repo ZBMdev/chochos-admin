@@ -1,7 +1,8 @@
 <template>
   <div>
     <PageHeading
-      title="Artisans"/>
+      title="Artisans"
+      :subtitle="`${totalRecords} artisans in total`"/>
     <ProgressSpinner style="display:flex; justify-content: center" v-if="isLoading" />
     <Card v-else>
       <template #content>
@@ -192,7 +193,7 @@
             v-model="newArtisan.firstName"
           >
           </InputText>
-        </div>
+         </div>
         <div class="p-field p-fluid">
           <label>
            Lastname
@@ -222,12 +223,40 @@
         </div>
         <div class="p-field p-fluid">
           <label>
-            Address
+            Password
           </label>
-          <InputText
-            v-model="newArtisan.address"
+          <Password
+            v-model="newArtisan.password"
+            toggleMask
+            :feedback="false"
+            placeholder="*******"
           >
-          </InputText>
+          </Password>
+        </div>
+        <!-- <div class="p-field p-fluid">
+          <label>
+            User Category
+          </label>
+          <InputNumber id="integeronly"
+            v-model="newArtisan.userCategory"
+            aria-describedby="userCat"/>
+            <small id="userCat" >Type in 1.</small>
+        </div> -->
+
+        <div class="p-field p-fluid">
+          <label>
+            User Category
+          </label>
+          <Dropdown
+            v-model="newArtisan.userCategory"
+            :options="userCat"
+            optionLabel="name"
+            optionValue="code"
+            placeholder="Select Artisan"
+            required="true"
+            :class="{'p-invalid': submitted && !newArtisan.userCategory}"
+          />
+          <small class="p-error" v-if="submitted && !newArtisan.userCategory">Selection required.</small>
         </div>
         <Button @click="saveArtisan" label="Submit"></Button>
       </div> 
@@ -302,7 +331,6 @@ import { useToast } from 'primevue/usetoast';
 import {FilterMatchMode} from 'primevue/api';
 import ArtisanCreate from "@/views/users/ArtisanCreate.vue";
 import qs from 'qs';
-// import { toast } from '@/utils/helper';
 
 interface ArtisanLazyParameters {
   page: number;
@@ -322,11 +350,14 @@ export default class Artisans extends Vue {
   artisan!: Artisan;
   datasource: Artisan[] = [];
   newArtisan = {} as ArtisanRegisterParams;
+  // artCat = {};
+  // artCat = {} as ArtisanRegisterParams.userCategories;
   artisanDialog = false;
   categoryDialog = false;
   newArtisanDialog = false;
   totalRecords = 0;
   service: ArtisanService = new ArtisanService();
+  // userCat: 
   selectedArtisans: Artisan[] = [];
   filters = {
     'global': {value: null, matchMode: FilterMatchMode.CONTAINS},
@@ -340,6 +371,9 @@ export default class Artisans extends Vue {
   lazyParams: Partial<ArtisanLazyParameters> = {};
   firstRecordIndex = 0;
   rowstoDisplay = 10;
+  userCat = [
+    {name: 'Artisan', code: 1},
+  ]
 
   created() {
     // watch the params of the route to fetch the data again
@@ -355,6 +389,7 @@ export default class Artisans extends Vue {
   }
 
   getData() {
+    // this.artCat = 1
     this.isLoading = true
     this.lazyParams = { page: 1, limit: this.rowstoDisplay }
     this.loadLazyData();
@@ -385,10 +420,9 @@ export default class Artisans extends Vue {
   }
 
   openNew(artisan: Artisan) {
-    this.artisan = new Artisan({});
+    // this.artisan = new Artisan({});
     // this.artisan = artisan;
-    // this.newArtisanDialog = true;
-    this.categoryDialog = true;
+    this.newArtisanDialog = true;
     this.submitted = false;
   }
 
@@ -407,21 +441,27 @@ export default class Artisans extends Vue {
   }
 
   saveArtisan() {
-    this.submitted = true;
-    console.log(this.newArtisan)
-
-    this.service.create(this.newArtisan)
+    this.service.createArtisan(this.newArtisan)
       .then((newArtisan) => {
-      this.toast.add({
-        severity:'success',
-        summary: 'Successful',
-        detail: 'Artisan Created',
-        life: 3000
+      // .then(() => {
+        // this.newArtisan = new Artisan({});
+        // this.userCategory = 1;
+        // this.artCat = 1;
+        this.toast.add({
+          severity:'success',
+          summary: 'Successful',
+          detail: 'Artisan Created',
+          life: 3000
+        });
+        this.newArtisanDialog = false;
+        this.$emit("Artisan created", newArtisan);
+      }).catch((e) => {
+        this.toast.add({ severity: 'error', summary: e, detail:"Sorry we could not create an artisan at the moment, please try again", life: 3000 });
+      }).finally(() => {
+        // this.newArtisanDialog = false;
+        this.submitted = true;
+        console.log(this.newArtisan)
       });
-      this.$emit("Artisan created", newArtisan);
-    }).finally(() => {
-      this.artisanDialog = false;
-    });
   }
 }
 </script>

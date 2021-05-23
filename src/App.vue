@@ -1,9 +1,12 @@
+<!-- <template @error="handleError($event)">
+  <Toast :baseZIndex="999999" />
+  <router-view></router-view>
+</template> -->
+
 <template @error="handleError($event)">
   <Toast :baseZIndex="999999" />
   <router-view></router-view>
 </template>
-
-
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component';

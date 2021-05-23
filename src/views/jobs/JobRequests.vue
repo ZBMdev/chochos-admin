@@ -9,7 +9,7 @@
         <DataTable
           dataKey="id"
           class="p-datatable-responsive p-datatable-sm"
-          :value="jobs"
+          :value="jobRequests"
           :paginator="true"
           :rows="10"
           :rowsPerPageOptions="[10, 20, 50, 100, 200]"
@@ -66,7 +66,7 @@
             </template>
           </Column>
           <Column
-            ref="price"
+            ref="totalAmount"
             field="totalAmount"
             header="Amount"
             filterField="price"
@@ -74,9 +74,19 @@
           >
             <template #body="slotProps">
               <span class="p-column-title">Amount</span>
-              {{ formatCurrency(slotProps.data.productsAmount) }}
+              {{ formatCurrency(slotProps.data.totalAmount) }}
             </template>
           </Column>
+          <Column
+            ref="quantity"
+            field="billOfQuantities.quantity"
+            header="Quantity"
+          >
+            <template #body="slotProps">
+              <span class="p-column-title">Quantity</span>
+              {{ slotProps.data.quantity }}
+            </template>
+          </Column> 
           <Column
             ref="date"
             field="date"
@@ -98,7 +108,13 @@
           >
             <template #body="slotProps">
               <span class="p-column-title">Job Status</span>
-              {{ slotProps.data.status }}
+              <span
+                :class="
+                  'product-badge status-' +
+                    slotProps.data.jobStatus
+                "
+                >{{ slotProps.data.jobStatus }}
+                </span>
             </template>
           </Column>  
           <Column
@@ -125,10 +141,10 @@
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component';
-import Job from '@/models/Job'
+import JobRequest from '@/models/JobRequest'
 import Rating from 'primevue/rating';
-import JobService from '@/services/JobService';
-import { JobData } from '@/types/jobs'
+import JobRequestService from '@/services/JobRequestService';
+import { JobRequestData } from '@/types/jobRequest'
 import {FilterMatchMode} from 'primevue/api';
 import qs from 'qs';
 
@@ -136,18 +152,18 @@ interface JobLazyParameters {
   page:       number;
   pageSize:   number;
   limit:      number;
-  items:      JobData[];
+  items:      JobRequestData[];
   totalCount: number;
 }
 
 export default class ProductList extends Vue {
-  jobs: Job[] = [];
-  selectedJobs: Job[] = [];
+  jobRequests: JobRequest[] = [];
+  selectedJobRequests: JobRequest[] = [];
   filterValue = '';
   isLoading = false;
   generalLoading = false;
   totalRecords = 0;
-  service: JobService = new JobService();
+  service: JobRequestService = new JobRequestService();
   filters = {
     'global': {value: null, matchMode: FilterMatchMode.CONTAINS},
     'name': {value: null, matchMode: FilterMatchMode.STARTS_WITH}
@@ -187,7 +203,7 @@ export default class ProductList extends Vue {
     this.isLoading = true;
     this.service.getAllPaginated(`${qs.stringify(this.lazyParams)}`)
       .then(data => {
-        this.jobs = data.items.map((prod) => new Job(prod));
+        this.jobRequests = data.items.map((prod) => new JobRequest(prod));
         this.totalRecords = data.totalCount;
         this.firstRecordIndex = data.page > 1 ? data.pageSize * data.page - 1 : 0;
         this.rowstoDisplay = data.pageSize;
@@ -262,6 +278,32 @@ export default class ProductList extends Vue {
   font-weight: 700;
   font-size: 12px;
   letter-spacing: 0.3px;
+}
+
+.product-badge.status-New {
+  background: #8089da;
+  color: #0d0a2b;
+}
+.product-badge.status-Approved {
+  background: #feedaf;
+  /* color: #e1f061; */
+  color: #443602
+}
+.product-badge.status-Declined {
+  background: #ffcdd2;
+  color: #c63737;
+}
+.product-badge.status-SendBill {
+  background: #d9d9f8;
+  color: #100ea1;
+}
+.product-badge.status-ConfirmBill {
+  background: #c8e6c9;
+  color: #256029;
+}
+.product-badge.status-RejectBill {
+  background: #ffe1cd;
+  color: #ff8c00;
 }
 </style>
 

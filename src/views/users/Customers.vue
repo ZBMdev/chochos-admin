@@ -238,7 +238,8 @@ export default class CustomerList extends Vue {
 <template>
   <div>
     <PageHeading
-      title="Customers"
+      title="Customers" 
+      :subtitle="`${totalRecords} customers in total`"
     />
     <ProgressSpinner style="display:flex; justify-content: center" v-if="isLoading" />
     <Card v-else>

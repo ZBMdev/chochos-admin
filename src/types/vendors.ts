@@ -6,6 +6,26 @@ export interface VendorRegisterParams {
     lastName: string;
     username: string;
     address: string;
+    userCategory: number;
+    categoryId?:       number;
+    fullName?:         string;
+    name?:  string;
+    id?:               number;
+    longitude?:        number ;
+    latitude?:         number ;
+    rating?:           number;
+    totalRatingValue?: number ;
+    mobile?:           string;
+    photoUrl?:         string;
+    last_login?:        Date;
+    lastLogin?:        Date;
+    created_at?:        Date;
+    updated_at?:        Date;
+    createdAtFormatted?: Date;
+    updatedAtFormatted?: Date;
+    about?:            string;
+    languages?:        Languages;
+
 }
 export interface Data {
     page:       number;

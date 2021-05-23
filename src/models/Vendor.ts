@@ -45,7 +45,8 @@ export default class Vendor extends Model {
             lastName: this.lastName,
             fullName: this.fullName,
             username: this.username,
-            address: this.address
+            address: this.address,
+            userCategory: this.userCategory
         } as VendorRegisterParams;
     }
 

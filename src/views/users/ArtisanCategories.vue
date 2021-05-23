@@ -8,8 +8,8 @@
         <DataTable
           class="p-datatable-responsive p-datatable-sm"
           ref="artisan-dt"
-          :value="artisansCat"
-          v-model:selection="selectedArtisansCat"
+          :value="categories"
+          v-model:selection="selectedCategories"
           dataKey="id"
           :paginator="true"
           :rows="10"
@@ -79,7 +79,6 @@
             headerStyle="min-width: 10rem"
             header="Created On"
             sortField="last_login_date"
-            :sortable="true"
           >
             <template #body="slotProps">
               {{ slotProps.data.createdAt }}
@@ -89,12 +88,12 @@
             <template #body="slotProps">
               <Button
                 icon="pi pi-pencil"
-                class="p-button-rounded p-button-success p-mr-2"
+                class="p-button-raised p-button-success p-mr-2"
                 @click="editCategory(slotProps.data)"
               />
               <Button
                 icon="pi pi-trash"
-                class="p-button-rounded p-button-warning"
+                class="p-button-raised p-button-danger"
                 @click="confirmDeleteCategory(slotProps.data)"
               />
             </template>
@@ -103,19 +102,37 @@
       </template>
     </Card>
     
-    <Dialog
-      v-model:visible="categoryDialog"
-      :style="{ width: '450px' }"
-      header="Category Details"
-      :modal="true"
-      class="p-fluid"
-    >
-      <ArtisanEdit
-        :category="category"
-        :artisansCat="artisansCat.filter(cat => cat.id !== category.id)"
-        @updated="afterUpdateCategory"
-        @created="afterCreateCategory"
-      />
+    <Dialog v-model:visible="categoryDialog" :style="{width: '450px'}" header="New Category Details" :modal="true" class="p-fluid">
+      <div class="p-field">
+        <label for="name">Name</label>
+        <InputText id="name" v-model.trim="category.name" required="true" autofocus :class="{'p-invalid': submitted && !category.name}" />
+        <small class="p-error" v-if="submitted && !category.name">Name is required.</small>
+      </div>
+      <div class="p-field">
+        <label for="description">Description</label>
+        <Textarea id="description" v-model="category.description" required="true" rows="3" cols="20" />
+      </div>
+      <template #footer>
+        <Button label="Cancel" icon="pi pi-times" class="p-button-text" @click="hideDialog"/>
+        <Button label="Save" icon="pi pi-check" class="p-button-text" @click="saveCategory" loadingText="Saving" />
+      </template>
+    </Dialog>
+
+    <Dialog v-model:visible="categoryEditDialog" :style="{width: '450px'}" header="Category Details" :modal="true" class="p-fluid">
+      <div class="p-field">
+        <label for="name">Name</label>
+        <InputText id="name" v-model="category.name" required="true" autofocus :class="{'p-invalid': submitted && !category.name}" />
+        <small class="p-error" v-if="submitted && !category.name">Name is required.</small>
+      </div>
+      <div class="p-field">
+        <label for="description">Description</label>
+        <Textarea id="description" v-model="category.description" required="true" rows="3" cols="20" />
+      </div>
+
+      <template #footer>
+        <Button label="Cancel" icon="pi pi-times" class="p-button-text" @click="hideDialog"/>
+        <Button label="Save" icon="pi pi-check" class="p-button-text" @click="updateCategory" loadingText="Saving" />
+      </template>
     </Dialog>
 
     <Dialog
@@ -178,167 +195,155 @@
 </template>
 
 <script lang="ts">
-import { Options, Vue } from 'vue-class-component';
-import MainLayout from '@/components/layouts/MainLayout.vue';
+import { ref, onMounted } from 'vue';
 import ArtisanCategory from '@/models/ArtisanCategory';
 import ArtisanCategoryService from '@/services/ArtisanCategoryService';
 import { ArtisanCategoryData } from '@/types/artisanCategory'
-import ArtisanEdit from "@/components/category/ArtisanEdit.vue";
 import { useToast } from 'primevue/usetoast';
 import {FilterMatchMode} from 'primevue/api';
 import qs from 'qs';
-// import { toast } from '@/utils/helper';
 
-interface ArtisanCatLazyParameters {
-  page: number;
-  limit: number;
-  name: string;
-  totalCount:  number;
-  items:      ArtisanCategoryData[];
-}
+export default {
+    setup() {   
+        const toast = useToast();
+        const dt = ref();
+        const isLoading = ref(false);
+        const categories = ref();
+        const categoryDialog = ref(false);
+        const deleteCategoryDialog = ref(false);
+        const deleteCategoriesDialog = ref(false);
+        const category = ref();
+        const service = ref(new ArtisanCategoryService());
+        const selectedCategories = ref();
+        const filters = ref({
+          'global': {value: null, matchMode: FilterMatchMode.CONTAINS},
+        });
+        const submitted = ref(false);
+        const lazyParams = ref({});
+        const totalRecords = ref(0);
+        const firstRecordIndex = ref(0);
+        const rowstoDisplay = ref(10);
+        const categoryEditDialog = ref(false);
 
-@Options({
-  components: { MainLayout, ArtisanEdit },
-}) 
+        const loadLazyData = () => {
+          isLoading.value = true;
+          service.value.getAllPaginated(`${qs.stringify(lazyParams.value)}`)
+            .then(data => {
+              categories.value = data.items.map((prod) => new ArtisanCategory(prod));
+              totalRecords.value = data.totalCount;
+              firstRecordIndex.value = data.page > 1 ? data.pageSize * data.page - 1 : 0;
+              rowstoDisplay.value = data.pageSize;
+              isLoading.value = false;
+            }).catch((e) => {
+            toast.add({ severity: "error", summary: "There was an error fetching the artisans", detail: "Please check your internet connection and refresh the page" })
+            console.log(e);
+            });
+        };
 
-export default class ArtisanList extends Vue {
-  isLoading = false;
-  artisansCat: ArtisanCategory[] = [];
-  datasource: ArtisanCategory[] = [];
-  totalRecords = 0;
-  service: ArtisanCategoryService = new ArtisanCategoryService();
-  selectedArtisans: ArtisanCategory[] = [];
-  filters = {
-    'global': {value: null, matchMode: FilterMatchMode.CONTAINS},
-    'name': {value: null, matchMode: FilterMatchMode.STARTS_WITH}
-  };
-  matchModeOptions =  [
-    {label: 'Starts With', value: FilterMatchMode.STARTS_WITH}
-  ]
-  submitted = false;
-  toast = useToast();
-  lazyParams: Partial<ArtisanCatLazyParameters> = {};
-  firstRecordIndex = 0;
-  rowstoDisplay = 10;
-  // categories: ArtisanCategory[] = [];
-  categoryDialog = false;
-  deleteCategoryDialog = false;
-  deleteCategoriesDialog = false;
-  category!: ArtisanCategory;
-  selectedCategories: ArtisanCategory[] = [];
+        const findIndexById = (id: number) => {
+          return categories.value.findIndex((cat: { id: number }) => cat.id === id)
+        }
 
-  created() {
-    // watch the params of the route to fetch the data again
-    this.$watch(
-      () => this.$route.params,
-      () => {
-        this.getData();
-      },
-      // fetch the data when the view is created and the data is
-      // already being observed
-      { immediate: true }
-    )
-  }
+        const openNew = () => {
+          category.value = {};
+          submitted.value = false;
+          categoryDialog.value = true;
+        };
 
-  getData() {
-    this.isLoading = true
-    this.lazyParams = { page: 1, limit: this.rowstoDisplay }
-    this.loadLazyData();
-  }
-  
-  loadLazyData() {
-    this.isLoading = true;
-    this.service.getAllPaginated(`${qs.stringify(this.lazyParams)}`)
-      .then(data => {
-        this.artisansCat = data.items.map((prod) => new ArtisanCategory(prod));
-        this.totalRecords = data.totalCount;
-        this.firstRecordIndex = data.page > 1 ? data.pageSize * data.page - 1 : 0;
-        this.rowstoDisplay = data.pageSize;
-        this.isLoading = false;
-      }).catch((e) => {
-      this.toast.add({ severity: "error", summary: "There was an error fetching the artisans", detail: "Please check your internet connection and refresh the page" })
-      console.log(e);
-    });
-  }
+        const hideDialog = () => {
+          categoryDialog.value = false;
+          submitted.value = false;
+        };
 
-  afterUpdateCategory(justUpdated: ArtisanCategoryData) {
-    this.artisansCat[this.findIndexById(justUpdated.id)] = new ArtisanCategory(justUpdated);
-  }
+        const saveCategory = () => {
+          submitted.value = true;
+          service.value.create(category.value)
+            .then(() => {
+              categories.value.push(category.value);
+              toast.add({
+                severity: "success",
+                summary: "Successful",
+                detail: "Category was created successfully",
+                life: 3000
+              });
+              // console.log(category.value)
+              }).finally(() => {
+                categoryDialog.value = false;
+              });
+        }
 
-  afterCreateCategory(justUpdated: ArtisanCategoryData) {
-    this.artisansCat.push(new ArtisanCategory(justUpdated));
-    this.categoryDialog = false;
-  }
+        const updateCategory = () => {
+          submitted.value = true;
+          service.value.put(category.value.id, category.value)
+            .then(() => {
+              toast.add({
+                severity: "success",
+                summary: "Successful",
+                detail: "Category was updated successfully",
+                life: 3000
+              });
+            // console.log(category.value)
+            }).finally(() => {
+              categoryEditDialog.value = false;
+            });
+        }
 
-  get parentCategory() {
-    const parent = this.artisansCat.find((cat) => cat.id === this.category.id);
-    return parent ? parent.id : 0;
-  }
-  set parentCategory(parentId: number) {
-    // eslint-disable-next-line
-    this.category.id = parentId;
-  }
+        const editCategory = (cat: ArtisanCategory) => {
+          category.value = cat;
+          categoryEditDialog.value = true;
+        };
 
-  editCategory(category: ArtisanCategory) {
-    this.category = category;
-    this.categoryDialog = true;
-  }
-  onUpload() {
-    this.toast.add({ severity: 'info', summary: 'Success', detail: 'File Uploaded', life: 3000 });
-  }
+        const confirmDeleteCategory = (cat: ArtisanCategory) => {
+          category.value = cat;
+          deleteCategoryDialog.value = true;
+        };
 
-  openNew() {
-    this.category = new ArtisanCategory({});
-    this.submitted = false;
-    this.categoryDialog = true;
-    console.log("It will soon work")
-  }
+        const confirmDeleteSelected = ()=>  {
+          deleteCategoriesDialog.value = true;
+        }
 
-  confirmDeleteCategory(category: ArtisanCategory) {
-    this.category = category;
-    this.deleteCategoryDialog = true;
-  }
-
-  confirmDeleteSelected() {
-    this.deleteCategoriesDialog = true;
-  }
-
-  hideDialog() {
-    this.categoryDialog = false;
-    this.submitted = false;
-  }
-
-  findIndexById(id: number): number {
-    return this.artisansCat.findIndex((cat) => cat.id === id)
-  }
-
-  deleteSelectedCategories() {
-    this.isLoading = true;
-    // delete 
-    this.selectedCategories.forEach(async (cat) => {
-      await this.service.delete(cat.id);
-    });
-    this.artisansCat = this.artisansCat.filter(val => !this.selectedCategories.includes(val));
-    this.deleteCategoriesDialog = false;
-    this.selectedCategories = [];
-    this.isLoading = false;
-    this.toast.add({ severity: 'success', summary: 'Successful', detail: 'Categories Deleted', life: 3000 });
-  }
-
-  deleteCategory() {
-    this.isLoading = true
-    this.service.delete(this.category.id)
-      .then((message) => {
-        this.artisansCat = this.artisansCat.filter(val => val.id !== this.category.id);
-        this.deleteCategoryDialog = false;
-        this.category = new ArtisanCategory({});
-        this.toast.add({ severity: 'success', summary: 'Successful', detail: message, life: 3000 });
-      }).catch(() => {
-        this.toast.add({ severity: 'error', summary: 'Error', detail: 'Deleting Failed failed', life: 3000 });
-      }).finally(() => {
-        this.isLoading = false
-      })
-  }
+        const deleteCategory = () =>{
+          isLoading.value = true
+          service.value.delete(category.value.id)
+            .then(() => {
+              categories.value = categories.value.filter((val: { id: any }) => val.id !== category.value.id);
+              deleteCategoryDialog.value = false;
+              category.value = new ArtisanCategory({});
+              // toast.add({ severity: 'success', summary: 'Successful', detail: message, life: 3000 });
+              toast.add({ severity: 'success', summary: 'Successful', detail: 'Category deleted successfully', life: 3000 });
+            }).catch(() => {
+              toast.add({ severity: 'error', summary: 'Error', detail: 'Deleting failed', life: 3000 });
+            }).finally(() => {
+              isLoading.value = false
+            })
+        }
+      
+        const deleteSelectedCategories = ()=> {
+            isLoading.value = true;
+            // delete 
+            selectedCategories.value.forEach(async (cat: { id: number }) => {
+            await service.value.delete(cat.id);
+            });
+            categories.value = categories.value.filter((val: any) => !selectedCategories.value.includes(val));
+            deleteCategoriesDialog.value = false;
+            selectedCategories.value = [];
+            isLoading.value = false;
+            toast.add({ severity: 'success', summary: 'Successful', detail: 'Categories Deleted', life: 3000 });
+        }
+        
+        onMounted(() => {
+           loadLazyData(),
+           saveCategory(),
+           openNew(),
+           hideDialog()
+        })
+        
+        return {
+            dt, categories, categoryDialog, category, isLoading, deleteCategoryDialog,
+            selectedCategories, filters, submitted, deleteCategoriesDialog, deleteSelectedCategories,
+            service,openNew, hideDialog, saveCategory, editCategory, findIndexById, updateCategory, categoryEditDialog, confirmDeleteCategory, confirmDeleteSelected, deleteCategory,
+        }
+    }
 }
 </script>
 

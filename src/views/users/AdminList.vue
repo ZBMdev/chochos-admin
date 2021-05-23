@@ -9,18 +9,42 @@
           dataKey="id"
           :value="admins"
           :loading="loading"
+          :rows="10"
+          v-model:filters="filters"
+          filterDisplay="row" 
+          :globalFilterFields="['firstName','lastName','username','email', 'languages', 'address']"
+          :paginator="true"
+          paginatorPosition="both"
+          paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
+          :rowsPerPageOptions="[10,20, 50, 100, 200]"
+          currentPageReportTemplate="Showing {first} to {last} of {totalRecords} admins"
           :scrollable="true"
-          style="width: 100%"
+          :rowHover="true"
+          responsiveLayout="scroll"
         >
           <template #header>
-            <div class="p-d-flex p-jc-end">
-              <Button
-                class="s"
-                label="New Admin"
-                icon="pi pi-plus"
-                @click="displayCreateForm = true"
-              />
+            <div class="table-header p-d-flex p-flex-column p-flex-md-row p-jc-md-between">
+              <div class="p-mb-2 p-m-md-0 p-as-md-center">
+                <Button
+                  label="New Admin"
+                  icon="pi pi-plus"
+                  class="p-button-success p-mr-2"
+                  @click="displayCreateForm = true"
+                />
+              </div>
+              <span class="p-input-icon-left">
+                <i class="pi pi-search" />
+                <InputText
+                  v-model="filters['global'].value"
+                  placeholder="Search..."
+                />
+              </span>
             </div>
+          </template> <template #empty>
+            No vendor found.
+          </template>
+          <template #loading>
+            Loading vendors data. Please wait.
           </template>
           <Column headerStyle="width: 3rem;">
             <template #body={data}>
@@ -36,29 +60,32 @@
           <Column
             field="firstName"
             header="First Name"
-            headerStyle="width: 250px;"
+            style="min-width: 250px"
+            :sortable="true"
+            filterMode="contains"
           ></Column>
           <Column
             field="lastName"
             header="Surname"
-            headerStyle="width: 250px;"
+            style="min-width: 250px"
+            :sortable="true"
+            filterMode="contains"
           ></Column>
           <Column
             field="email"
             header="Email"
-            headerStyle="width: 250px;"
+            style="min-width: 250px"
+            :sortable="true"
+            filterMode="contains"
           ></Column>
           <Column
             field="username"
             header="Username"
-            headerStyle="width: 150px;"
+            style="min-width: 150px"
+            :sortable="true"
+            filterMode="contains"
           ></Column>
           <Column headerStyle="width: 100px;">
-            <!-- <template #body="{data}">
-              <Button
-                icon="pi pi-pencil"
-                @click="editAdmin(data)"
-              />-->
             <template #body="slotProps">
               <Button
                 icon="pi pi-pencil"
@@ -300,7 +327,7 @@ export default defineComponent({
         })
         .finally(() => {
           this.loading = false;
-          // location.reload();
+          location.reload();
         });
     },
     createAdmin() {
@@ -315,7 +342,7 @@ export default defineComponent({
           this.$emit("Admin-created", newAdmin);
         }).finally(() => {
           this.displayCreateForm = false;
-          // location.reload();
+          location.reload();
         });
     },
 
@@ -324,6 +351,8 @@ export default defineComponent({
       const adminForm = this.editForm;
       this.service.update(admin.id, adminForm)
         .then((admin) => {
+          console.log("It will soon work");
+          console.log(admin);
           this.toast.add({ severity: "info", detail: "Editing successful", life: 3000 })
         })
         .finally(() => {

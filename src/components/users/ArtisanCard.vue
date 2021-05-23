@@ -1,5 +1,5 @@
 <template>
-  <PageHeading :title="`${artisan.fullName}'s Profile`"  />
+  <PageHeading :title="`${artisan.fullName}'s Profile`"  style="display:flex; justify-content: center; margin-bottom: 30px" />
   <ProgressSpinner style="display:flex; justify-content: center" v-if="loading" />
   <div v-else class="p-d-flex p-jc-center p-ai-center">
     <div class="p-col-12 p-md-6">

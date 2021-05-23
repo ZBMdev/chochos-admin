@@ -46,11 +46,11 @@ export default function handleError(error: any) {
     }
 
     // Toast the Message
-    if (message.length > 0) {
+    /* if (message.length > 0) {
         // @ts-ignore
         vm.emitter.emit("error", { message, validationErrors: error.response.data?.error?.validationError })
         if (process.env.NODE_ENV !== "production") {
             console.error("<<<<<<<<< AXIOS ERROR >>>>>>>>>>\n", devMessage, typeof validationErrors, validationErrors.map((val: { param: any; msg: any; }) => `${val.param}: ${val.msg}`));
         }
-    }
+    } */
 }
