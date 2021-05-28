@@ -34,17 +34,17 @@
               </div>
               <span class="p-input-icon-left">
                 <i class="pi pi-search" />
-                <InputText
+                <!-- <InputText
                   v-model="filters['global'].value"
                   placeholder="Search..."
-                />
+                /> -->
               </span>
             </div>
           </template> <template #empty>
-            No vendor found.
+            No admin found.
           </template>
           <template #loading>
-            Loading vendors data. Please wait.
+            Loading admins data. Please wait.
           </template>
           <Column headerStyle="width: 3rem;">
             <template #body={data}>

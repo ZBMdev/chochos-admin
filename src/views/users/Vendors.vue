@@ -50,7 +50,7 @@
           <template #loading>
             Loading vendors data. Please wait.
           </template>
-          <Column field="name" headerStyle="width: 3rem;">
+          <Column headerStyle="width: 3rem;">
             <template #body="slotProps">
               <Avatar
                 :label="slotProps.data.fullName.charAt(0).toUpperCase()"
