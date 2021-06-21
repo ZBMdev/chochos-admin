@@ -1,7 +1,139 @@
 <template>
   <PageHeading :title="`${artisan.fullName}'s Profile`"  style="display:flex; justify-content: center; margin-bottom: 30px" />
   <ProgressSpinner style="display:flex; justify-content: center" v-if="loading" />
-  <div v-else class="p-d-flex p-jc-center p-ai-center">
+  <div v-else>
+    <TabView>
+      <TabPanel header="About">
+        <div class="userCard">
+              <div
+                class="p-d-flex p-jc-center p-ai-center p-pt-4 p-pl-4 p-pr-4 p-pb-0"
+              >
+                <Avatar
+                  v-if="artisan.photoUrl === '' || artisan.photoUrl === null " 
+                  icon="pi pi-user"
+                  class="p-mr-2"
+                  style="background-color:#c8e6c9;color:#256029;width:8rem;height:8rem;font-size:4rem;"
+                  shape="circle"
+                />
+                <Avatar 
+                  v-else-if="artisan.fullName"
+                  :label="artisan.fullName.charAt(0).toUpperCase()"
+                  class="p-mr-2"
+                  style="background-color:#c8e6c9;color:#256029;width:8rem;height:8rem;font-size:4rem;"
+                  shape="circle"
+                />
+                <img v-else
+                  :src="artisan.photoUrl"
+                  :alt="artisan.photoUrl"
+                  style="width:8rem;height:8rem;font-size:4rem;"
+                />
+              </div>
+              <div  class="p-text-left" id="personalDetails">
+                <p>
+                  Name: <b>{{ artisan?.fullName }}</b>
+                </p>
+                <p>
+                  Username: <b>{{ "@" + artisan?.username }}</b>
+                </p>
+                <p>
+                  Email: <b>{{ artisan?.email }}</b>
+                </p>
+                <p>
+                  Phone number: <b>{{ artisan?.mobile }}</b>
+                </p>
+                <p>
+                  Address: <b>{{ artisan?.address }}</b>
+                </p>
+                <p>
+                  Date registered: <b>{{ artisan?.created_on }}</b>
+                </p>
+                <p>
+                  Last login: <b>{{ artisan?.lastLogin }}</b>
+                </p>
+                <p>
+                  Active: <b>{{ artisan?.isActive }}</b>
+                </p>
+                <p>
+                  About: <b>{{ artisan?.about }}</b>
+                </p>
+                <p>
+                  Languages: <b>{{ artisan?.languages }}</b>
+                </p>
+                <p>
+                  Address: <b>{{ artisan?.address }}</b>
+                </p>
+                <p>
+                  State: <b>{{ artisan?.state }}</b>
+                </p>
+                <p>
+                  City: <b>{{ artisan?.city }}</b>
+                </p>
+              </div>
+              <div  class="p-text-left" id="jobDetails">
+                <p>
+                  Occupation: <b>{{ artisan?.jobName }}</b>
+                </p>
+                <p>
+                  Business email: <b>{{ artisan?.businessEmail }}</b>
+                </p>
+                <p>
+                  Fee Rate: <b>{{ artisan?.feeRate }}</b>
+                </p>
+                <p>
+                  Fee: <b>{{ artisan?.fee }}</b>
+                </p>
+                <p>
+                  Jobs completed: <b>{{ artisan?.jobsCompleted }}</b>
+                </p>
+                <p>
+                  Tools: <b>{{ artisan?.tools }}</b>
+                </p>
+                <p>
+                  Address: <b>{{ artisan?.address }}</b>
+                </p>
+                <p>
+                  Address: <b>{{ artisan?.address }}</b>
+                </p>
+                <p>
+                  Address: <b>{{ artisan?.address }}</b>
+                </p>
+                <p>
+                  Address: <b>{{ artisan?.address }}</b>
+                </p>
+                <p>
+                  Address: <b>{{ artisan?.address }}</b>
+                </p>
+                <p>
+                  Address: <b>{{ artisan?.address }}</b>
+                </p>
+              </div>
+        </div>
+      </TabPanel>
+      <TabPanel header="Portfolio">
+        <Card style="width: 25em">
+            <template #header>
+                <img src="https://www.primefaces.org/wp-content/uploads/2020/02/primefacesorg-primevue-2020.png" style="height: 15rem" />
+            </template>
+            <template #subtitle class="subtitle">
+                Card subtitle
+            </template>
+            <template #content>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error repudiandae numquam deserunt
+                quisquam repellat libero asperiores earum nam nobis, culpa ratione quam perferendis esse, cupiditate neque quas!</p>
+            </template>
+        </Card>
+      </TabPanel>
+      <TabPanel header="Reviews">
+        <div>
+          <div class="review-card">
+            No reviews
+          </div>
+        </div>
+      </TabPanel>
+    </TabView>
+  </div>
+
+  <div class="p-d-flex p-jc-center p-ai-center">
     <div class="p-col-12 p-md-6">
       <Card
         class="p-text-center"
@@ -131,3 +263,23 @@ export default class ArtisanCard extends Vue {
 }
 </script>
 
+<style scoped>
+.userCard{
+  width: 100%;
+  height: 100vh;
+}
+.p-text-center{
+  widows: 100%;
+}
+#userDetails {
+  display: flex;
+}
+#personalDetails{
+  float: left;
+  margin-left: 20px;
+}
+#jobDetails{
+  float: right;
+  margin-right: 350px;
+}
+</style>

@@ -10,7 +10,8 @@ export default class OccupationsService extends Service<OccupationData, Occupati
     url = "/occupations";
 
     allOccupations = qs.stringify({
-        limit: 1000000
+        limit: 1000000,
+        pageSize: 1000000,
     });
     
 }

@@ -10,7 +10,8 @@ export default class SkillsService extends Service<SkillsData, CreateSkillsParam
     url = "/skills";
 
     allSkills = qs.stringify({
-        limit: 1000000
+        limit: 1000000,
+        pageSize: 1000000,
     });
 
     getAllSkills() {

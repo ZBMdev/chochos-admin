@@ -25,19 +25,18 @@
           responsiveLayout="scroll"
           :scrollable="true"
           :rowHover="true"
-          paginatorPosition="both"
         >
           <template #header>
             <!-- <div class="table-header"> -->
             <div class="p-mb-4">  
               Products
-              <span class="p-input-icon-left">
+              <!--<span class="p-input-icon-left">
                 <i class="pi pi-search" />
                 <InputText
                   v-model="filters['global'].value"
                   placeholder="Search products"
                 />
-              </span>
+              </span> -->
             </div>
           </template>
           <template #empty>
@@ -149,7 +148,8 @@ import { Vue } from 'vue-class-component';
 import Product from '@/models/Product'
 import ProductService from '@/services/ProductService';
 import { ProductData, StockStatus } from '@/types/product';
-import {FilterMatchMode} from 'primevue/api';
+import { useToast } from 'primevue/usetoast';
+// import {FilterMatchMode} from 'primevue/api';
 import qs from 'qs';
 
 interface ProductLazyParameters {
@@ -177,13 +177,14 @@ export default class ProductList extends Vue {
   lazyParams: Partial<ProductLazyParameters> = {};
   firstRecordIndex = 0;
   rowstoDisplay = 10;
-  filters = {
-    'global': {value: null, matchMode: FilterMatchMode.CONTAINS},
-    'name': {value: null, matchMode: FilterMatchMode.STARTS_WITH}
-  };
-  matchModeOptions =  [
-    {label: 'Starts With', value: FilterMatchMode.STARTS_WITH}
-  ]
+  toast = useToast();
+  // filters = {
+  //   'global': {value: null, matchMode: FilterMatchMode.CONTAINS},
+  //   'name': {value: null, matchMode: FilterMatchMode.STARTS_WITH}
+  // };
+  // matchModeOptions =  [
+  //   {label: 'Starts With', value: FilterMatchMode.STARTS_WITH}
+  // ]
 
   created() {
     // watch the params of the route to fetch the data again
@@ -201,7 +202,8 @@ export default class ProductList extends Vue {
   getData() {
     this.generalLoading = true
     this.loading = true;
-    this.lazyParams = { first: 0, page: 1, limit: this.rowstoDisplay }
+    // this.lazyParams = { first: 0, page: 1, limit: this.rowstoDisplay }
+    this.lazyParams = {  page: 1, limit: this.rowstoDisplay }
     this.loadLazyData();
   }
 
@@ -211,7 +213,7 @@ export default class ProductList extends Vue {
 
   loadLazyData() {
     this.loading = true;
-    this.service.getAllPaginated(`${qs.stringify(this.lazyParams)}`)
+    this.service.getAllPaginated(this.service.allProducts)
       .then(data => {
         this.products = data.items.map((prod) => new Product(prod));
         this.totalRecords = data.totalCount;
@@ -219,7 +221,10 @@ export default class ProductList extends Vue {
         this.rowstoDisplay = data.pageSize;
         this.loading = false;
         this.generalLoading = false;
-      });
+      }).catch((e) => {
+      this.toast.add({ severity: "error", summary: "There was an error fetching the all products", detail: "Please check your internet connection and refresh the page" })
+      console.log(e);
+    });
   }
 
 }

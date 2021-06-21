@@ -19,7 +19,6 @@
           :rowsPerPageOptions="[10, 20, 50, 100, 200]"
           currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
           paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
-          paginatorPosition="both"
           :totalRecords="totalRecords"
           :loading="isLoading"
           :first="firstRecordIndex"
@@ -29,13 +28,13 @@
         >
           <template #header>
             <div class="table-header p-d-flex">
-              <span class="p-input-icon-left">
+              <!--<span class="p-input-icon-left">
                 <i class="pi pi-search" />
                 <InputText
                   v-model="filters['global'].value"
                   placeholder="Search..."
                 />
-              </span>
+              </span> -->
             </div>
           </template>
           <template #empty>
@@ -154,7 +153,7 @@ import { Vue } from 'vue-class-component';
 import Job from '@/models/Job'
 import JobService from '@/services/JobService';
 import { JobData } from '@/types/jobs'
-import {FilterMatchMode} from 'primevue/api';
+// import {FilterMatchMode} from 'primevue/api';
 import qs from 'qs';
 
 interface JobLazyParameters {
@@ -173,13 +172,13 @@ export default class ProductList extends Vue {
   generalLoading = false;
   totalRecords = 0;
   service: JobService = new JobService();
-  filters = {
-    'global': {value: null, matchMode: FilterMatchMode.CONTAINS},
-    'name': {value: null, matchMode: FilterMatchMode.STARTS_WITH}
-  };
-  matchModeOptions =  [
-    {label: 'Starts With', value: FilterMatchMode.STARTS_WITH}
-  ]
+  // filters = {
+  //   'global': {value: null, matchMode: FilterMatchMode.CONTAINS},
+  //   'name': {value: null, matchMode: FilterMatchMode.STARTS_WITH}
+  // };
+  // matchModeOptions =  [
+  //   {label: 'Starts With', value: FilterMatchMode.STARTS_WITH}
+  // ]
   lazyParams: Partial<JobLazyParameters> = {};
   firstRecordIndex = 0;
   rowstoDisplay = 10;

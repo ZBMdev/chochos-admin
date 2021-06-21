@@ -10,7 +10,8 @@ export default class JobService extends Service<JobData, JobRequest>{
     url = "/jobs";
     
     allJobs = qs.stringify({
-        limit: 1000000
+        limit: 1000000,
+        pageSize: 1000000,
     });
 
     async getSummary(query?: string) {

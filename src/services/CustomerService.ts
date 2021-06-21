@@ -10,7 +10,8 @@ export default class CustomerService extends Service<CustomerData, RegisterObjec
     url = "/users";
     
     allUsers = qs.stringify({
-        limit: 1000000
+        limit: 1000000,
+        pageSize: 1000000,
     });
 
     async getSummary(query?: string) {

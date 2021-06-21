@@ -18,7 +18,6 @@
           :globalFilterFields="['executorName', 'customerName', 'productsAmount', 'status']"
           currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
           paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
-          paginatorPosition="both"
           :totalRecords="totalRecords"
           :loading="isLoading"
           :first="firstRecordIndex"
@@ -28,13 +27,13 @@
         >
           <template #header>
             <div class="table-header p-d-flex">
-              <span class="p-input-icon-left">
+              <!--<span class="p-input-icon-left">
                 <i class="pi pi-search" />
                 <InputText
                   v-model="filters['global'].value"
                   placeholder="Search..."
                 />
-              </span>
+              </span>-->
             </div>
           </template>
           <template #empty>
@@ -122,6 +121,7 @@
             header="Job Reviews"
             filterField="rating"
             filterMatchMode="contains"
+            style="min-width: 14rem"
           >
             <template #body="slotProps">
               <span class="p-column-title">Job Reviews</span>
@@ -144,8 +144,10 @@ import { Options, Vue } from 'vue-class-component';
 import JobRequest from '@/models/JobRequest'
 import Rating from 'primevue/rating';
 import JobRequestService from '@/services/JobRequestService';
-import { JobRequestData } from '@/types/jobRequest'
-import {FilterMatchMode} from 'primevue/api';
+import { JobRequestData } from '@/types/jobRequest';
+// import {FilterMatchMode} from 'primevue/api';
+// import { FilterMatchMode } from 'primevue/api'
+
 import qs from 'qs';
 
 interface JobLazyParameters {
@@ -164,13 +166,13 @@ export default class ProductList extends Vue {
   generalLoading = false;
   totalRecords = 0;
   service: JobRequestService = new JobRequestService();
-  filters = {
-    'global': {value: null, matchMode: FilterMatchMode.CONTAINS},
-    'name': {value: null, matchMode: FilterMatchMode.STARTS_WITH}
-  };
-  matchModeOptions =  [
-    {label: 'Starts With', value: FilterMatchMode.STARTS_WITH}
-  ]
+  // filters = {
+  //   'global': {value: null, matchMode: FilterMatchMode.CONTAINS},
+  //   'name': {value: null, matchMode: FilterMatchMode.STARTS_WITH}
+  // };
+  // matchModeOptions =  [
+  //   {label: 'Starts With', value: FilterMatchMode.STARTS_WITH}
+  // ]
   lazyParams: Partial<JobLazyParameters> = {};
   firstRecordIndex = 0;
   rowstoDisplay = 10;

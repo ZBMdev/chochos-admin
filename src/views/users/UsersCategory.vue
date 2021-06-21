@@ -25,7 +25,7 @@
           responsiveLayout="scroll"
         >
           <template #header>
-            <div class="table-header p-d-flex">
+            <!--<div class="table-header p-d-flex">
               <span class="p-input-icon-left">
                 <i class="pi pi-search" />
                 <InputText
@@ -33,7 +33,7 @@
                   placeholder="Search..."
                 />
               </span>
-            </div>
+            </div>-->
           </template> <template #empty>
             No user found.
           </template>
@@ -99,7 +99,11 @@
             filterMode="contains"
           >
             <template #body="slotProps">
-              {{ slotProps.data.about }}
+              <!--{{ slotProps.data.about }}-->
+              <span
+                v-html="`${ slotProps.data.about.substr(0, 20)}...`"
+              >
+              </span>
             </template>
           </Column>
           <Column
@@ -130,7 +134,7 @@ import UserCategoryService from '@/services/UserCategoryService';
 import { useToast } from 'primevue/usetoast';
 import qs from 'qs';
 import { UserCategoryData } from '@/types/customer';
-import {FilterMatchMode} from 'primevue/api';
+// import {FilterMatchMode} from 'primevue/api';
 
 interface UserCategoryLazyParameters {
   page: number;
@@ -153,13 +157,13 @@ export default class UserCatList extends Vue {
   datasource: UserCategory[] = [];
   service: UserCategoryService = new UserCategoryService();
   selectedUsers: UserCategory[] = [];
-  filters = {
-    'global': {value: null, matchMode: FilterMatchMode.CONTAINS},
-    'name': {value: null, matchMode: FilterMatchMode.STARTS_WITH}
-  };
-  matchModeOptions =  [
-    {label: 'Starts With', value: FilterMatchMode.STARTS_WITH}
-  ]
+  // filters = {
+  //   'global': {value: null, matchMode: FilterMatchMode.CONTAINS},
+  //   'name': {value: null, matchMode: FilterMatchMode.STARTS_WITH}
+  // };
+  // matchModeOptions =  [
+  //   {label: 'Starts With', value: FilterMatchMode.STARTS_WITH}
+  // ]
   submitted = false;
   toast = useToast();
   lazyParams: Partial<UserCategoryLazyParameters> = {};

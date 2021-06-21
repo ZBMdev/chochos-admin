@@ -12,7 +12,8 @@ export default class ArtisanService extends Service<ArtisanData, ArtisanRegister
     url3 = "/auth"
 
     allArtisans = qs.stringify({
-        limit: 1000000
+        limit: 1000000,
+        pageSize: 1000000,
     });
 
     public createArtisan(payload: ArtisanRegisterParams){

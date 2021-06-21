@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <div class="categories">
     <PageHeading title="Categories" />
     <ProgressSpinner v-if="isLoading" />
@@ -306,3 +306,4 @@ export default class Categories extends Vue {
   color: #8a5340;
 }
 </style>
+-->

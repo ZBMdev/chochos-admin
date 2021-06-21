@@ -10,7 +10,8 @@ export default class VendorService extends Service<VendorData, VendorRegisterPar
     url2 = "/auth";
 
     allUsers = qs.stringify({
-        limit: 1000000
+        limit: 1000000,
+        pageSize: 1000000,
     });
 
     public createVendor(payload: VendorRegisterParams){

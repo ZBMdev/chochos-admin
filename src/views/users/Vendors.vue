@@ -17,7 +17,6 @@
           filterDisplay="row" 
           :globalFilterFields="['fullName','username','email', 'languages', 'address']"
           :paginator="true"
-          paginatorPosition="both"
           paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
           :rowsPerPageOptions="[10,20, 50, 100, 200]"
           currentPageReportTemplate="Showing {first} to {last} of {totalRecords} vendors"
@@ -36,13 +35,13 @@
                   @click="openNew"
                 />
               </div>
-              <span class="p-input-icon-left">
+              <!--<span class="p-input-icon-left">
                 <i class="pi pi-search" />
                 <InputText
                   v-model="filters['global'].value"
                   placeholder="Search..."
                 />
-              </span>
+              </span>-->
             </div>
           </template> <template #empty>
             No vendor found.
@@ -353,7 +352,7 @@ import VendorService from '@/services/VendorService';
 import { VendorRegisterParams, VendorData } from '@/types/vendors'
 import VendorBox from "@/components/users/VendorBox.vue";
 import { useToast } from 'primevue/usetoast';
-import {FilterMatchMode} from 'primevue/api';
+// import {FilterMatchMode} from 'primevue/api';
 import qs from 'qs';
 import Dialog from 'primevue/dialog';
 import TrialVue from './Trial.vue';
@@ -379,13 +378,13 @@ export default class Vendors extends Vue {
   totalRecords = 0;
   service: VendorService = new VendorService();
   selectedVendors: Vendor[] = [];
-  filters = {
-    'global': {value: null, matchMode: FilterMatchMode.CONTAINS},
-    'name': {value: null, matchMode: FilterMatchMode.STARTS_WITH}
-  };
-  matchModeOptions =  [
-    {label: 'Starts With', value: FilterMatchMode.STARTS_WITH}
-  ]
+  // filters = {
+  //   'global': {value: null, matchMode: FilterMatchMode.CONTAINS},
+  //   'name': {value: null, matchMode: FilterMatchMode.STARTS_WITH}
+  // };
+  // matchModeOptions =  [
+  //   {label: 'Starts With', value: FilterMatchMode.STARTS_WITH}
+  // ]
   submitted = false;
   toast = useToast();
   lazyParams: Partial<VendorLazyParameters> = {};

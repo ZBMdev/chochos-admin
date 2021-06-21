@@ -1,4 +1,4 @@
-<template>
+<!--<template>
     <div>
         <div class="card">
             <Toolbar class="p-mb-4">
@@ -253,3 +253,4 @@ export default {
 	}
 }
 </style>
+-->

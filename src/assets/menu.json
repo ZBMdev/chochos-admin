@@ -36,11 +36,6 @@
 				"to": "/vendors"
 			},
 			{
-				"label": "Skills",
-				"icon": "pi pi-key",
-				"to": "/skills"
-			},
-			{
 				"label": "Administrators",
 				"icon": "pi pi-user-edit",
 				"to": "/admins"

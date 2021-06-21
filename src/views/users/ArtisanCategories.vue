@@ -34,13 +34,13 @@
                   @click="openNew"
                 />
               </div>
-              <span class="p-input-icon-left">
+              <!-- <span class="p-input-icon-left">
                 <i class="pi pi-search" />
                 <InputText
                   v-model="filters['global'].value"
                   placeholder="Search..."
                 />
-              </span>
+              </span> -->
             </div>
           </template>
           <template #empty>
@@ -200,7 +200,7 @@ import ArtisanCategory from '@/models/ArtisanCategory';
 import ArtisanCategoryService from '@/services/ArtisanCategoryService';
 import { ArtisanCategoryData } from '@/types/artisanCategory'
 import { useToast } from 'primevue/usetoast';
-import {FilterMatchMode} from 'primevue/api';
+// import {FilterMatchMode} from 'primevue/api';
 import qs from 'qs';
 
 export default {
@@ -215,9 +215,9 @@ export default {
         const category = ref();
         const service = ref(new ArtisanCategoryService());
         const selectedCategories = ref();
-        const filters = ref({
-          'global': {value: null, matchMode: FilterMatchMode.CONTAINS},
-        });
+        // const filters = ref({
+        //   'global': {value: null, matchMode: FilterMatchMode.CONTAINS},
+        // });
         const submitted = ref(false);
         const lazyParams = ref({});
         const totalRecords = ref(0);
@@ -340,7 +340,8 @@ export default {
         
         return {
             dt, categories, categoryDialog, category, isLoading, deleteCategoryDialog,
-            selectedCategories, filters, submitted, deleteCategoriesDialog, deleteSelectedCategories,
+            // selectedCategories, filters, submitted, deleteCategoriesDialog, deleteSelectedCategories,
+            selectedCategories, submitted, deleteCategoriesDialog, deleteSelectedCategories,
             service,openNew, hideDialog, saveCategory, editCategory, findIndexById, updateCategory, categoryEditDialog, confirmDeleteCategory, confirmDeleteSelected, deleteCategory,
         }
     }

@@ -1,4 +1,4 @@
-<template>
+<!--<template>
     <div>
         <Card style="width: 25em">
             <template #header>
@@ -32,4 +32,4 @@ p {
     line-height: 1.5;
     margin: 0;
 }
-</style>
+</style>-->

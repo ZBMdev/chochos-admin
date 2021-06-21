@@ -219,13 +219,13 @@ export default class SkillsList extends Vue {
         >
           <template #header>
             <div class="table-header">
-              <span class="p-input-icon-left">
+              <!-- <span class="p-input-icon-left">
                 <i class="pi pi-search" />
                 <InputText
                   v-model="filters['global'].value"
                   placeholder="Search occupations"
                 />
-              </span>
+              </span> -->
             </div>
           </template>
           <Column
@@ -273,7 +273,7 @@ import { Options, Vue } from 'vue-class-component';
 import Occupation from '@/models/Occupation'
 import OccupationService from '@/services/OccupationService';
 import { OccupationData } from '@/types/occupation'
-import {FilterMatchMode} from 'primevue/api';
+// import {FilterMatchMode} from 'primevue/api';
 import qs from 'qs';
 
 interface OccupationLazyParameters {
@@ -289,13 +289,13 @@ export default class SkillsList extends Vue {
   loading = false;
   generalLoading = false;
   service: OccupationService = new OccupationService();
-  filters = {
-    'global': {value: null, matchMode: FilterMatchMode.CONTAINS},
-    'name': {value: null, matchMode: FilterMatchMode.STARTS_WITH}
-  };
-  matchModeOptions =  [
-    {label: 'Starts With', value: FilterMatchMode.STARTS_WITH}
-  ]
+  // filters = {
+  //   'global': {value: null, matchMode: FilterMatchMode.CONTAINS},
+  //   'name': {value: null, matchMode: FilterMatchMode.STARTS_WITH}
+  // };
+  // matchModeOptions =  [
+  //   {label: 'Starts With', value: FilterMatchMode.STARTS_WITH}
+  // ]
   lazyParams: Partial<OccupationLazyParameters> = {};
   firstRecordIndex = 0;
   rowstoDisplay = 10;

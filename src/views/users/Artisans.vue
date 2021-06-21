@@ -32,13 +32,13 @@
                   @click="openNew"
                 />
               </div>
-              <span class="p-input-icon-left">
+              <!-- <span class="p-input-icon-left">
                 <i class="pi pi-search" />
                 <InputText
                   v-model="filters['global'].value"
                   placeholder="Search..."
                 />
-              </span>
+              </span>-->
             </div>
           </template>
           <template #empty>
@@ -47,6 +47,17 @@
           <template #loading>
             Loading artisans data. Please wait.
           </template>
+
+          <Column
+            selectionMode="multiple"
+            style="width: 3rem"
+            :exportable="false">
+            <template #body="slotProps">
+              <Button
+                @click="$router.push('/artisans/' + slotProps.data.id)"
+              />
+            </template>
+          </Column>
           <Column field="name" headerStyle="width: 3rem;">
             <template #body="slotProps">
               <Avatar
@@ -328,7 +339,7 @@ import Artisan from '@/models/Artisan';
 import { ArtisanRegisterParams, ArtisanData } from '@/types/artisan'
 import ArtisanService from '@/services/ArtisanService';
 import { useToast } from 'primevue/usetoast';
-import {FilterMatchMode} from 'primevue/api';
+// import {FilterMatchMode} from 'primevue/api';
 import ArtisanCreate from "@/views/users/ArtisanCreate.vue";
 import qs from 'qs';
 
@@ -359,13 +370,13 @@ export default class Artisans extends Vue {
   service: ArtisanService = new ArtisanService();
   // userCat: 
   selectedArtisans: Artisan[] = [];
-  filters = {
-    'global': {value: null, matchMode: FilterMatchMode.CONTAINS},
-    'name': {value: null, matchMode: FilterMatchMode.STARTS_WITH}
-  };
-  matchModeOptions =  [
-    {label: 'Starts With', value: FilterMatchMode.STARTS_WITH}
-  ]
+  // filters = {
+  //   'global': {value: null, matchMode: FilterMatchMode.CONTAINS},
+  //   'name': {value: null, matchMode: FilterMatchMode.STARTS_WITH}
+  // };
+  // matchModeOptions =  [
+  //   {label: 'Starts With', value: FilterMatchMode.STARTS_WITH}
+  // ]
   submitted = false;
   toast = useToast();
   lazyParams: Partial<ArtisanLazyParameters> = {};
@@ -426,6 +437,10 @@ export default class Artisans extends Vue {
     this.submitted = false;
   }
 
+  // openArtisan(artisan: Artisan) {
+  //   this.artisan = artisan;
+  //   this.artisanDialog = true;
+  // }
   openArtisan(artisan: Artisan) {
     this.artisan = artisan;
     this.artisanDialog = true;

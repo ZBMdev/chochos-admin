@@ -6,10 +6,17 @@ import { ProductCreateParam, ProductData, UpdateProductParam, ProductImageUpdate
 import { API } from '@/utils/api';
 import { AxiosResponse } from 'axios';
 import Service from './Service';
+import qs from 'qs'
 
 export default class ProductService extends Service<ProductData, ProductCreateParam>{
 
     url = "/products";
+
+    allProducts = qs.stringify({
+        limit: 1000000,
+        pageSize: 1000000,
+    });
+
     constructor(url?: string) {
         super(url);
     }

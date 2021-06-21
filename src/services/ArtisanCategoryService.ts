@@ -9,7 +9,8 @@ export default class ArtisanCategoryService extends Service<ArtisanCategoryData,
     url = "/v1/occupationCategories";
 
     allArtisansCategory = qs.stringify({
-        limit: 1000000
+        limit: 1000000,
+        pageSize: 1000000,
     });
 
     getAllCategories() {

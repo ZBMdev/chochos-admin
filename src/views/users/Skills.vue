@@ -23,13 +23,13 @@
         >
           <template #header>
             <div class="table-header p-d-flex">
-              <span class="p-input-icon-left">
+              <!--<span class="p-input-icon-left">
                 <i class="pi pi-search" />
                 <InputText
                   v-model="filters['global'].value"
                   placeholder="Search..."
                 />
-              </span>
+              </span>-->
               <div class="p-ml-auto">
                 <Button
                   label="New"
@@ -212,7 +212,7 @@ import SkillsService from '@/services/SkillsService';
 import { SkillsData, CreateSkillsParam } from '@/types/skills'
 import SkillsEdit from "@/components/category/SkillsEdit.vue";
 import { useToast } from 'primevue/usetoast';
-import {FilterMatchMode} from 'primevue/api';
+// import {FilterMatchMode} from 'primevue/api';
 import qs from 'qs';
 
 export default{
@@ -227,9 +227,9 @@ export default{
         const category = ref();
         const service = ref(new SkillsService());
         const selectedCategories = ref();
-        const filters = ref({
-          'global': {value: null, matchMode: FilterMatchMode.CONTAINS},
-        });
+        // const filters = ref({
+        //   'global': {value: null, matchMode: FilterMatchMode.CONTAINS},
+        // });
         const submitted = ref(false);
         const lazyParams = ref({});
         const totalRecords = ref(0);
@@ -351,7 +351,8 @@ export default{
         
         return {
             dt, categories, categoryDialog, category, isLoading, deleteCategoryDialog,
-            selectedCategories, filters, submitted, deleteCategoriesDialog, deleteSelectedCategories,
+            // selectedCategories, filters, submitted, deleteCategoriesDialog, deleteSelectedCategories,
+            selectedCategories, submitted, deleteCategoriesDialog, deleteSelectedCategories,
             service,openNew, hideDialog, saveCategory, editCategory, findIndexById, updateCategory, categoryEditDialog,
             confirmDeleteCategory, confirmDeleteSelected, deleteCategory,
         }

@@ -1,6 +1,6 @@
 <template>
   <div class="order-list">
-    <PageHeading title="Jobs Delivered" :subtitle="`${totalRecords} job requests in total`"/>
+    <PageHeading title="Jobs Delivered" :subtitle="`${totalRecords} job deliveries in total`"/>
    <ProgressSpinner v-if="isLoading" />
     <Card v-else>
       <template #content>
