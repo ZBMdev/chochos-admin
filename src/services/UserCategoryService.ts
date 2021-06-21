@@ -6,6 +6,7 @@ export default class UserCategoryService extends Service<UserCategoryData, UserC
     url = "/userCategories";
 
     allUsersCategory = qs.stringify({
+        page: 1,
         limit: 1000000
     });
 }

@@ -72,10 +72,12 @@ export default defineComponent({
       this.service.login(data)
         .then((loginData) => {
           window.localStorage.setItem('token', loginData.token);
+          console.log(loginData)
+          console.log(loginData.token)
           // redirect to previous link
-          const redirectTo = this.$route.query.redirect as string || '/dashboard';
+          // const redirectTo = this.$route.query.redirect as string || '/dashboard';
           // this.$router.push(redirectTo);
-          window.location.href = redirectTo;
+          // window.location.href = redirectTo;
         })
         .finally(() => {
           this.isLoading = false;

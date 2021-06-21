@@ -512,7 +512,7 @@ export default class CustomerList extends Vue {
   
   loadLazyData() {
     this.isLoading = true;
-    this.service.getAllPaginated(`${qs.stringify(this.lazyParams)}`)
+    this.service.getAllPaginated(this.service.allUsers)
       .then(data => {
         this.customers = data.items.map((prod) => new Customer(prod));
         this.totalRecords = data.totalCount;

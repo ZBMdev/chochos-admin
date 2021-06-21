@@ -1,6 +1,6 @@
 // import Category from '@/models/Category';
 // import Product from '@/models/Product';
-import { APIResponse, PaginatedResponse } from '@/types/api'
+import { APIResponse, PaginatedResponse, PaginatedResponse2 } from '@/types/api'
 import { API } from '@/utils/api'
 import { AxiosResponse } from 'axios';
 
@@ -14,6 +14,16 @@ export default class Service<Typ, CParam> {
     async getAllPaginated(query?: string) {
         return API.get(`${this.url}${query ? '?' + query : ''}`)
             .then(({ data }: AxiosResponse<APIResponse<PaginatedResponse<Typ>>>) => {
+                return data.data;
+            }).catch((error) => {
+                console.error("Service.ts >>>>>", error.message, error)
+                throw error;
+            });
+    }
+
+    async getAllPaginated2(query?: string) {
+        return API.get(`${this.url}${query ? '?' + query : ''}`)
+            .then(({ data }: AxiosResponse<APIResponse<PaginatedResponse2<Typ>>>) => {
                 return data.data;
             }).catch((error) => {
                 console.error("Service.ts >>>>>", error.message, error)

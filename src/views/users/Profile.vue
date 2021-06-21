@@ -75,11 +75,14 @@ import { defineComponent } from "vue";
 import AdminService from "@/services/AdminService";
 import { useToast } from 'primevue/usetoast';
 import { AdminsData, AdminCreateParam, AdminChangePassword } from "@/types/admin";
+import store from '@/store'
 import getUser from "@/utils/users";
 import getInitials from "@/utils/getInitials";
 import DynamicForm from "@/components/elements/DynamicForm.vue";
 import { profileFormSchema, passwordFormSchema } from '@/models/Admin';
 /* eslint-disable */
+store.dispatch("Admin/getUserAd");
+store.dispatch("Admin/getToken");
 
 export default defineComponent({
   components: { DynamicForm },
@@ -161,7 +164,23 @@ export default defineComponent({
   async mounted() {
 
     this.loading = true;
-    this.user = await getUser();
+    this.user = await store.getters.getUserAd();
+    if( this.user ) {
+      this.admin.firstName = this.user.firstName
+    }
+    // this.user = await getUser();
+
+    // if (this.user) {
+    //   this.admin.firstName = this.user.firstName,
+    //   this.admin.username = this.user.username,
+    //   this.admin.email = this.user.email
+    //   // this.admin.role_id = this.user.role_id
+    //   this.loading = false;
+    // }
+
+    // this.initials = getInitials(this.user);
+
+    this.user = this.$store.state.user;
 
     if (this.user) {
       this.admin.firstName = this.user.firstName,
@@ -171,7 +190,7 @@ export default defineComponent({
       this.loading = false;
     }
 
-    this.initials = getInitials(this.user);
+    this.initials = this.$store.getters.getInits(this.user);
   }
 })
 </script>

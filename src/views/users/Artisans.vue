@@ -397,7 +397,7 @@ export default class Artisans extends Vue {
   
   loadLazyData() {
     this.isLoading = true;
-    this.service.getAllPaginated(`${qs.stringify(this.lazyParams)}`)
+    this.service.getAllPaginated(this.service.allArtisans)
       .then(data => {
         this.artisans = data.items.map((prod) => new Artisan(prod));
         this.totalRecords = data.totalCount;

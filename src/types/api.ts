@@ -5,6 +5,13 @@ export interface APIResponse<T> {
     devMessage: string;
 }
 
+export interface APIResponse2<T> {
+    code: number;
+    data: T;
+    message: string;
+    success:  boolean;
+}
+
 export interface PaginatedResponse<T> {
     page:       number;
     pageSize:   number;
@@ -18,6 +25,12 @@ export interface PaginatedResponse<T> {
     next_page:     number;
 }
 
+export interface PaginatedResponse2<T> {
+    page:       number;
+    pageSize:   number;
+    items:      T[];
+    totalCount: number;
+}
 
 export interface APIErrorResponse {
     code: number;

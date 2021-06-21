@@ -17,7 +17,6 @@
           filterDisplay="row" 
           :globalFilterFields="['user_id','occupation','userType', 'address']"
           :paginator="true"
-          paginatorPosition="both"
           paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
           :rowsPerPageOptions="[10,20, 50, 100, 200]"
           currentPageReportTemplate="Showing {first} to {last} of {totalRecords} users"
@@ -165,7 +164,8 @@ export default class UserCatList extends Vue {
   toast = useToast();
   lazyParams: Partial<UserCategoryLazyParameters> = {};
   firstRecordIndex = 0;
-  rowstoDisplay = 10;
+  // rowstoDisplay = 10;
+  rowstoDisplay = 100000;
 
   created() {
     // watch the params of the route to fetch the data again
@@ -182,21 +182,26 @@ export default class UserCatList extends Vue {
 
   getData() {
     this.isLoading = true
-    this.lazyParams = { page: 1, limit: this.rowstoDisplay }
+    // this.lazyParams = { page: 1, limit: this.rowstoDisplay }
+    this.lazyParams = { page: 1, limit: 1000000 }
     this.loadLazyData();
   }
   
   loadLazyData() {
     this.isLoading = true;
-    this.service.getAllPaginated(`${qs.stringify(this.lazyParams)}`)
+    this.service.getAllPaginated(this.service.allUsersCategory)
       .then(data => {
         this.userCat = data.items.map((prod) => new UserCategory(prod));
         this.totalRecords = data.totalCount;
-        this.firstRecordIndex = data.page > 1 ? data.pageSize * data.page - 1 : 0;
-        this.rowstoDisplay = data.pageSize;
+        // this.firstRecordIndex = data.page > 1 ? data.pageSize * data.page - 1 : 0;
+        // this.rowstoDisplay = data.pageSize * 100000 ;
         this.isLoading = false;
       }).catch((e) => {
-      this.toast.add({ severity: "error", summary: "There was an error fetching the customers", detail: "Please check your internet connection and refresh the page" })
+      this.toast.add({
+        severity: "error",
+        summary: "There was an error fetching the customers",
+        detail: "Please check your internet connection and refresh the page"
+      })
       console.log(e);
     });
   }
