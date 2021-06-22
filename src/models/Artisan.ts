@@ -97,9 +97,9 @@ export default class Artisan extends Model {
         return this.formatDate(this.last_login)
     }
 
-    get jobName() {
-        return `${this.userCategoryRecord.occupationName }`
-    }
+    // get jobName() {
+    //     return `${this.userCategoryRecord.occupationName }`
+    // }
 
     // get jobName() {
     //     return this.userCategoryRecord.occupationName;

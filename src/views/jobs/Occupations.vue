@@ -217,6 +217,7 @@ export default class SkillsList extends Vue {
           responsiveLayout="scroll"
           :scrollable="true"
           :rowHover="true"
+          @row-click="openOccupation($event.data.id)"
         >
           <template #header>
             <div class="table-header">
@@ -333,6 +334,10 @@ export default class SkillsList extends Vue {
         this.loading = false;
         this.generalLoading = false;
       });
+  }
+
+  openOccupation(id: number) {
+    this.$router.push({ path: `/occupations/${id}`});
   }
 
 }
