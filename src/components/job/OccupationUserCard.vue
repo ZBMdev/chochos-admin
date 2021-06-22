@@ -1,8 +1,8 @@
 <template>
   <PageHeading :title="`${occupation.name}`"  style="display:flex; justify-content: center; margin-bottom: 30px" />
   <ProgressSpinner style="display:flex; justify-content: center" v-if="loading" />
-  <div v-else class="p-d-flex p-jc-center p-ai-center">
-    <div v-for="(user, index) in users" :key="index" class="p-col-12 p-md-6">
+  <div v-else class="p-d-grid p-jc-center p-ai-center">
+    <div v-for="(user, index) in occupation" :key="index" id="userCard" class="p-col-12 p-md-6">
       <Card
         class="p-text-center"
         :value="occupation"
@@ -116,6 +116,9 @@ export default class OccupationCard extends Vue {
 </script>
 
 <style scoped>
+#userCard{
+    display: grid;
+}
 .btns{
     display: flex;
     justify-content: space-around;
