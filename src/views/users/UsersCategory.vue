@@ -99,11 +99,11 @@
             filterMode="contains"
           >
             <template #body="slotProps">
-              <!--{{ slotProps.data.about }}-->
-              <span
+              {{ slotProps.data.about }}
+              <!--<span
                 v-html="`${ slotProps.data.about.substr(0, 20)}...`"
               >
-              </span>
+              </span>-->
             </template>
           </Column>
           <Column
