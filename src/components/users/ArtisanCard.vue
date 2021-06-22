@@ -89,24 +89,6 @@
                 <p>
                   Tools: <b>{{ artisan?.tools }}</b>
                 </p>
-                <p>
-                  Address: <b>{{ artisan?.address }}</b>
-                </p>
-                <p>
-                  Address: <b>{{ artisan?.address }}</b>
-                </p>
-                <p>
-                  Address: <b>{{ artisan?.address }}</b>
-                </p>
-                <p>
-                  Address: <b>{{ artisan?.address }}</b>
-                </p>
-                <p>
-                  Address: <b>{{ artisan?.address }}</b>
-                </p>
-                <p>
-                  Address: <b>{{ artisan?.address }}</b>
-                </p>
               </div>
         </div>
       </TabPanel>
@@ -127,7 +109,7 @@
         <div>
           <Card style="width: 25em">
             <template #header>
-                <img src="https://www.primefaces.org/wp-content/uploads/2020/02/primefacesorg-primevue-2020.png" style="height: 15rem" />
+                <img src="" style="height: 15rem" />
             </template>
             <template #subtitle class="subtitle">
                 Card subtitle
