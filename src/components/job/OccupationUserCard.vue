@@ -2,7 +2,7 @@
   <PageHeading :title="`${occupation.name}`"  style="display:flex; justify-content: center; margin-bottom: 30px" />
   <ProgressSpinner style="display:flex; justify-content: center" v-if="loading" />
   <div v-else class="p-d-flex p-jc-center p-ai-center">
-    <div class="p-col-12 p-md-6">
+    <div v-for="(user, index) in users" :key="index" class="p-col-12 p-md-6">
       <Card
         class="p-text-center"
         :value="occupation"
@@ -34,38 +34,11 @@
               Description: <b>{{ occupation?.description }}</b>
             </p>
             <p>
-              Tags: <b>{{ occupation?.tags }}</b>
-              <Chips
-                id="desription"
-                v-model="occupation.tags"
-                required="true"
-                separator=","
-                :addOnBlur="true"
-                :allowDuplicate="false"
-              />
-            </p>
-            <p>
               Date Created: <b>{{ occupation?.createdAt }}</b>
             </p>
             <p>
               Last update: <b>{{ occupation?.updatedAt }}</b>
             </p>
-            <div class="btns">
-                <div>
-                    <p> Active </p>
-                    <InputSwitch
-                    class="p-mr-2"
-                    v-model="occupation.isActive"
-                    />
-                </div>
-                <div>
-                    <p> Featured </p>
-                    <InputSwitch
-                    class="p-mr-2"
-                    v-model="occupation.isFeatured"
-                    />
-                </div>
-            </div>
           </div>
         </template>
       </Card>
