@@ -212,6 +212,7 @@ export default class SkillsList extends Vue {
           filterDisplay="row" 
           :globalFilterFields="['name']"
           paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
+          currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
           :rowsPerPageOptions="[10,20,50, 100, 200]"
           responsiveLayout="scroll"
           :scrollable="true"
@@ -244,7 +245,7 @@ export default class SkillsList extends Vue {
             <template #body="slotProps">
               <span class="p-column-title">Image</span>
               <img
-                :src="slotProps.data.mainImage"
+                :src="slotProps.data.image"
                 class="product-image"
               />
             </template>
@@ -326,7 +327,7 @@ export default class SkillsList extends Vue {
 
   loadLazyData() {
     this.loading = true;
-    this.service.getAll(`${qs.stringify(this.lazyParams)}`)
+    this.service.getAll(this.service.allOccupations)
       .then(data => {
         this.occupations = data.map((prod) => new Occupation(prod));
         this.loading = false;

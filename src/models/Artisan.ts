@@ -44,6 +44,31 @@ export default class Artisan extends Model {
     skills!:             any[];
     portfolios!:         Portfolio[];
 
+    // id!:                    number;
+    userId!:                number;
+    occupationId!:          number;
+    occupationName!:        string;
+    feeRate!:               number;
+    fee!:                   number;
+    jobsCompleted!:         number;
+    businessEmail!:         null;
+    // address!:               string;
+    state!:                 null;
+    city!:                  null;
+    // about!:                 string;
+    idImageUrl!:            null;
+    utilityBillImageUrl!:   null;
+    officialPhoneNumber!:   null;
+    // userCategory!:          number;
+    isValidated!:           null;
+    isActive!:              null;
+    isUtilityBillVerified!: null;
+    isIdVerified!:          null;
+    tools!:                 null;
+    updated_on!:            Date;
+    created_on!:            Date;
+    deletedAt!:             null;
+
     constructor(data?: Partial<ArtisanData>) {
         super();
         if (data) {
@@ -70,6 +95,10 @@ export default class Artisan extends Model {
 
     get lastLogin() {
         return this.formatDate(this.last_login)
+    }
+
+    get jobName() {
+        return `${this.userCategoryRecord.occupationName }`
     }
 
     // get jobName() {

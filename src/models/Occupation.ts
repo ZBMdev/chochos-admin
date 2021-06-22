@@ -6,11 +6,13 @@ import { format } from "timeago.js";
 export default class Occupation {
     id!:                    number;
     name!:                  string;
-    image!:                 null;
+    image!:                 string;
     description!:           string;
-    occupationCategory_id!: number;
+    tags!:                  string;
+    isActive!:              boolean;
     updated_on!:            Date;
     created_on!:            Date;
+    deletedAt!:             null;
 
     constructor(data?: Partial<OccupationData>) {
         if (data) {

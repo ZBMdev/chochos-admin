@@ -2,7 +2,7 @@
   <PageHeading :title="`${artisan.fullName}'s Profile`"  style="display:flex; justify-content: center; margin-bottom: 30px" />
   <ProgressSpinner style="display:flex; justify-content: center" v-if="loading" />
   <div v-else>
-    <TabView>
+    <TabView :value="artisan">
       <TabPanel header="About">
         <div class="userCard">
               <div
@@ -15,18 +15,19 @@
                   style="background-color:#c8e6c9;color:#256029;width:8rem;height:8rem;font-size:4rem;"
                   shape="circle"
                 />
+                <img v-else-if="artisan.photoUrl != '' || artisan.photoUrl != null "
+                  :src="artisan.photoUrl"
+                  :alt="artisan.photoUrl"
+                  style="width:8rem;height:8rem;font-size:4rem;"
+                />
                 <Avatar 
-                  v-else-if="artisan.fullName"
+                  v-else
                   :label="artisan.fullName.charAt(0).toUpperCase()"
                   class="p-mr-2"
                   style="background-color:#c8e6c9;color:#256029;width:8rem;height:8rem;font-size:4rem;"
                   shape="circle"
                 />
-                <img v-else
-                  :src="artisan.photoUrl"
-                  :alt="artisan.photoUrl"
-                  style="width:8rem;height:8rem;font-size:4rem;"
-                />
+                
               </div>
               <div  class="p-text-left" id="personalDetails">
                 <p>
@@ -110,7 +111,21 @@
         </div>
       </TabPanel>
       <TabPanel header="Portfolio">
-        <Card style="width: 25em">
+        <div v-for="(portfolio, index) in portfolios" :key="index">
+          <Card style="width: 25em">
+            <template #header>
+                <img :src="portfolio.url" style="height: 15rem" />
+            </template>
+            <template #subtitle class="subtitle">
+                {{ portfolio.name }}
+            </template>
+            <template #content>
+              {{ portfolio.description }}
+            </template>
+          </Card>
+        </div>
+        <div>
+          <Card style="width: 25em">
             <template #header>
                 <img src="https://www.primefaces.org/wp-content/uploads/2020/02/primefacesorg-primevue-2020.png" style="height: 15rem" />
             </template>
@@ -121,7 +136,8 @@
                 <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error repudiandae numquam deserunt
                 quisquam repellat libero asperiores earum nam nobis, culpa ratione quam perferendis esse, cupiditate neque quas!</p>
             </template>
-        </Card>
+          </Card>
+        </div>
       </TabPanel>
       <TabPanel header="Reviews">
         <div>
@@ -133,7 +149,7 @@
     </TabView>
   </div>
 
-  <div class="p-d-flex p-jc-center p-ai-center">
+  <!--<div class="p-d-flex p-jc-center p-ai-center">
     <div class="p-col-12 p-md-6">
       <Card
         class="p-text-center"
@@ -185,7 +201,7 @@
         </template>
       </Card>
     </div>
-  </div>
+  </div>-->
 </template>
 
 <script lang="ts">

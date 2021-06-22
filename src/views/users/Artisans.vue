@@ -20,7 +20,7 @@
           :scrollable="true"
           :rowHover="true"
           responsiveLayout="scroll"
-          @row-click="openArtisan($event.data)"
+          @row-click="openArtisan($event.data.id)"
         >
           <template #header>
             <div class="table-header p-d-flex p-flex-column p-flex-md-row p-jc-md-between">
@@ -32,7 +32,9 @@
                   @click="openNew"
                 />
               </div>
-              <!-- <span class="p-input-icon-left">
+              <!-- 
+              @row-click="openArtisan($event.data)"
+              <span class="p-input-icon-left">
                 <i class="pi pi-search" />
                 <InputText
                   v-model="filters['global'].value"
@@ -52,11 +54,11 @@
             selectionMode="multiple"
             style="width: 3rem"
             :exportable="false">
-            <template #body="slotProps">
+            <!--<template #body="slotProps">
               <Button
                 @click="$router.push('/artisans/' + slotProps.data.id)"
               />
-            </template>
+            </template>-->
           </Column>
           <Column field="name" headerStyle="width: 3rem;">
             <template #body="slotProps">
@@ -441,9 +443,8 @@ export default class Artisans extends Vue {
   //   this.artisan = artisan;
   //   this.artisanDialog = true;
   // }
-  openArtisan(artisan: Artisan) {
-    this.artisan = artisan;
-    this.artisanDialog = true;
+  openArtisan(id: number) {
+    this.$router.push({ path: `/artisans/${id}`});
   }
 
   hideDialog() {

@@ -88,11 +88,6 @@
 				"label": "All Occupations",
 				"icon": "pi pi-briefcase",
 				"to": "/occupations"
-			},
-			{
-				"label": "Categories",
-				"icon": "pi pi-tags",
-				"to": "/artisan-category"
 			}
 		]
 	},

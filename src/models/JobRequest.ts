@@ -49,8 +49,9 @@ export default class JobRequest extends Model {
         return `${this.billOfQuantities.productName}`
     }
 
-    get quantity() {
-        return `${this.billOfQuantities.quantity}`
+    // get quantity() {
+    get productQuantity() {
+        return `${this.billOfQuantities}`
     }
 
     /* get quantity() {
@@ -61,7 +62,8 @@ export default class JobRequest extends Model {
     } */
 
     get totalAmount() {
-        return `${this.billOfQuantities.totalPrice}`
+        // return `${this.billOfQuantities.totalPrice}`
+        return 5;
     }
 
     get start_date() {

@@ -83,7 +83,7 @@
           >
             <template #body="slotProps">
               <span class="p-column-title">Quantity</span>
-              {{ slotProps.data.quantity }}
+              {{ slotProps.data.billOfQuantities.quantity}}
             </template>
           </Column> 
           <Column

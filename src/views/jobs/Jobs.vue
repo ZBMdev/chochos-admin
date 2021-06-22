@@ -34,7 +34,7 @@
                   v-model="filters['global'].value"
                   placeholder="Search..."
                 />
-              </span> -->
+              </span>-->
             </div>
           </template>
           <template #empty>

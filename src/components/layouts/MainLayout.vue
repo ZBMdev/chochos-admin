@@ -130,6 +130,7 @@ export default class MainLayout extends Vue {
 
   logout() {
     window.localStorage.setItem("token", "");
+    window.localStorage.setItem("user", "");
     window.location.href = `/login?redirect=${window.location.pathname}`
     // this.$router.push({ name: "login", query: { redirect: this.$route.path } });
 
@@ -264,7 +265,8 @@ export default class MainLayout extends Vue {
     position: fixed;
     margin-right: calc(100vw - 22vw);
     width: 22vw;
-    height: calc(100vh - 4rem);
+    /*height: calc(100vh - 4rem);*/
+    height: 100vh;
     overflow-y: auto;
     bottom: 0;
     border-right: 1px solid #dee2e6;
