@@ -72,7 +72,7 @@
               </div>
               <div  class="p-text-left" id="jobDetails">
                 <p>
-                  Occupation: <b>{{ artisan?.jobName }}</b>
+                  Occupation: <b>{{}}</b>
                 </p>
                 <p>
                   Business email: <b>{{ artisan?.businessEmail }}</b>
