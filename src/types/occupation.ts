@@ -11,10 +11,12 @@
 export interface OccupationData {
     id:          number;
     name:        string;
-    image:       string;
+    image:       null;
+    iconName:    string;
     description: string;
     tags:        string;
     isActive:    boolean;
+    isFeatured:  boolean;
     updated_on:  Date;
     created_on:  Date;
     deletedAt:   null;

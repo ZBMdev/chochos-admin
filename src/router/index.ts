@@ -159,6 +159,22 @@ const routes: Array<RouteRecordRaw> = [
         }
       },
       {
+        path: '/occupations/:id',
+        name: 'occupation-details',
+        component: () => import('../components/job/OccupationCard.vue'),
+        meta: {
+          title: `Occupation Details`,
+        }
+      },
+      {
+        path: '/occupations/:id/artisans',
+        name: 'occupation-artisans',
+        component: () => import('../components/job/OccupationUserCard.vue'),
+        meta: {
+          title: `Occupation Artisans`,
+        }
+      },
+      {
         path: '/categories',
         name: 'Categories',
         component: () => import('../views/products/Categories.vue'),
