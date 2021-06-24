@@ -140,7 +140,7 @@ export default class ProductList extends Vue {
 
   loadLazyData() {
     this.loading = true;
-    this.service.getAllPaginated(`${qs.stringify(this.lazyParams)}`)
+    this.service.getAllPaginated(this.service.allJobs)
       .then(data => {
         this.jobs = data.items.map((prod) => new Job(prod));
         this.totalRecords = data.totalCount;

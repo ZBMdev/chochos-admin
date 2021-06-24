@@ -4,9 +4,15 @@ import Service from "./Service";
 import { APIResponse } from '@/types/api'
 import { API } from '@/utils/api'
 import { AxiosResponse } from 'axios';
+import qs from 'qs'
 
 export default class CategoryService extends Service<CategoryData, CategoryCreateParam> {
     url = "/productCategories";
+
+    allCategories = qs.stringify({
+        limit: 1000000,
+        pageSize: 1000000,
+    });
 
     getAllCategories() {
         return API.get(`/productCategories`)

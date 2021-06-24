@@ -55,20 +55,51 @@
         <template #content>
           <div class="p-text-left">
             <p>
-              Name: <b>{{ vendor?.fullName }}</b>
+              Name: <span> {{ vendor?.fullName }}</span>
             </p>
             <p>
-              Username: <b>{{ "@" + vendor?.username }}</b>
+              Username: <span> {{ "@" + vendor?.username }}</span>
             </p>
             <p>
-              Email: <b>{{ vendor?.email }}</b>
+              Email: <span> {{ vendor?.email }}</span>
             </p>
             <p>
-              Products: <b>{{ vendor?.about }}</b>
+              Mobile: <span> {{ vendor?.mobile }}</span>
             </p>
             <p>
-              Address: <b>{{ vendor?.address }}</b>
+              Address: <span> {{ vendor?.address }}</span>
             </p>
+            <p>
+              Date joined: <span> {{ vendor?.created_on }}</span>
+            </p>
+            <p>
+              last login: <span> {{ vendor?.lastLogin }}</span>
+            </p>
+            <div class="rating">
+                  <p> Average rating </p>
+                  <Rating
+                    :modelValue="vendor.rating"
+                    :readonly="true"
+                    :cancel="false"
+                    :stars="5"
+                    class="ratingNumber"
+                  />
+                </div>
+            <div class="status">
+                  <p> Status: </p>
+                  <div v-if="vendor.isActive === true">
+                    <p class="active"> Active </p>
+                  </div>
+                  <div v-else>
+                    <p class="block"> Inactive </p>
+                  </div>
+                </div>
+            <div class="about">
+              <h4>About </h4>
+              <div class="about-card">
+                {{ vendor.about}}
+              </div>
+            </div>
           </div>
         </template>
       </Card>

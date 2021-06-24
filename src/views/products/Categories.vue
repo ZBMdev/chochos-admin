@@ -207,7 +207,7 @@ export default {
 
         const loadLazyData = () => {
             isLoading.value = true;
-            service.value.getAllPaginated(`${qs.stringify(lazyParams.value)}`)
+            service.value.getAllPaginated(service.value.allCategories)
             .then(data => {
                 categories.value = data.items.map((prod) => new Category(prod));
                 totalRecords.value = data.totalCount;

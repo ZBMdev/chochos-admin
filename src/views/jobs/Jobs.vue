@@ -1,172 +1,73 @@
 <template>
   <div>
     <PageHeading
-      title="All Jobs"
+      title="Jobs"
       :subtitle="`${totalRecords} jobs in total`"
     />
     <ProgressSpinner style="display:flex; justify-content: center" v-if="isLoading" />
-    <Card v-else>
-      <template #content>
-        <DataTable
-          dataKey="id"
-          class="p-datatable-responsive p-datatable-sm"
-          :value="jobs"
-          :paginator="true"
-          :rows="10"
-          v-model:filters="filters"
-          filterDisplay="row" 
-          :globalFilterFields="['customerName','executorName','customerAddress', 'productsAmount', 'start_date']"
-          :rowsPerPageOptions="[10, 20, 50, 100, 200]"
-          currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
-          paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
-          :totalRecords="totalRecords"
-          :loading="isLoading"
-          :first="firstRecordIndex"
-          :rowHover="true"
-          :scrollable="true"
-          responsiveLayout="scroll"
-        >
-          <template #header>
-            <div class="table-header p-d-flex">
-              <!--<span class="p-input-icon-left">
-                <i class="pi pi-search" />
-                <InputText
-                  v-model="filters['global'].value"
-                  placeholder="Search..."
-                />
-              </span>-->
-            </div>
-          </template>
-          <template #empty>
-            No job found.
-          </template>
-          <template #loading>
-            Loading jobs data. Please wait.
-          </template>
-          <Column
-            field="CustomerName"
-            style="min-width: 14rem"
-            headerStyle="min-width: 14rem"
-            header="Customer"
-            filterMode="contains"
-          >
-            <template #body="slotProps">
-              {{ slotProps.data.customerName }}
-            </template>
-          </Column>
-          <Column
-            field="name"
-            style="min-width: 14rem"
-            headerStyle="min-width: 14rem"
-            header="Executor"
-            filterMode="contains"
-          >
-            <template #body="slotProps">
-              {{ slotProps.data.executorName }}
-            </template>
-          </Column>
-          <Column
-            field="address"
-            style="min-width: 14rem"
-            headerStyle="min-width: 14rem"
-            header="Address"
-            filterMode="contains"
-          >
-            <template #body="slotProps">
-              {{ slotProps.data.customerAddress }}
-            </template>
-          </Column>
-          <Column
-            ref="price"
-            field="totalAmount"
-            headerStyle="min-width: 14rem"
-            style="min-width: 14rem"
-            header="Amount"
-            filterField="price"
-            filterMatchMode="contains"
-          >
-            <template #body="slotProps">
-              <span class="p-column-title">Amount</span>
-              {{ formatCurrency(slotProps.data.productsAmount) }}
-            </template>
-          </Column>
-          <Column
-            ref="date"
-            field="date"
-            style="min-width: 14rem"
-            headerStyle="min-width: 14rem"
-            header="Start Date"
-            filterField="date"
-            filterMatchMode="contains"
-          >
-            <template #body="slotProps">
-              <span class="p-column-title">Start Date</span>
-              {{ slotProps.data.start_date }}
-            </template>
-          </Column>  
-          <Column
-            ref="status"
-            field="status"
-            header="Job Status"
-            style="min-width: 14rem"
-            headerStyle="min-width: 14rem"
-            filterField="status"
-            filterMatchMode="contains"
-          >
-            <template #body="slotProps">
-              <span class="p-column-title">Job Status</span>
-              <span
-                :class="
-                  'product-badge status-' +
-                    slotProps.data.jobStatus
-                "
-                >{{ slotProps.data.jobStatus }}
-                </span>
-            </template>
-          </Column>  
-          <Column
-            field="rating"
-            style="min-width: 14rem"
-            headerStyle="min-width: 14rem"
-            header="Job Reviews"
-            filterField="rating"
-            filterMatchMode="contains"
-          >
-            <template #body="slotProps">
-              <span class="p-column-title">Job Reviews</span>
-              <Rating
-                :modelValue="slotProps.data.customerReview"
-                :readonly="true"
-                :cancel="false"
-              />
-            </template>
-          </Column>
-        </DataTable>
-      </template>
-    </Card>
+    <div v-else>
+      <TabView :value="vendor">
+        <TabPanel header="All Jobs">
+          <AllJobs />
+        </TabPanel>
+        <TabPanel header="New Jobs">
+          <NewJobs />
+        </TabPanel>
+        <TabPanel header="Payment-Successful Jobs">
+          <PaySuccessJobs />
+        </TabPanel>
+        <TabPanel header="Payment-Failed Jobs">
+          <PayFailedJobs />
+        </TabPanel>
+        <TabPanel header="Started Jobs">
+          <StartedJobs />
+        </TabPanel>
+        <TabPanel header="Paused Jobs">
+          <PausedJobs />
+        </TabPanel>
+        <TabPanel header="Completed Jobs">
+          <CompletedJobs />
+        </TabPanel>
+        <TabPanel header="Disputed Jobs">
+          <DisputedJobs />
+        </TabPanel>
+      </TabView>
+    </div>    
   </div>
 </template>
 
 
 <script lang="ts">
-import { Vue } from 'vue-class-component';
+import { Options, Vue } from 'vue-class-component';
 import Job from '@/models/Job'
-import JobService from '@/services/JobService';
-import { JobData } from '@/types/jobs'
+import AllJobs from '@/views/jobs/AllJobs.vue'
+import NewJobs from '@/views/jobs/NewJobs.vue'
+import PaySuccessJobs from '@/views/jobs/PaymentSuccessJobs.vue'
+import PayFailedJobs from '@/views/jobs/PaymentFailedJobs.vue'
+import StartedJobs from '@/views/jobs/StartedJobs.vue'
+import PausedJobs from '@/views/jobs/PausedJobs.vue'
+import CompletedJobs from '@/views/jobs/CompletedJobs.vue'
+import DisputedJobs from '@/views/jobs/DisputedJobs.vue'
 // import {FilterMatchMode} from 'primevue/api';
 import qs from 'qs';
+import { defineComponent } from 'vue';
+import JobService from '@/services/JobService';
 
 interface JobLazyParameters {
   page:       number;
   pageSize:   number;
   limit:      number;
-  items:      JobData[];
   totalCount: number;
 }
 
-export default class ProductList extends Vue {
+@Options({
+  components: { AllJobs, NewJobs, PaySuccessJobs, PayFailedJobs,
+    StartedJobs, PausedJobs, CompletedJobs, DisputedJobs
+  }
+})
+
+export default class Jobs extends Vue {
   jobs: Job[] = [];
-  selectedJobs: Job[] = [];
   filterValue = '';
   isLoading = false;
   generalLoading = false;
@@ -203,14 +104,9 @@ export default class ProductList extends Vue {
     this.loadLazyData();
   }
 
-  formatCurrency(value: number) {
-    return value.toLocaleString('en-NG', { style: 'currency', currency: 'NGN' });
-  }
-
-
   loadLazyData() {
     this.isLoading = true;
-    this.service.getAllPaginated(`${qs.stringify(this.lazyParams)}`)
+    this.service.getAllPaginated(this.service.allJobs)
       .then(data => {
         this.jobs = data.items.map((prod) => new Job(prod));
         this.totalRecords = data.totalCount;

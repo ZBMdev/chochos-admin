@@ -78,14 +78,6 @@ const routes: Array<RouteRecordRaw> = [
         }
       },
       {
-        path: '/analytics',
-        name: 'analytics',
-        component: Analytics,
-        meta: {
-          title: `Analytics`,
-        }
-      },
-      {
         path: '/products',
         name: 'products',
         component: () => import('../views/products/ProductList.vue'),
@@ -170,7 +162,7 @@ const routes: Array<RouteRecordRaw> = [
         name: 'jobs',
         component: () => import('../views/jobs/Jobs.vue'),
         meta: {
-          title: `All Products`,
+          title: `All Jobs`,
         }
       },
       {
@@ -187,38 +179,6 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import('../views/jobs/JobsDelivered.vue'),
         meta: {
           title: `Jobs Delivered`,
-        }
-      },
-      {
-        path: '/orders',
-        name: 'orders',
-        component: () => import('../views/orders/OrderList.vue'),
-        meta: {
-          title: `All Orders`,
-        }
-      },
-      {
-        path: '/orders/:id',
-        name: 'edit-order',
-        component: () => import('../views/orders/OrderEdit.vue'),
-        meta: {
-          title: `Edit Order`,
-        }
-      },
-      {
-        path: '/orders/new',
-        name: 'new-order',
-        component: () => import('../views/orders/OrderEdit.vue'),
-        meta: {
-          title: `New Order`,
-        }
-      },
-      {
-        path: '/new-users',
-        name: 'NewUsers',
-        component: () => import('../views/users/NewUsers.vue'),
-        meta: {
-          title: `New Users`,
         }
       },
       {
@@ -269,6 +229,14 @@ const routes: Array<RouteRecordRaw> = [
           title: `All Vendors`,
         }
       },
+      // {
+      //   path: '/vendors/:id',
+      //   name: 'vendor-profile',
+      //   component: () => import('../components/users/VendorCard.vue'),
+      //   meta: {
+      //     title: `Vendor Profile`,
+      //   }
+      // },
       {
         path: '/vendors/:id',
         name: 'vendor-profile',
@@ -300,19 +268,6 @@ const routes: Array<RouteRecordRaw> = [
         meta: {
           title: 'Settings', 
         },
-        children: [
-          {
-            alias: '/settings',
-            name: "payment-method",
-            path: 'payment-method',
-            component: () => import('../views/settings/PaymentMethods.vue'),
-          },
-          {
-            name: "delivery-method",
-            path: 'delivery-method',
-            component: () => import('../views/settings/DeliveryMethods.vue'),
-          },
-        ]
       },
       {
         path: '/profile',

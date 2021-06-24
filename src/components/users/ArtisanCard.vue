@@ -308,13 +308,7 @@ import BombsightService from '@/services/BombsightService';
 import { useToast } from 'primevue/usetoast';
 import qs from 'qs';
 import { reactive } from 'vue';
-import DynamicForm from "@/components/elements/DynamicForm.vue";
-import { profileFormSchema, passwordFormSchema } from '@/models/Admin';
 
-
-@Options<ArtisanCard>({
-  components: { DynamicForm  },
-})
 
 export default class ArtisanCard extends Vue {
 

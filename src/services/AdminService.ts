@@ -1,6 +1,6 @@
 import { APIResponse } from '@/types/api';
 import {RegisterObject, LoginObject, Admins, AdminsData, AdminCreateParam, AdminUpdateParam, AdminChangePassword, AdminData, AdminLoginParam, AdminResetPassParam, AdminInitResetPassParam, LoginData } from '@/types/admin'
-// import qs from 'qs';
+import qs from 'qs';
 import { API } from '@/utils/api';
 import { AxiosResponse } from 'axios';
 import Service from './Service';
@@ -11,6 +11,10 @@ export default class AdminService extends Service<AdminData, AdminUpdateParam>{
     constructor(url?: string) {
         super(url);
     }
+    allAdmins = qs.stringify({
+        limit: 1000000,
+        pageSize: 1000000,
+    });
     /**
      * Register
      */
