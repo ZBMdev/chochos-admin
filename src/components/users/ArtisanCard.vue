@@ -36,17 +36,13 @@
                     {{ slotProps.data.userCategoryRecord.occupationName }}
                   </template>
                 </jobName>-->
-                <h4> Electrician </h4>
-                <span> <i class="pi pi-pin"></i> <p> {{ artisan.address }} </p> </span>
+                <h4> {{  }} Electrician </h4>
+                <span> <i class="pi pi-map-marker"></i> <p> {{ artisan.address }} </p> </span>
               </div>
               <div class="details2">
-                <div>
-                  <!--<artisanNumber>
-                    <template #body="slotProps">
-                      <p> Jobs completed </p>
-                      <p class="jobNumber"> {{  slotProps.data.userCategoryRecords.jobsCompleted}} </p>
-                    </template>
-                  </artisanNumber>-->
+                <div class="jobs">
+                  <p> Jobs completed </p>
+                  <p class="jobNumber"> {{  }} 5 </p>
                 </div>
                 <div class="rating">
                   <p> Average rating </p>
@@ -57,16 +53,10 @@
                     :stars="5"
                     class="ratingNumber"
                   />
-                  <p class="ratingNumber"> {{ artisan.rating }} 5 </p>
-
                 </div>
-                <div>
-                  <!--<artisanPrice>
-                    <template #body="slotProps">
-                      <p> Average price </p>
-                      <p class="price"> {{ slotProps.data.userCategoryRecord.fee }} </p>
-                    </template>
-                  </artisanPrice>-->
+                <div class="price">
+                  <p> Average price </p>
+                  <h4> {{ }} 2500</h4>
                 </div>
               </div>
               <div class="about">
@@ -75,86 +65,23 @@
                   {{ artisan.about}}
                 </div>
               </div>
-              <div class="details3">
-                <p>
-                  Date registered: <b>{{ artisan?.created_on }}</b>
-                </p>
-                <p>
-                  Last login: <b>{{ artisan?.lastLogin }}</b>
-                </p>
-                <p>
-                  Active: <b>{{ artisan?.isActive }}</b>
-                </p>
-                <div class="active">
-                  <p> Active </p>
-                  <InputSwitch
-                    id="activeBtn"
-                    class="p-ml-10"
-                    v-model="artisan.isActive"
-                  />
+              <div class="details3">                
+                <div class="status">
+                  <p> Status: </p>
+                  <div v-if="artisan.isActive === true">
+                    <p class="active"> Active </p>
+                  </div>
+                  <div v-else>
+                    <p class="block"> Inactive </p>
+                  </div>
                 </div>
-              </div>
-              <!-- <div  class="p-text-left" id="personalDetails">
-                <p>
-                  Name: <b>{{ artisan?.fullName }}</b>
-                </p>
-                <p>
-                  Username: <b>{{ "@" + artisan?.username }}</b>
-                </p>
-                <p>
-                  Email: <b>{{ artisan?.email }}</b>
-                </p>
-                <p>
-                  Phone number: <b>{{ artisan?.mobile }}</b>
-                </p>
-                <p>
-                  Address: <b>{{ artisan?.address }}</b>
-                </p>
                 <p>
                   Date registered: <b>{{ artisan?.created_on }}</b>
                 </p>
                 <p>
                   Last login: <b>{{ artisan?.lastLogin }}</b>
                 </p>
-                <p>
-                  Active: <b>{{ artisan?.isActive }}</b>
-                </p>
-                <p>
-                  About: <b>{{ artisan?.about }}</b>
-                </p>
-                <p>
-                  Languages: <b>{{ artisan?.languages }}</b>
-                </p>
-                <p>
-                  Address: <b>{{ artisan?.address }}</b>
-                </p>
-                <p>
-                  State: <b>{{ artisan?.state }}</b>
-                </p>
-                <p>
-                  City: <b>{{ artisan?.city }}</b>
-                </p>
-              </div>
-              <div  class="p-text-left" id="jobDetails">
-                <p>
-                  Occupation: <b>{{}}</b>
-                </p>
-                <p>
-                  Business email: <b>{{ artisan?.businessEmail }}</b>
-                </p>
-                <p>
-                  Fee Rate: <b>{{ artisan?.feeRate }}</b>
-                </p>
-                <p>
-                  Fee: <b>{{ artisan?.fee }}</b>
-                </p>
-                <p>
-                  Jobs completed: <b>{{ artisan?.jobsCompleted }}</b>
-                </p>
-                <p>
-                  Tools: <b>{{ artisan?.tools }}</b>
-                </p>
-              </div>-->
+              </div>  
         </div>
       </TabPanel>
       <TabPanel header="Portfolio">
@@ -171,8 +98,116 @@
             </template>
           </Card>
         </div>-->
-        <div>
-          <Card style="width: 25em">
+        <div class="portfolios">
+          <Card style="width: 25em" class="p-card-portfolio">
+            <template #header>
+                <img src="" style="height: 15rem" />
+            </template>
+            <template #subtitle class="subtitle">
+                Card subtitle
+            </template>
+            <template #content>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error repudiandae numquam deserunt
+                quisquam repellat libero asperiores earum nam nobis, culpa ratione quam perferendis esse, cupiditate neque quas!</p>
+            </template>
+          </Card>
+          <Card style="width: 25em" class="p-card-portfolio">
+            <template #header>
+                <img src="" style="height: 15rem" />
+            </template>
+            <template #subtitle class="subtitle">
+                Card subtitle
+            </template>
+            <template #content>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error repudiandae numquam deserunt
+                quisquam repellat libero asperiores earum nam nobis, culpa ratione quam perferendis esse, cupiditate neque quas!</p>
+            </template>
+          </Card>
+          <Card style="width: 25em" class="p-card-portfolio">
+            <template #header>
+                <img src="" style="height: 15rem" />
+            </template>
+            <template #subtitle class="subtitle">
+                Card subtitle
+            </template>
+            <template #content>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error repudiandae numquam deserunt
+                quisquam repellat libero asperiores earum nam nobis, culpa ratione quam perferendis esse, cupiditate neque quas!</p>
+            </template>
+          </Card>
+          <Card style="width: 25em" class="p-card-portfolio">
+            <template #header>
+                <img src="" style="height: 15rem" />
+            </template>
+            <template #subtitle class="subtitle">
+                Card subtitle
+            </template>
+            <template #content>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error repudiandae numquam deserunt
+                quisquam repellat libero asperiores earum nam nobis, culpa ratione quam perferendis esse, cupiditate neque quas!</p>
+            </template>
+          </Card>
+          <Card style="width: 25em" class="p-card-portfolio">
+            <template #header>
+                <img src="" style="height: 15rem" />
+            </template>
+            <template #subtitle class="subtitle">
+                Card subtitle
+            </template>
+            <template #content>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error repudiandae numquam deserunt
+                quisquam repellat libero asperiores earum nam nobis, culpa ratione quam perferendis esse, cupiditate neque quas!</p>
+            </template>
+          </Card>
+          <Card style="width: 25em" class="p-card-portfolio">
+            <template #header>
+                <img src="" style="height: 15rem" />
+            </template>
+            <template #subtitle class="subtitle">
+                Card subtitle
+            </template>
+            <template #content>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error repudiandae numquam deserunt
+                quisquam repellat libero asperiores earum nam nobis, culpa ratione quam perferendis esse, cupiditate neque quas!</p>
+            </template>
+          </Card>
+          <Card style="width: 25em" class="p-card-portfolio">
+            <template #header>
+                <img src="" style="height: 15rem" />
+            </template>
+            <template #subtitle class="subtitle">
+                Card subtitle
+            </template>
+            <template #content>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error repudiandae numquam deserunt
+                quisquam repellat libero asperiores earum nam nobis, culpa ratione quam perferendis esse, cupiditate neque quas!</p>
+            </template>
+          </Card>
+          <Card style="width: 25em" class="p-card-portfolio">
+            <template #header>
+                <img src="" style="height: 15rem" />
+            </template>
+            <template #subtitle class="subtitle">
+                Card subtitle
+            </template>
+            <template #content>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error repudiandae numquam deserunt
+                quisquam repellat libero asperiores earum nam nobis, culpa ratione quam perferendis esse, cupiditate neque quas!</p>
+            </template>
+          </Card>
+          <Card style="width: 25em" class="p-card-portfolio">
+            <template #header>
+                <img src="" style="height: 15rem" />
+            </template>
+            <template #subtitle class="subtitle">
+                Card subtitle
+            </template>
+            <template #content>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error repudiandae numquam deserunt
+                quisquam repellat libero asperiores earum nam nobis, culpa ratione quam perferendis esse, cupiditate neque quas!</p>
+            </template>
+          </Card>
+          <Card style="width: 25em" class="p-card-portfolio">
             <template #header>
                 <img src="" style="height: 15rem" />
             </template>
@@ -188,6 +223,17 @@
       </TabPanel>
       <TabPanel header="Reviews">
         <div>
+          <!--<div v-if="artisan.reviews.length >=1" class="review-card">
+            <Card style="width: 25em">
+              <template #content>
+                  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error repudiandae numquam deserunt
+                  quisquam repellat libero asperiores earum nam nobis, culpa ratione quam perferendis esse, cupiditate neque quas!</p>
+              </template>
+            </Card>
+          </div>
+          <div v-else class="review-card">
+            No reviews
+          </div>-->
           <div class="review-card">
             No reviews
           </div>
@@ -344,24 +390,75 @@ export default class ArtisanCard extends Vue {
   justify-content: center;
   align-items: center;
 }
+.details1 h4{
+  margin-top: 0;
+  font-weight: lighter;
+}
+.details1 span {
+  display: flex;
+}
+.details1 span p {
+  margin-top: 0;
+  padding-left: 5px;
+}
+.jobs{
+  display: flex;
+  justify-content: space-between;
+  text-align: left;
+}
+.jobs p{
+  text-align: left;
+}
 .jobNumber {
   font-weight: bold;
-}
-.ratingNumber{
-  color: gold;
-}
-.price {
-  color: green;
-}
-.active {
-  display: flex;
-  /*justify-content: space-around;*/
-}
-.active p {
-  margin-top:5px;
+  text-align: right;
 }
 .rating{
   display: flex;
+  justify-content: space-between;
+}
+.rating p{
+  text-align: left;
+}
+.ratingNumber{
+  color: gold;
+  /*float: right;
+  align-items: flex-end; */
+}
+.price{
+  display: flex;
+  justify-content: space-between;
+}
+.price h4{
+  color: green;
+}
+.about-card{
+  border-radius: 5px;
+  color: purple;
+  font-weight: lighter;
+  padding: 10px;
+}
+.status {
+  display: flex;
+  justify-content: space-between;
+}
+.status p {
+  margin-right: 10px;
+}
+.active {
+  color: green;
+}
+.block{
+  color: black;
+}
+
+.portfolios {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+}
+.p-card-portfolio {
+  margin: 10px;
 }
 #personalDetails{
   float: left;

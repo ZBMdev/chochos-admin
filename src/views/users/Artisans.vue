@@ -71,7 +71,7 @@
               />
             </template>
           </Column>
-          <Column
+          <!--<Column
             field="userCategoryRecord.occupationNmae"
             style="min-width: 14rem"
             headerStyle="min-width: 14rem"
@@ -82,7 +82,7 @@
             <template #body="slotProps">
               {{ slotProps.data.jobName }}
             </template>
-          </Column>
+          </Column>-->
           <Column
             field="name"
             style="min-width: 14rem"
