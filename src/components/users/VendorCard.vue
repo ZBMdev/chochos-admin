@@ -29,72 +29,7 @@
                 />
                 
               </div>
-              <div class="details1">
-                <h3> {{ artisan.fullName }} </h3>
-                <!--<jobName>
-                  <template #body="slotProps">
-                    {{ slotProps.data.userCategoryRecord.occupationName }}
-                  </template>
-                </jobName>-->
-                <h4> Electrician </h4>
-                <span> <i class="pi pi-pin"></i> <p> {{ artisan.address }} </p> </span>
-              </div>
-              <div class="details2">
-                <div>
-                  <!--<artisanNumber>
-                    <template #body="slotProps">
-                      <p> Jobs completed </p>
-                      <p class="jobNumber"> {{  slotProps.data.userCategoryRecords.jobsCompleted}} </p>
-                    </template>
-                  </artisanNumber>-->
-                </div>
-                <div class="rating">
-                  <p> Average rating </p>
-                  <Rating
-                    :modelValue="artisan.rating"
-                    :readonly="true"
-                    :cancel="false"
-                    :stars="5"
-                    class="ratingNumber"
-                  />
-                  <p class="ratingNumber"> {{ artisan.rating }} 5 </p>
-
-                </div>
-                <div>
-                  <!--<artisanPrice>
-                    <template #body="slotProps">
-                      <p> Average price </p>
-                      <p class="price"> {{ slotProps.data.userCategoryRecord.fee }} </p>
-                    </template>
-                  </artisanPrice>-->
-                </div>
-              </div>
-              <div class="about">
-                <h4>About </h4>
-                <div class="about-card">
-                  {{ artisan.about}}
-                </div>
-              </div>
-              <div class="details3">
-                <p>
-                  Date registered: <b>{{ artisan?.created_on }}</b>
-                </p>
-                <p>
-                  Last login: <b>{{ artisan?.lastLogin }}</b>
-                </p>
-                <p>
-                  Active: <b>{{ artisan?.isActive }}</b>
-                </p>
-                <div class="active">
-                  <p> Active </p>
-                  <InputSwitch
-                    id="activeBtn"
-                    class="p-ml-10"
-                    v-model="artisan.isActive"
-                  />
-                </div>
-              </div>
-              <!-- <div  class="p-text-left" id="personalDetails">
+              <div  class="p-text-left" id="personalDetails">
                 <p>
                   Name: <b>{{ artisan?.fullName }}</b>
                 </p>
@@ -135,30 +70,10 @@
                   City: <b>{{ artisan?.city }}</b>
                 </p>
               </div>
-              <div  class="p-text-left" id="jobDetails">
-                <p>
-                  Occupation: <b>{{}}</b>
-                </p>
-                <p>
-                  Business email: <b>{{ artisan?.businessEmail }}</b>
-                </p>
-                <p>
-                  Fee Rate: <b>{{ artisan?.feeRate }}</b>
-                </p>
-                <p>
-                  Fee: <b>{{ artisan?.fee }}</b>
-                </p>
-                <p>
-                  Jobs completed: <b>{{ artisan?.jobsCompleted }}</b>
-                </p>
-                <p>
-                  Tools: <b>{{ artisan?.tools }}</b>
-                </p>
-              </div>-->
         </div>
       </TabPanel>
       <TabPanel header="Portfolio">
-        <!-- <div v-for="(portfolio, index) in portfolios" :key="index">
+        <div v-for="(portfolio, index) in portfolios" :key="index">
           <Card style="width: 25em">
             <template #header>
                 <img :src="portfolio.url" style="height: 15rem" />
@@ -170,7 +85,7 @@
               {{ portfolio.description }}
             </template>
           </Card>
-        </div>-->
+        </div>
         <div>
           <Card style="width: 25em">
             <template #header>
@@ -275,7 +190,6 @@ export default class ArtisanCard extends Vue {
   isLoading = false;
   artisans: Artisan[] = [];
   artisan = reactive(new Artisan({})) as Artisan;
-  //artisan!: Artisan;
   datasource: Artisan[] = [];
   totalRecords = 0;
   service: ArtisanService = new ArtisanService();
@@ -336,31 +250,6 @@ export default class ArtisanCard extends Vue {
   widows: 100%;
 }
 #userDetails {
-  display: flex;
-}
-.details1{
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-.jobNumber {
-  font-weight: bold;
-}
-.ratingNumber{
-  color: gold;
-}
-.price {
-  color: green;
-}
-.active {
-  display: flex;
-  /*justify-content: space-around;*/
-}
-.active p {
-  margin-top:5px;
-}
-.rating{
   display: flex;
 }
 #personalDetails{

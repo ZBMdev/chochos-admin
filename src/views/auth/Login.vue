@@ -71,8 +71,9 @@ export default defineComponent({
 
       this.service.login(data)
         .then((loginData) => {
+          window.localStorage.getItem("token");
           window.localStorage.setItem("token", loginData.token);
-          window.localStorage.setItem("user", JSON.stringify(loginData.admin));
+          // window.localStorage.setItem("user", JSON.stringify(loginData.admin));
           
           console.log(loginData)
           console.log(loginData.token)

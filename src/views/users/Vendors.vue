@@ -23,7 +23,7 @@
           :scrollable="true"
           :rowHover="true"
           responsiveLayout="scroll"
-          @row-click="openVendor($event.data)"
+          @row-click="openVendor($event.data.id)"
         >
           <template #header>
             <div class="table-header p-d-flex p-flex-column p-flex-md-row p-jc-md-between">
@@ -432,9 +432,12 @@ export default class Vendors extends Vue {
     this.newVendorDialog = true;
     this.submitted = false;
   }
-  openVendor(vendor: Vendor) {
-    this.vendor = vendor;
-    this.vendorDialog = true;
+  // openVendor(vendor: Vendor) {
+  //   this.vendor = vendor;
+  //   this.vendorDialog = true;
+  // }
+  openVendor(id: number) {
+    this.$router.push({ path: `/vendors/${id}`});
   }
 
   hideDialog() {
