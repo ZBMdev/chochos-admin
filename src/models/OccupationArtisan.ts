@@ -3,7 +3,7 @@ import {  OccupationArtisanData, UserCategoryRecord } from '@/types/occupationAr
 // @ts-ignore
 import { format } from "timeago.js";
 
-export default class Occupation {
+export default class OccupationArtisan {
     fullName!:           string;
     id!:                 number;
     userCategory!:       number;

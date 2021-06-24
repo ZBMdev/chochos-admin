@@ -43,7 +43,7 @@ export default class Job extends Model {
     }
 
     get customerReview() {
-        return `${this.customer.rating}`;
+        return `${this.executor.rating}`;
     }
 
     get amount() {

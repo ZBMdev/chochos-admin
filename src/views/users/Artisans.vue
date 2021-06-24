@@ -33,6 +33,7 @@
                 />
               </div>
               <!-- 
+          @row-click="openArtisan($event.data.id)"
               @row-click="openArtisan($event.data)"
               <span class="p-input-icon-left">
                 <i class="pi pi-search" />
@@ -68,6 +69,18 @@
                 style="background-color:#c8e6c9;color:#256029"
                 shape="circle"
               />
+            </template>
+          </Column>
+          <Column
+            field="userCategoryRecord.occupationNmae"
+            style="min-width: 14rem"
+            headerStyle="min-width: 14rem"
+            header="Job Name"
+            sortable
+            filterMatchMode="contains"
+          >
+            <template #body="slotProps">
+              {{ slotProps.data.jobName }}
             </template>
           </Column>
           <Column

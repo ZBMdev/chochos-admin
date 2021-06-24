@@ -12,7 +12,7 @@
             class="p-d-flex p-jc-center p-ai-center p-pt-4 p-pl-4 p-pr-4 p-pb-0"
           >
             <Avatar
-                v-if="occupation.image === '' || occupation.image === null "
+              v-if="occupation.image === '' || occupation.image === null "
               :label="occupation.name.charAt(0).toUpperCase()"
               class="p-mr-2"
               style="background-color:#c8e6c9;color:#256029;width:8rem;height:8rem;font-size:4rem;"
@@ -53,6 +53,9 @@ import MainLayout from '@/components/layouts/MainLayout.vue';
 import Occupation from '@/models/Occupation';
 import OccupationService from '@/services/OccupationService';
 import { OccupationData } from '@/types/occupation'
+import OccupationArtisan from '@/models/OccupationArtisan';
+import OccupationArtisanService from '@/services/OccupationArtisanService';
+import { OccupationArtisanData } from '@/types/occupationArtisan'
 import BombsightService from '@/services/BombsightService';
 import { useToast } from 'primevue/usetoast';
 import qs from 'qs';
@@ -63,10 +66,13 @@ export default class OccupationCard extends Vue {
 
   isLoading = false;
   occupations: Occupation[] = [];
-  occupation = reactive(new Occupation({})) as Occupation;
+  occupation = reactive(new Occupation({})) as Occupation;  
+  occupationArtisans: OccupationArtisan[] = [];
+  occupationArtisan = reactive(new OccupationArtisan({})) as OccupationArtisan;
   datasource: Occupation[] = [];
   totalRecords = 0;
   service: OccupationService = new OccupationService();
+  artisanservice: OccupationArtisanService = new OccupationArtisanService();
   selectedOccupations: Occupation[] = [];
   filters: Record<string, unknown> = {};
   submitted = false;
@@ -98,6 +104,7 @@ export default class OccupationCard extends Vue {
 
   getData() {
     this.getOccupation();
+    // this.getOccupationArtisan();
   }
 
   getOccupation() {
@@ -112,6 +119,30 @@ export default class OccupationCard extends Vue {
   setOccupation(value: Occupation) {
     this.occupation = reactive(value) as Occupation;
   }
+  // getOccupationArtisan() {
+  //   this.isLoading = true;
+  //   // this.artisanservice.getAllPaginated(this.artisanservice.allOccupations)
+  //   //   .then(data => {
+  //   //     this.occupationArtisans = data.items.map((prod) => new OccupationArtisan(prod));
+  //   //     this.isLoading = false;
+  //   //   })
+  //   this.artisanservice.getOne(+this.$route.params.id)
+  //     .then((occupationData) => {
+  //       this.setOccupationArtisan(new OccupationArtisan(occupationData));
+  //       this.isLoading = false;
+  //     }).catch((e) => {
+  //     this.toast.add({
+  //       severity: "error",
+  //       summary: "There was an error loading artisans",
+  //       detail: "Please check your internet connection and refresh the page"
+  //     })
+  //     console.log(e);
+  //   });
+  // }
+
+  // setOccupationArtisan(value: OccupationArtisan) {
+  //   this.occupationArtisan = reactive(value) as OccupationArtisan;
+  // }
 }
 </script>
 

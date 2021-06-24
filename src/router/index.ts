@@ -54,31 +54,6 @@ const routes: Array<RouteRecordRaw> = [
     ]
   },
 
-
-  /* {
-    path: '/login',
-    name: 'login',
-    component: () => import('../views/auth/Login.vue'),
-    meta: {
-      title: "Sign in",
-    }
-  },
-  {
-    path: '/reset-password/init',
-    name: 'init-reset-password',
-    component: () => import('../views/auth/InitResetPassword.vue'),
-    meta: {
-      title: "Request password reset",
-    }
-  },
-  {
-    path: '/reset-password',
-    name: 'reset-password',
-    component: () => import('../views/auth/ResetPassword.vue'),
-    meta: {
-      title: "Reset",
-    }
-  }, */
   { 
     path: '/',
     component: MainLayout,
@@ -100,22 +75,6 @@ const routes: Array<RouteRecordRaw> = [
               content: 'Summary of all your stores activity.'
             }
           ]
-        }
-      },
-      {
-        path: '/trial',
-        name: 'Trial',
-        component: () => import('../views/users/Trial.vue'),
-        meta: {
-          title: `Trial`,
-        }
-      },
-      {
-        path: '/trial2',
-        name: 'Trial2',
-        component: () => import('../views/users/Trial2.vue'),
-        meta: {
-          title: `Trial2`,
         }
       },
       {
@@ -174,6 +133,14 @@ const routes: Array<RouteRecordRaw> = [
           title: `Occupation Artisans`,
         }
       },
+      // {
+      //   path: '/occupations/:id/artisans',
+      //   name: 'occupation-artisans',
+      //   component: () => import('../components/job/OccCard.vue'),
+      //   meta: {
+      //     title: `Occupation Artisans`,
+      //   }
+      // },
       {
         path: '/categories',
         name: 'Categories',

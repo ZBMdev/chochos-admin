@@ -1,190 +1,186 @@
 <template>
-  <div class="p-fluid">
-    <div class="p-field">
-      <label for="firstName">First Name</label>
-      <InputText
-        id="firstName"
-        v-model.trim="firstName"
-        required="true"
-        autofocus
-        :class="{ 'p-invalid': errors['firstName'] }"
-      />
-      <small class="p-invalid" v-if="errors['firstName']">
-        {{ errors["firstName"] }}
-      </small>
-    </div>
-    <div class="p-field">
-      <label for="lastName">Last Name</label>
-      <InputText
-        id="lastName"
-        v-model.trim="lastName"
-        required="true"
-        autofocus
-        :class="{ 'p-invalid': errors['lastName'] }"
-      />
-      <small class="p-invalid" v-if="errors['lastName']">
-        {{ errors["lastName"] }}
-      </small>
-    </div>
-    <div class="p-field">
-      <label for="email">Email</label>
-      <InputText
-        id="email"
-        v-model.trim="email"
-        required="true"
-        autofocus
-        :class="{ 'p-invalid': errors['email'] }"
-      />
-      <small class="p-invalid" v-if="errors['email']">
-        {{ errors["email"] }}
-      </small>
-    </div>
-    <div class="p-field">
-      <label for="username">Username</label>
-      <InputText
-        id="username"
-        v-model.trim="username"
-        required="true"
-        autofocus
-        :class="{ 'p-invalid': errors['username'] }"
-      />
-      <small class="p-invalid" v-if="errors['username']">
-        {{ errors["username"] }}
-      </small>
-    </div>
-    <div class="p-field">
-      <label for="password">Password</label>
-      <InputText
-        id="password"
-        v-model.trim="password"
-        required="true"
-        autofocus
-        :class="{ 'p-invalid': errors['password'] }"
-      />
-      <small class="p-invalid" v-if="errors['password']">
-        {{ errors["password"] }}
-      </small>
-    </div>
-    
-    <div class="p-d-flex p-field">
-      <LButton
-        icon="pi pi-save"
-        :loading="isSubmitting"
-        :disabled="!!errors.name?.length"
-        @click="onSubmit"
-        label="Save"
-        loadingText="Saving"
-      />
-    </div>
+  <div class="product-edit">
+    <PageHeading
+      :title="`${thereIsAnID ? 'Edit' : 'Create'} Artisan`"
+      subtitle=""
+    />
+    <ProgressSpinner v-if="isLoading" />
+    <form v-else>
+      <div class="p-grid">
+        <div class="p-col-12 p-md-8">
+          <Card class="edit p-mb-4">
+            <template #content>
+              <div class="p-field p-fluid p-mb-4">
+                <label for="name"> Name</label>
+                <InputText
+                  class="p-inputtext-md product-title"
+                  id="name"
+                  type="text"
+                  :required="true"
+                  v-model="artisan.fullName"
+                />
+                <label for="name"> Job</label>
+                <InputText
+                  class="p-inputtext-md product-title"
+                  id="name"
+                  type="text"
+                  :required="true"
+                  v-model="artisan.jobName"
+                />
+              </div>
+            </template>
+              <div class="p-field">
+                <label for="description">Description</label>
+                <Editor
+                  class="p-mb-4"
+                  id="description"
+                  :required="true"
+                  v-model="artisan.email"
+                  editorStyle="height: 220px"
+                >
+                </Editor>
+              </div>
+          </Card>
+
+        </div>
+      </div>
+    </form>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from "vue";
-import { useForm, useField } from "vee-validate";
-import * as yup from "yup";
-import BombsightService from '@/services/BombsightService';
-import ArtisanService from '@/services/ArtisanService';
+import { Options, Vue } from 'vue-class-component';
+import Product from '@/models/Product';
+import SpecificationCard from '@/components/products/SpecificationCard.vue';
 import { useToast } from 'primevue/usetoast';
-import { ArtisanRegisterParams} from '@/types/artisan';
+import ArtisanService from '@/services/ArtisanService';
+import Artisan from '@/models/Artisan';
+import CategoryService from '@/services/CategoryService';
+// import { ProductCreateParam } from '@/types/product';
+import { TreeNode, SelectedCheckbox } from '@/types/category';
+import BombsightService from '@/services/BombsightService';
+import { reactive } from 'vue';
+import { ProductImageUpdateParam } from '@/types/product';
 
-/* eslint-disable */
+@Options<ProductEdit>({
+  components: { SpecificationCard },
+})
+export default class ProductEdit extends Vue {
+  artisan = reactive(new Artisan({})) as Artisan;
+  categories: TreeNode[] = [];
+  selectedCategories: SelectedCheckbox = {};
+  toast = useToast();
+  artisanService: ArtisanService = new ArtisanService();
+  categoryService: CategoryService = new CategoryService();
+  isLoading = false;
+  expandedKeys: Record<number, boolean> = {};
+  deleteProductDialog = false;
+  files!: File[];
+  imageService = new BombsightService();
+  imageLoading = false;
 
-export default defineComponent({
-  props: {
-    artisan: { type: Object, required: true },
-    artisans: { type: Array, required: true },
-  },
-  emits: ["updated", "created"],
-  setup(props, context) {
-    const schema = yup.object({
-      firstName: yup.string().required().label('First Name'),
-      lastName: yup.string().required().label('Last Name'),
-      email: yup.string().required().label('Email'),
-      username: yup.string().required().label('Username'),
-      password: yup.string().label('Password'),
-    });
+  created() {
+    // watch the params of the route to fetch the data again
+    this.$watch(
+      () => this.$route.params,
+      () => {
+        if (this.thereIsAnID) {
+          this.getData();
+        }// else {
+        //   this.getCategories();
+        // }
+      },
+      // fetch the data when the view is created and the data is
+      // already being observed
+      { immediate: true }
+    )
+  }
 
-    const formValues = { ...props.artisan } as Record<keyof ArtisanRegisterParams, any>;
-    const { errors, handleSubmit, setFieldValue } = useForm({ validationSchema: schema, initialValues: formValues });
+  get thereIsAnID() {
+    return !!this.$route.params.id
+  }
 
-    const { value: firstName } = useField<string>("firstName");
-    const { value: lastName } = useField<string>("lastName");
-    const { value: email } = useField<string>("email");
-    const { value: username } = useField<string>("username");
-    const { value: password } = useField<string>("password");
+  getData() {
+    this.getProducts();
+  }
+ 
+  getProducts() {
+    this.isLoading = true;
+    this.artisanService.getOne(+this.$route.params.id)
+      .then((productData) => {
+        this.setProduct(new Artisan(productData));
+        this.isLoading = false;
+      });
+  }
 
-    const toast = useToast();
-    const file = ref<File>();
-    const uploadedImage = ref<string>();
-    const isSubmitting = ref(false);
+  setProduct(value: Artisan) {
+    this.artisan = reactive(value) as Artisan;
+  }
 
-    // eslint-disable-next-line
-    const uploadImage = (event: any) => {
-      file.value = event.files[0];
-      uploadedImage.value = window.URL.createObjectURL(file.value);
+  expandAll() {
+    for (const node of this.categories) {
+      this.expandNode(node);
     }
 
-    const onSubmit = handleSubmit(async (formValues) => {
-      isSubmitting.value = true;
-      const service = new ArtisanService();
-      const imageService = new BombsightService();
-
-      let values = { ...formValues }
-
-      if (file.value) {
-        const formData = new FormData();
-        formData.append('file', file.value, file.value.name);
-        const image = await imageService.upload(formData);
-        // setFieldValue("image_url", image.url, { force: true })
-        values = { ...values }
-      }
-
-      if (props.artisan?.id) {
-        service.put(props.artisan?.id, values)
-          .then((artisan) => {
-            context.emit("updated", artisan);
-            toast.add({ severity: "success", summary: "Successfull!", detail: "Category updated", life: 3000 });
-          })
-          .finally(() => {
-            isSubmitting.value = false;
-            if (uploadedImage.value) {
-              window.URL.revokeObjectURL(uploadedImage.value);
-              uploadedImage.value = undefined;
-            }
-          });
-      } else {
-        service.create(values)
-          .then((newArtisan) => {
-            context.emit("created", newArtisan);
-            toast.add({ severity: "success", summary: "Successful !!", detail: "Artisan created", life: 3000 });
-          })
-          .finally(() => {
-            isSubmitting.value = false;
-            if (uploadedImage.value) {
-              window.URL.revokeObjectURL(uploadedImage.value);
-              uploadedImage.value = undefined;
-            }
-          })
-      }
-
-    })
-
-    return {
-      uploadedImage,
-      uploadImage,
-      isSubmitting,
-      onSubmit,
-      errors,
-      firstName,
-      lastName,
-      email,
-      password,
-      username
-    };
+    this.expandedKeys = { ...this.expandedKeys };
   }
-});
+
+  expandNode(node: TreeNode) {
+    this.expandedKeys[node.key] = true;
+    if (node.children && node.children.length) {
+      for (const child of node.children) {
+        this.expandNode(child);
+      }
+    }
+  }
+}
 </script>
 
-<style lang="scss" scoped>
+<style>
+.p-accordion .p-accordion-header .p-accordion-header-link {
+  padding: 0.5rem !important;
+}
+@media (min-width: 768px) {
+  .p-md-4 {
+    padding: 0.5rem !important;
+  }
+}
+
+.product-images .product-image .image-delete button:hover {
+  color: #db1b1b;
+}
+.product-images .product-image .image-delete button {
+  color: white;
+  font-weight: 700;
+  float: right;
+}
+.product-images .product-image .image-delete {
+  display: none;
+  position: absolute;
+  inset: 0;
+  background: #0000007b;
+}
+
+.product-images .product-image:hover .image-delete {
+  display: block;
+}
+
+.product-images .product-image img {
+  height: 100%;
+  object-fit: cover;
+}
+.product-images .product-image {
+  position: relative;
+  height: 8rem;
+  width: 100%;
+}
+.image-loading {
+  display: flex;
+  z-index: 2;
+  inset: 0;
+  position: absolute;
+  background: rgba(0, 0, 0, 0.45);
+  justify-content: center;
+  align-items: center;
+}
 </style>

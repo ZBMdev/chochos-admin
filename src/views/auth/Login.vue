@@ -77,8 +77,8 @@ export default defineComponent({
           console.log(loginData)
           console.log(loginData.token)
           // redirect to previous link
-          // const redirectTo = this.$route.query.redirect as string || '/';
-          // this.$router.push(redirectTo);
+          const redirectTo = this.$route.query.redirect as string || '/';
+          this.$router.push(redirectTo);
           // window.location.href = redirectTo;
         })
         .finally(() => {
