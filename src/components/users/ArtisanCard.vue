@@ -51,7 +51,8 @@
                     :readonly="true"
                     :cancel="false"
                     :stars="5"
-                    class="ratingNumber"
+                    class="p-rating"
+                    :style="{color: gold}"
                   />
                 </div>
                 <div class="price">
@@ -414,10 +415,8 @@ export default class ArtisanCard extends Vue {
 .rating p{
   text-align: left;
 }
-.ratingNumber{
-  color: gold;
-  /*float: right;
-  align-items: flex-end; */
+.p-rating{
+   color: gold;
 }
 .price{
   display: flex;

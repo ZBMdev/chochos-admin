@@ -40,7 +40,7 @@
           <template #loading>
             Loading users data. Please wait.
           </template>
-          <Column
+          <!--<Column
             field="user_id"
             style="min-width: 12rem"
             header="User ID"
@@ -61,7 +61,7 @@
             <template #body="slotProps">
               {{ slotProps.data.occupation }}
             </template>
-          </Column>
+          </Column>-->
           <Column
             field="userCategory"
             style="min-width: 12rem"

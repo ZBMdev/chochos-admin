@@ -218,7 +218,7 @@ export default class ProductList extends Vue {
         this.products = data.items.map((prod) => new Product(prod));
         this.totalRecords = data.totalCount;
         this.firstRecordIndex = data.page > 1 ? data.pageSize * data.page - 1 : 0;
-        this.rowstoDisplay = data.pageSize;
+        // this.rowstoDisplay = data.pageSize;
         this.loading = false;
         this.generalLoading = false;
       }).catch((e) => {

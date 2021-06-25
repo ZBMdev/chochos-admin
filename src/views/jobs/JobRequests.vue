@@ -7,6 +7,23 @@
     <Card v-else>
       <template #content>
         <DataTable
+          class="p-datatable-responsive p-datatable-sm"
+          :value="jobRequests"
+          v-model:selection="selectedJobRequests"
+          dataKey="id"
+          :rows="10"
+          v-model:filters="filters"
+          filterDisplay="row" 
+          :globalFilterFields="['executorName', 'customerName', 'productsAmount', 'status']"
+          :paginator="true"
+          paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
+          :rowsPerPageOptions="[10,20, 50, 100, 200]"
+          currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
+          :scrollable="true"
+          :rowHover="true"
+          responsiveLayout="scroll"
+        >
+        <!-- <DataTable
           dataKey="id"
           class="p-datatable-responsive p-datatable-sm"
           :value="jobRequests"
@@ -24,7 +41,7 @@
           responsiveLayout="scroll"
           :scrollable="true"
           :rowHover="true"
-        >
+        >-->
           <template #header>
             <div class="table-header p-d-flex">
               <!--<span class="p-input-icon-left">
@@ -45,6 +62,7 @@
           <Column
             field="customerName"
             headerStyle="width: 250px"
+            style="width: 250px"
             header="Customer"
             :sortable="true"
             filterMode="contains"
@@ -56,6 +74,7 @@
           <Column
             field="executorName"
             headerStyle="width: 250px"
+            style="width: 250px"
             header="Executor"
             :sortable="true"
             filterMode="contains"
@@ -64,10 +83,32 @@
               {{ slotProps.data.executorName }}
             </template>
           </Column>
+           <Column
+            ref="quantity"
+            header="Products"
+            style="width: 250px"
+          >
+            <template #body="slotProps">
+              <span class="p-column-title"> Products </span>
+              {{ slotProps.data.productsName}}
+            </template>
+          </Column> 
+          <Column
+            ref="quantity"
+            field="billOfQuantities.quantity"
+            header="Quantity"
+            style="width: 100px"
+          >
+            <template #body="slotProps">
+              <span class="p-column-title">Quantity</span>
+              {{ slotProps.data.productQuantity}}
+            </template>
+          </Column> 
           <Column
             ref="totalAmount"
             field="totalAmount"
             header="Amount"
+            style="width: 250px"
             filterField="price"
             filterMatchMode="contains"
           >
@@ -77,19 +118,10 @@
             </template>
           </Column>
           <Column
-            ref="quantity"
-            field="billOfQuantities.quantity"
-            header="Quantity"
-          >
-            <template #body="slotProps">
-              <span class="p-column-title">Quantity</span>
-              {{ slotProps.data.billOfQuantities.quantity}}
-            </template>
-          </Column> 
-          <Column
             ref="date"
             field="date"
             header="Start Date"
+            style="width: 250px"
             filterField="date"
             filterMatchMode="contains"
           >
@@ -102,6 +134,7 @@
             ref="status"
             field="status"
             header="Job Status"
+            style="width: 250px"
             filterField="status"
             filterMatchMode="contains"
           >
@@ -126,7 +159,7 @@
             <template #body="slotProps">
               <span class="p-column-title">Job Reviews</span>
               <Rating
-                :modelValue="slotProps.data.customerReview"
+                :modelValue="slotProps.data.executorReview"
                 :readonly="true"
                 :cancel="false"
               />
@@ -218,6 +251,7 @@ export default class ProductList extends Vue {
 </script>
 
 <style scoped>
+/*
 .table-header {
   display: flex;
   align-items: center;
@@ -288,7 +322,7 @@ export default class ProductList extends Vue {
 }
 .product-badge.status-Approved {
   background: #feedaf;
-  /* color: #e1f061; */
+  hash  color: #e1f061;
   color: #443602
 }
 .product-badge.status-Declined {
@@ -306,6 +340,6 @@ export default class ProductList extends Vue {
 .product-badge.status-RejectBill {
   background: #ffe1cd;
   color: #ff8c00;
-}
+}*/
 </style>
 
