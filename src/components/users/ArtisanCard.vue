@@ -51,8 +51,7 @@
                     :readonly="true"
                     :cancel="false"
                     :stars="5"
-                    class="p-rating"
-                    :style="{color: gold}"
+                    class="ratingNumber"
                   />
                 </div>
                 <div class="price">
@@ -76,12 +75,14 @@
                     <p class="block"> Inactive </p>
                   </div>
                 </div>
-                <p>
-                  Date registered: <b>{{ artisan?.created_on }}</b>
-                </p>
-                <p>
-                  Last login: <b>{{ artisan?.lastLogin }}</b>
-                </p>
+                <div class="dates">
+                  <p>
+                    Date registered: <b>{{ artisan?.created_on }}</b>
+                  </p>
+                  <p>
+                    Last login: <b>{{ artisan?.lastLogin }}</b>
+                  </p>
+                </div>
               </div>  
         </div>
       </TabPanel>
@@ -415,8 +416,10 @@ export default class ArtisanCard extends Vue {
 .rating p{
   text-align: left;
 }
-.p-rating{
-   color: gold;
+.ratingNumber{
+  color: gold;
+  /*float: right;
+  align-items: flex-end; */
 }
 .price{
   display: flex;
@@ -444,6 +447,12 @@ export default class ArtisanCard extends Vue {
 .block{
   color: black;
 }
+
+.details3 .dates p{
+  display: flex;
+  justify-content: space-between;
+}
+
 
 .portfolios {
   display: flex;

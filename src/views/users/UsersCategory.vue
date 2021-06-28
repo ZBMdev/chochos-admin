@@ -98,12 +98,16 @@
             :sortable="true"
             filterMode="contains"
           >
-            <template #body="slotProps">
+            <!--<template #body="slotProps">
               {{ slotProps.data.about }}
-              <!--<span
+              <span
                 v-html="`${ slotProps.data.about.substr(0, 20)}...`"
               >
-              </span>-->
+              </span>
+            </template>-->
+            <template #body="slotProps">
+              <span v-if="slotProps.data.about != null" v-html="`${slotProps.data.about?.substr(0, 20)}...`"
+              ></span>
             </template>
           </Column>
           <Column

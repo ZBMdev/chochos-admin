@@ -6,7 +6,7 @@
     <ProgressSpinner style="display:flex; justify-content: center" v-if="isLoading" />
     <Card v-else>
       <template #content>
-        <DataTable
+        <!--<DataTable
           class="p-datatable-responsive p-datatable-sm"
           :value="jobRequests"
           v-model:selection="selectedJobRequests"
@@ -22,8 +22,8 @@
           :scrollable="true"
           :rowHover="true"
           responsiveLayout="scroll"
-        >
-        <!-- <DataTable
+        >-->
+        <DataTable
           dataKey="id"
           class="p-datatable-responsive p-datatable-sm"
           :value="jobRequests"
@@ -41,16 +41,16 @@
           responsiveLayout="scroll"
           :scrollable="true"
           :rowHover="true"
-        >-->
+        >
           <template #header>
             <div class="table-header p-d-flex">
-              <!--<span class="p-input-icon-left">
+              <span class="p-input-icon-left">
                 <i class="pi pi-search" />
                 <InputText
                   v-model="filters['global'].value"
                   placeholder="Search..."
                 />
-              </span>-->
+              </span>
             </div>
           </template>
           <template #empty>
@@ -61,8 +61,8 @@
           </template>
           <Column
             field="customerName"
-            headerStyle="width: 250px"
-            style="width: 250px"
+            headerStyle="min-width: 14rem"
+            style="min-width: 14rem"
             header="Customer"
             :sortable="true"
             filterMode="contains"
@@ -73,8 +73,8 @@
           </Column>
           <Column
             field="executorName"
-            headerStyle="width: 250px"
-            style="width: 250px"
+            headerStyle="min-width: 14rem"
+            style="min-width: 14rem"
             header="Executor"
             :sortable="true"
             filterMode="contains"
@@ -86,18 +86,18 @@
            <Column
             ref="quantity"
             header="Products"
-            style="width: 250px"
+            style="min-width: 14rem"
           >
             <template #body="slotProps">
-              <span class="p-column-title"> Products </span>
-              {{ slotProps.data.productsName}}
+              <span v-if="slotProps.data.productsName != null" v-html="`${slotProps.data.productsName?.substr(0, 15)}...`"
+              ></span>
             </template>
           </Column> 
           <Column
             ref="quantity"
             field="billOfQuantities.quantity"
             header="Quantity"
-            style="width: 100px"
+            style="min-width: 14rem"
           >
             <template #body="slotProps">
               <span class="p-column-title">Quantity</span>
@@ -108,7 +108,7 @@
             ref="totalAmount"
             field="totalAmount"
             header="Amount"
-            style="width: 250px"
+            style="min-width: 14rem"
             filterField="price"
             filterMatchMode="contains"
           >
@@ -121,7 +121,7 @@
             ref="date"
             field="date"
             header="Start Date"
-            style="width: 250px"
+            style="min-width: 14rem"
             filterField="date"
             filterMatchMode="contains"
           >
@@ -134,7 +134,7 @@
             ref="status"
             field="status"
             header="Job Status"
-            style="width: 250px"
+            style="min-width: 14rem"
             filterField="status"
             filterMatchMode="contains"
           >
@@ -178,8 +178,7 @@ import JobRequest from '@/models/JobRequest'
 import Rating from 'primevue/rating';
 import JobRequestService from '@/services/JobRequestService';
 import { JobRequestData } from '@/types/jobRequest';
-// import {FilterMatchMode} from 'primevue/api';
-// import { FilterMatchMode } from 'primevue/api'
+import {FilterMatchMode} from 'primevue/api';
 
 import qs from 'qs';
 
@@ -199,13 +198,13 @@ export default class ProductList extends Vue {
   generalLoading = false;
   totalRecords = 0;
   service: JobRequestService = new JobRequestService();
-  // filters = {
-  //   'global': {value: null, matchMode: FilterMatchMode.CONTAINS},
-  //   'name': {value: null, matchMode: FilterMatchMode.STARTS_WITH}
-  // };
-  // matchModeOptions =  [
-  //   {label: 'Starts With', value: FilterMatchMode.STARTS_WITH}
-  // ]
+  filters = {
+    'global': {value: null, matchMode: FilterMatchMode.CONTAINS},
+    'name': {value: null, matchMode: FilterMatchMode.STARTS_WITH}
+  };
+  matchModeOptions =  [
+    {label: 'Starts With', value: FilterMatchMode.STARTS_WITH}
+  ]
   lazyParams: Partial<JobLazyParameters> = {};
   firstRecordIndex = 0;
   rowstoDisplay = 10;
@@ -251,7 +250,7 @@ export default class ProductList extends Vue {
 </script>
 
 <style scoped>
-/*
+
 .table-header {
   display: flex;
   align-items: center;
@@ -322,7 +321,7 @@ export default class ProductList extends Vue {
 }
 .product-badge.status-Approved {
   background: #feedaf;
-  hash  color: #e1f061;
+  /* color: #e1f061; */
   color: #443602
 }
 .product-badge.status-Declined {
@@ -340,6 +339,6 @@ export default class ProductList extends Vue {
 .product-badge.status-RejectBill {
   background: #ffe1cd;
   color: #ff8c00;
-}*/
+}
 </style>
 
