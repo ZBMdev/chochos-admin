@@ -1,5 +1,5 @@
 /* eslint-disable */
-import { OccupationArtisanData, UserCategoryRecord} from "@/types/occupationArtisan";
+import { OccupationArtisan, OccupationArtisanData, UserCategoryRecord} from "@/types/occupationArtisan";
 import Service from "./Service";
 import { APIResponse, APIResponse2 } from '@/types/api'
 import { API } from '@/utils/api'
@@ -16,7 +16,7 @@ export default class OccupationsService extends Service<OccupationArtisanData, U
 
     public occupationArtisans(id: number,  query?: string) {
         return API.get(`${this.url}/${id}/artisans${query ? '?' + query : ''}`)
-            .then(({ data }: AxiosResponse<APIResponse2<OccupationArtisanData>>) => {
+            .then(({ data }: AxiosResponse<APIResponse2<OccupationArtisan>>) => {
                 return data.data;
             }).catch((error) => {
                 console.error("Service.ts >>>>>", error.message, error)

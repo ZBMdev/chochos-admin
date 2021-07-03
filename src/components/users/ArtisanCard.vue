@@ -2,7 +2,7 @@
   <PageHeading :title="`${artisan.fullName}'s Profile`"  style="display:flex; justify-content: center; margin-bottom: 30px" />
   <ProgressSpinner style="display:flex; justify-content: center" v-if="loading" />
   <div v-else>
-    <TabView :value="artisan">
+    <TabView :value="allArtisans">
       <TabPanel header="About">
         <div class="userCard">
               <div
@@ -29,14 +29,14 @@
                 />
                 
               </div>
-              <div class="details1">
+              <div class="details1" >
                 <h3> {{ artisan.fullName }} </h3>
-                <!--<jobName>
+                <jobName>
                   <template #body="slotProps">
                     {{ slotProps.data.userCategoryRecord.occupationName }}
                   </template>
-                </jobName>-->
-                <h4> {{  }} Electrician </h4>
+                </jobName>
+                <h4> {{ allArtisan.jobName }} Electrician </h4>
                 <span> <i class="pi pi-map-marker"></i> <p> {{ artisan.address }} </p> </span>
               </div>
               <div class="details2">
@@ -317,6 +317,8 @@ export default class ArtisanCard extends Vue {
   isLoading = false;
   artisans: Artisan[] = [];
   artisan = reactive(new Artisan({})) as Artisan;
+  allArtisans: Artisan[] = [];
+  allArtisan = reactive(new Artisan({})) as Artisan;
   //artisan!: Artisan;
   datasource: Artisan[] = [];
   totalRecords = 0;
@@ -352,6 +354,7 @@ export default class ArtisanCard extends Vue {
 
   getData() {
     this.getArtisan();
+    this.getAllArtisans();
   }
 
   getArtisan() {
@@ -365,6 +368,17 @@ export default class ArtisanCard extends Vue {
 
   setArtisan(value: Artisan) {
     this.artisan = reactive(value) as Artisan;
+  }
+
+  getAllArtisans() {
+    this.service.getAllPaginated(this.service.allArtisans)
+      .then(data => {
+        this.allArtisans = data.items.map((prod) => new Artisan(prod));
+        this.isLoading = false;
+      }).catch((e) => {
+      this.toast.add({ severity: "error", summary: "There was an error fetching the artisans", detail: "Please check your internet connection and refresh the page" })
+      console.log(e);
+    });
   }
 }
 </script>
