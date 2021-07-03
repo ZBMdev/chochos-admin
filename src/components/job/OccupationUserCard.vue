@@ -18,6 +18,7 @@
           
             <div
               class="p-d-flex p-jc-center p-ai-center p-pt-4 p-pl-4 p-pr-4 p-pb-0"
+              id="avatar"
             >
               <Avatar
                 v-if="user.photoUrl === '' || user.photoUrl === null "
@@ -33,34 +34,45 @@
               />
             </div>
           
-            <div class="p-text-left">
-              <p>
-                Name: <b>{{ user?.fullName }}</b>
+            <div class="p-text-left" id="demoDetail">
+              <h3 class="name">
+                <b>{{ user?.fullName }}</b>
+              </h3>
+              <p class="email">
+                {{ user?.email }}
               </p>
-              <p>
-                Username: <b>{{ user?.username }}</b>
+              <p class="mobile">
+                {{ user?.mobile }}
               </p>
-              <p>
-                Email: <b>{{ user?.email }}</b>
-              </p>
-              <p>
-                Mobile: <b>{{ user?.mobile }}</b>
-              </p>
-              <p>
-                Address: <b>{{ user?.address }}</b>
-              </p>
-              <p>
-                About: <b>{{ user?.about }}</b>
-              </p>
-              <p>
-                Job: <b>{{ user?.userCategoryRecord.occupationName }}</b>
-              </p>
-              <p>
-                Rating: <b>{{ user?.rating }}</b>
-              </p>
-              <p>
-                Last login: <b>{{ user?.last_login }}</b>
-              </p>
+              <span> <i class="pi pi-map-marker"></i> <p> {{ user?.address }} </p> </span>
+            </div>
+            <div class="jobDetail">
+              <div class="jobs">
+                <p> Jobs completed </p>
+                <p class="jobNumber"> {{ user.userCategoryRecord.jobsCompleted }}  </p>
+              </div>
+              <div class="rating">
+                <p> Average rating </p>
+                <Rating
+                  :modelValue="user.rating"
+                  :readonly="true"
+                  :cancel="false"
+                  :stars="5"
+                  class="ratingNumber"
+                />
+              </div>
+              <div class="price">
+                <p> Average price </p>
+                <h4> {{ formatCurrency(user.userCategoryRecord.fee) }} </h4>
+              </div>
+            </div>
+            <div class="p-text-left" id="jobDetail">
+              <div class="about">
+                <p> <b>About </b> </p>
+                <p class="about-text">
+                  {{ user?.userCategoryRecord.about }}
+                </p>
+              </div>
             </div>
             <div class="portfolio">
               <!-- <div v-if="user.portfolios === null">
@@ -70,9 +82,12 @@
                 <p> No portfolio available </p>
               </div>
               <div v-else>
-                <div v-for="port in user.portfolios" :key="port">
-                  <img :src="port.url" alt="" style="height:250px">
-                  <h3> {{ port.name }} </h3>
+                <div v-for="port in user.portfolios" :key="port"  class="singlePortfolio">
+                  <h3>Portfolio</h3>
+                  <div class="portImg">
+                    <img :src="port.url" alt="">
+                  </div>
+                  <h4> {{ port.name }} </h4>
                   <p> {{ port.description }} </p>
                 </div>
               </div>
@@ -153,6 +168,10 @@ export default class OccupationCard extends Vue {
     this.getPortfolio();
   }
 
+  formatCurrency(value: number) {
+    return value.toLocaleString('en-NG', { style: 'currency', currency: 'NGN' });
+  }
+
   getOccupation() {
     this.isLoading = true;
     this.service.getOne(+this.$route.params.id)
@@ -218,6 +237,7 @@ export default class OccupationCard extends Vue {
   display: flex;
   justify-content: center;
   flex-wrap: nowrap;
+  padding-top: 80px;
 }
 #userCard{
   display: grid;
@@ -234,5 +254,105 @@ export default class OccupationCard extends Vue {
   display: flex;
   justify-content: center;
   margin-top: 100px;
+}
+#avatar{
+  margin-top: -95px;
+}
+#demoDetail{
+  display: grid;
+  justify-content: center;
+  text-align: center;
+}
+.name{
+  display: flex;
+  justify-content: center;
+}
+.email{
+  display: flex;
+  justify-content: center;
+  margin-top: -5px;
+  font-weight: 500;
+}
+.mobile{
+  display: flex;
+  justify-content: center;
+  margin-top: -5px;
+  font-size: 14px;
+}
+#demoDetail span{
+  display: flex;
+  font-size: 12px;
+}
+#demoDetail span i {
+  margin-right: 10px;
+}
+#demoDetail span p {
+  margin-top: 0;
+}
+.jobDetail {
+  padding: 10px;
+}
+.jobs{
+  display: flex;
+  justify-content: space-between;
+  text-align: left;
+}
+.jobs p{
+  text-align: left;
+}
+.jobNumber {
+  font-weight: bold;
+  text-align: right;
+}
+.rating{
+  display: flex;
+  justify-content: space-between;
+}
+.rating p{
+  text-align: left;
+}
+.ratingNumber{
+  color: gold;
+  margin-top: 15px;
+  /*float: right;
+  align-items: flex-end; */
+}
+.price{
+  display: flex;
+  justify-content: space-between;
+}
+.price h4{
+  color: green;
+}
+.about {
+  display: grid;
+  padding: 10px;
+}
+.about-text {
+  background: rgb(209, 202, 209);
+  color: rgb(100, 87, 100);
+  padding: 10px;
+  border-radius: 5px;
+  margin-top: -5px;
+}
+.portfolio{
+  width: 95%;
+  margin: auto;
+}
+.singlePortfolio{
+  background: white;
+  border-radius: 10px;
+}
+.portImg{
+  width: 100%;
+  height: 200px;
+}
+.singlePortfolio img {
+  width: 100%;
+  height: 100%;
+  border-radius: 10px 10px 0 0;
+}
+.singlePortfolio p{
+  text-align: left;
 }
 </style>
