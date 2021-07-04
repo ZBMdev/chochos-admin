@@ -393,6 +393,10 @@ export default class AllJobs extends Vue {
   font-size: 12px;
   letter-spacing: 0.3px;
 }
+label {
+  font-weight: bold;
+  font-size: 14px;
+}
 #details {
   display: flex;
   justify-content: space-between;
