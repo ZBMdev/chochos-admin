@@ -28,15 +28,14 @@
         >
           <template #header>
             <!-- <div class="table-header"> -->
-            <div class="p-mb-4">  
-              Products
-              <!--<span class="p-input-icon-left">
+            <div class="p-mb-4"> 
+              <span class="p-input-icon-left">
                 <i class="pi pi-search" />
                 <InputText
                   v-model="filters['global'].value"
                   placeholder="Search products"
                 />
-              </span> -->
+              </span>
             </div>
           </template>
           <template #empty>
@@ -149,7 +148,7 @@ import Product from '@/models/Product'
 import ProductService from '@/services/ProductService';
 import { ProductData, StockStatus } from '@/types/product';
 import { useToast } from 'primevue/usetoast';
-// import {FilterMatchMode} from 'primevue/api';
+import {FilterMatchMode} from 'primevue/api';
 import qs from 'qs';
 
 interface ProductLazyParameters {
@@ -178,13 +177,13 @@ export default class ProductList extends Vue {
   firstRecordIndex = 0;
   rowstoDisplay = 10;
   toast = useToast();
-  // filters = {
-  //   'global': {value: null, matchMode: FilterMatchMode.CONTAINS},
-  //   'name': {value: null, matchMode: FilterMatchMode.STARTS_WITH}
-  // };
-  // matchModeOptions =  [
-  //   {label: 'Starts With', value: FilterMatchMode.STARTS_WITH}
-  // ]
+  filters = {
+    'global': {value: null, matchMode: FilterMatchMode.CONTAINS},
+    'name': {value: null, matchMode: FilterMatchMode.STARTS_WITH}
+  };
+  matchModeOptions =  [
+    {label: 'Starts With', value: FilterMatchMode.STARTS_WITH}
+  ]
 
   created() {
     // watch the params of the route to fetch the data again
@@ -203,7 +202,7 @@ export default class ProductList extends Vue {
     this.generalLoading = true
     this.loading = true;
     // this.lazyParams = { first: 0, page: 1, limit: this.rowstoDisplay }
-    this.lazyParams = {  page: 1, limit: this.rowstoDisplay }
+    // this.lazyParams = {  page: 1, limit: this.rowstoDisplay }
     this.loadLazyData();
   }
 
@@ -221,6 +220,9 @@ export default class ProductList extends Vue {
         // this.rowstoDisplay = data.pageSize;
         this.loading = false;
         this.generalLoading = false;
+        console.log(this.products);
+        console.log(this.products.length)
+        console.log(data)
       }).catch((e) => {
       this.toast.add({ severity: "error", summary: "There was an error fetching the all products", detail: "Please check your internet connection and refresh the page" })
       console.log(e);

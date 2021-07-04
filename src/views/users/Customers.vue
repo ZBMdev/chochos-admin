@@ -25,10 +25,10 @@
           :rowHover="true"
           :totalRecords="totalRecords"
           :first="firstRecordIndex"
-          @row-click="openCustomer($event.data)"
+          @row-click="openCustomer($event.data.id)"
         >
           <template #header>
-            <!--<div class="table-header p-d-flex">
+            <div class="table-header p-d-flex">
               <span class="p-input-icon-left">
                 <i class="pi pi-search" />
                 <InputText
@@ -36,7 +36,7 @@
                   placeholder="Search..."
                 />
               </span>
-            </div>-->
+            </div>
           </template>
           <template #empty>
             No customer found.
@@ -216,7 +216,7 @@ import MainLayout from '@/components/layouts/MainLayout.vue';
 import Customer from '@/models/Customer';
 import CustomerService from '@/services/CustomerService';
 import { useToast } from 'primevue/usetoast';
-// import {FilterMatchMode} from 'primevue/api';
+import {FilterMatchMode} from 'primevue/api';
 import qs from 'qs';
 // import { toast } from '@/utils/helper';
 
@@ -239,13 +239,13 @@ export default class CustomerList extends Vue {
   datasource: Customer[] = [];
   service: CustomerService = new CustomerService();
   selectedCustomers: Customer[] = [];
-  // filters = {
-  //   'global': {value: null, matchMode: FilterMatchMode.CONTAINS},
-  //   'name': {value: null, matchMode: FilterMatchMode.STARTS_WITH}
-  // };
-  // matchModeOptions =  [
-  //   {label: 'Starts With', value: FilterMatchMode.STARTS_WITH}
-  // ]
+  filters = {
+    'global': {value: null, matchMode: FilterMatchMode.CONTAINS},
+    'name': {value: null, matchMode: FilterMatchMode.STARTS_WITH}
+  };
+  matchModeOptions =  [
+    {label: 'Starts With', value: FilterMatchMode.STARTS_WITH}
+  ]
   customerDialog = false;
   submitted = false;
   toast = useToast();
@@ -287,9 +287,13 @@ export default class CustomerList extends Vue {
     });
   }
   
-  openCustomer(customer: Customer) {
-    this.customer = customer;
-    this.customerDialog = true;
+  // openCustomer(customer: Customer) {
+  //   this.customer = customer;
+  //   this.customerDialog = true;
+  // }
+
+  openCustomer(id: number) {
+    this.$router.push({ path: `/customers/${id}`});
   }
 }
 </script>

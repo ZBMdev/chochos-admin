@@ -109,14 +109,14 @@ const routes: Array<RouteRecordRaw> = [
           title: `Occupations`,
         }
       },
-      {
-        path: '/occupations/:id',
-        name: 'occupation-details',
-        component: () => import('../components/job/OccupationCard.vue'),
-        meta: {
-          title: `Occupation Details`,
-        }
-      },
+      // {
+      //   path: '/occupations/:id',
+      //   name: 'occupation-details',
+      //   component: () => import('../components/job/OccupationCard.vue'),
+      //   meta: {
+      //     title: `Occupation Details`,
+      //   }
+      // },
       {
         path: '/occupations/:id/artisans',
         name: 'occupation-artisans',
@@ -169,6 +169,14 @@ const routes: Array<RouteRecordRaw> = [
         path: '/job-requests',
         name: 'jobRequests',
         component: () => import('../views/jobs/JobRequests.vue'),
+        meta: {
+          title: `Job Requests`,
+        }
+      },
+      {
+        path: '/job-requests/:id',
+        name: 'jobRequests_id',
+        component: () => import('../components/job/JobRequestCard.vue'),
         meta: {
           title: `Job Requests`,
         }

@@ -6,23 +6,6 @@
     <ProgressSpinner style="display:flex; justify-content: center" v-if="isLoading" />
     <Card v-else>
       <template #content>
-        <!--<DataTable
-          class="p-datatable-responsive p-datatable-sm"
-          :value="jobRequests"
-          v-model:selection="selectedJobRequests"
-          dataKey="id"
-          :rows="10"
-          v-model:filters="filters"
-          filterDisplay="row" 
-          :globalFilterFields="['executorName', 'customerName', 'productsAmount', 'status']"
-          :paginator="true"
-          paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
-          :rowsPerPageOptions="[10,20, 50, 100, 200]"
-          currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
-          :scrollable="true"
-          :rowHover="true"
-          responsiveLayout="scroll"
-        >-->
         <DataTable
           dataKey="id"
           class="p-datatable-responsive p-datatable-sm"
@@ -41,6 +24,7 @@
           responsiveLayout="scroll"
           :scrollable="true"
           :rowHover="true"
+          @row-click="openRequest($event.data.id)"
         >
           <template #header>
             <div class="table-header p-d-flex">
@@ -244,6 +228,10 @@ export default class ProductList extends Vue {
         this.isLoading = false;
         this.generalLoading = false;
       });
+  }
+
+  openRequest(id: number) {
+    this.$router.push({ path: `/jobRequests/${id}`});
   }
 
 }

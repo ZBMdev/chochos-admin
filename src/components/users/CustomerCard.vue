@@ -2,82 +2,76 @@
   <PageHeading :title="`${customer.fullName}'s Profile`" style="display:flex; justify-content: center; margin-bottom: 30px" />
   <ProgressSpinner style="display:flex; justify-content: center" v-if="loading" />
   <div v-else class="p-d-flex p-jc-center p-ai-center">
-    <div class="p-col-12 p-md-6">
+    <div class="p-col-12 p-md-6" id="hero">
       <Card
-        class="p-text-center"
+        class="p-card"
         :value="customer"
       >
         <template #header>
           <div
             class="p-d-flex p-jc-center p-ai-center p-pt-4 p-pl-4 p-pr-4 p-pb-0"
           >
-            <!--<img 
-              v-if="customer.photoUrl !== '' || customer.photoUrl !== null " 
-                :src="customer.photoUrl"
-                :alt="customer.photoUrl"
-                style="width:8rem;height:8rem;font-size:4rem; border-radius: 50%;"
-            />
             <Avatar 
-                v-else-if="customer.fullName !== '' || customer.fullName !== null "
-                :label="customer.fullName.charAt(0).toUpperCase()"
-                class="p-mr-2"
-                style="background-color:#c8e6c9;color:#256029;width:8rem;height:8rem;font-size:4rem;"
-                shape="circle"
-            />
-            <Avatar
-                v-else 
-                icon="pi pi-user"
-                class="p-mr-2"
-                style="background-color:#c8e6c9;color:#256029;width:8rem;height:8rem;font-size:4rem;"
-                shape="circle"
-            />-->
-             <Avatar 
               v-if="customer.photoUrl === '' || customer.photoUrl === null || customer.photoUrl === 'string' " 
               :label="customer.fullName.charAt(0).toUpperCase()"
               class="p-mr-2"
-              style="background-color:#c8e6c9;color:#256029;width:8rem;height:8rem;font-size:4rem;"
+              id="avatar"
               shape="circle"
             />
             <img
               v-else-if="customer.fullName" 
               :src="customer.photoUrl"
               :alt="customer.photoUrl"
-              style="width:8rem; height:8rem; font-size:4rem; border-radius: 50%;"
+              id="avatar"
             />
             <Avatar
               v-else
               icon="pi pi-user"
               class="p-mr-2"
-              style="background-color:#c8e6c9;color:#256029;width:8rem;height:8rem;font-size:4rem;"
+              id="avatar"
               shape="circle"
             />
           </div>
         </template>
-        <template #body="slotProps">
-            <span v-bind="fullName">
-                 {{ customer.fullName}}
-            </span>
-            <p>
-              Full Name: <b>{{ slotProps.data.fullName }}</b> 
-            </p>
-        </template>
         <template #content>
-          <div class="p-text-left">
-            <p>
-              Name: <b>{{ customer?.fullName }}</b>
+          <div class="p-text-left" id="details">
+            <h3 class="name">
+              {{ customer?.fullName }}
+            </h3>
+            <p class="email">
+              {{ customer?.email }}
             </p>
-            <p>
-              Username: <b>{{ "@" + customer?.username }}</b>
+            <p class="mobile">
+              {{ customer?.mobile }}
             </p>
-            <p>
-              Email: <b>{{ customer?.email }}</b>
-            </p>
-            <p>
-              Products: <b>{{ customer?.about }}</b>
-            </p>
-            <p>
-              Address: <b>{{ customer?.address }}</b>
-            </p>
+            <span> <i class="pi pi-map-marker"></i> <p> {{ customer?.address }} </p> </span>
+          </div>
+          <div class="details2">      
+            <div class="rating">
+              <p> Average rating </p>
+              <Rating
+                :modelValue="customer.rating"
+                :readonly="true"
+                :cancel="false"
+                :stars="5"
+                class="ratingNumber"
+              />
+            </div>
+            <div class="status">
+              <p> Status: </p>
+              <div v-if="customer.isActive === true">
+                <p class="active"> Active </p>
+              </div>
+              <div v-else>
+                <p class="block"> Inactive </p>
+              </div>
+            </div>
+            <div class="about">
+              <h4>About </h4>
+              <p class="about-card">
+                {{ customer.about}}
+              </p>
+            </div>
           </div>
         </template>
       </Card>
@@ -161,14 +155,80 @@ export default class CustomerCard extends Vue {
 }
 </script>
 
-
-
-
-
-
-
-
-
-
-
-
+<style scoped>
+#hero {
+  margin-top: 80px;
+}
+.p-card{
+  border-radius: 20px;
+}
+#avatar{
+  margin-top: -95px;
+  background: rgb(209, 202, 209);
+  color: purple;
+  width:8rem;
+  height:8rem;
+  font-size:4rem;
+  border-radius: 50%;
+}
+.name{
+  display: flex;
+  justify-content: center;
+}
+.email{
+  display: flex;
+  justify-content: center;
+  margin-top: -5px;
+  font-weight: 500;
+}
+.mobile{
+  display: flex;
+  justify-content: center;
+  margin-top: -5px;
+  font-size: 14px;
+}
+#details span{
+  display: flex;
+  justify-content: center;
+  font-size: 12px;
+}
+#details span i {
+  margin-right: 10px;
+}
+#details span p {
+  margin-top: 0;
+}
+.details2{
+  padding: 15px;
+}
+.rating, .status {
+  display: flex;
+  justify-content: space-between;
+}
+.ratingNumber {
+  margin-top: 10px;
+}
+.active {
+  background: rgb(178, 228, 178);
+  color: green;
+  padding: 5px 10px;
+  border-radius: 10px;
+}
+.block {
+  background: rgb(240, 202, 202);
+  color: red;
+  padding: 5px 10px;
+  border-radius: 10px;
+}
+.about {
+  display: grid;
+}
+.about-card {
+  background: rgb(209, 202, 209);
+  color: rgb(100, 87, 100);
+  padding: 10px;
+  border-radius: 5px;
+  margin-top: -5px;
+  margin-bottom: -10px;
+}
+</style>

@@ -21,16 +21,17 @@
           :rowHover="true"
           :scrollable="true"
           responsiveLayout="scroll"
+          @row-click="openJob($event.data)"
         >
           <template #header>
             <div class="table-header p-d-flex">
-              <!--<span class="p-input-icon-left">
+              <span class="p-input-icon-left">
                 <i class="pi pi-search" />
                 <InputText
                   v-model="filters['global'].value"
                   placeholder="Search..."
                 />
-              </span>-->
+              </span>
             </div>
           </template>
           <template #empty>
@@ -120,6 +121,87 @@
         </DataTable>
       </template>
     </Card>
+
+    <Dialog
+      v-model:visible="jobDialog"
+      :breakpoints="{'960px': '75vw', '640px': '100vw'}"
+      :style="{width: '450px'}"
+      header="Job Details"
+      :modal="true"
+      class="p-fluid"
+    >
+      <div>
+        <div class="p-field p-fluid">
+          <label>
+            Customer
+          </label>
+          <InputText
+            v-model="job.customerName"
+          >
+          </InputText>
+        </div>
+        <div class="p-field p-fluid">
+          <label>
+            Executor
+          </label>
+          <InputText
+            v-model="job.executorName"
+          >
+          </InputText>
+        </div>
+        <div class="p-field p-fluid">
+          <label>
+            Address
+          </label>
+          <InputText
+            v-model="job.customerAddress"
+          >
+          </InputText>
+        </div>
+        <div class="p-field p-fluid">
+          <label>
+            Amount
+          </label>
+          <InputNumber
+            v-model="job.productsAmount"
+            mode="currency"
+            currency="NGN"
+            locale="en-NG"
+          >
+          </InputNumber>
+        </div>
+        <div class="p-field p-fluid">
+          <label>
+            Start date
+          </label>
+          <InputText
+            v-model="job.start_date"
+          >
+          </InputText>
+        </div>
+        <div class="p-field p-fluid" id="jobStat">
+          <label>
+            Job status
+          </label>
+          <span
+            :class="'product-badge status-' + job.jobStatus"
+          >
+            {{ job.jobStatus }}
+          </span>
+        </div>
+        <div class="p-field p-fluid">
+          <label>
+            Reviews
+          </label>
+          <Rating
+            :modelValue="job.customerReview"
+            :readonly="true"
+            :cancel="false"
+            :stars="5"
+          />
+        </div>
+      </div>      
+    </Dialog>
   </div>
 </template>
 
@@ -129,7 +211,7 @@ import { Options, Vue } from 'vue-class-component';
 import Job from '@/models/Job'
 import JobService from '@/services/JobService';
 import { JobData } from '@/types/jobs'
-// import {FilterMatchMode} from 'primevue/api';
+import {FilterMatchMode} from 'primevue/api';
 import qs from 'qs';
 
 interface JobLazyParameters {
@@ -142,19 +224,21 @@ interface JobLazyParameters {
 
 export default class PayFailedJobs extends Vue {
   jobs: Job[] = [];
+  job!: Job;
   selectedJobs: Job[] = [];
   filterValue = '';
   isLoading = false;
   generalLoading = false;
+  jobDialog = false;
   totalRecords = 0;
   service: JobService = new JobService();
-  // filters = {
-  //   'global': {value: null, matchMode: FilterMatchMode.CONTAINS},
-  //   'name': {value: null, matchMode: FilterMatchMode.STARTS_WITH}
-  // };
-  // matchModeOptions =  [
-  //   {label: 'Starts With', value: FilterMatchMode.STARTS_WITH}
-  // ]
+  filters = {
+    'global': {value: null, matchMode: FilterMatchMode.CONTAINS},
+    'name': {value: null, matchMode: FilterMatchMode.STARTS_WITH}
+  };
+  matchModeOptions =  [
+    {label: 'Starts With', value: FilterMatchMode.STARTS_WITH}
+  ]
   lazyParams: Partial<JobLazyParameters> = {};
   firstRecordIndex = 0;
   rowstoDisplay = 10;
@@ -199,6 +283,11 @@ export default class PayFailedJobs extends Vue {
         this.isLoading = false;
         this.generalLoading = false;
       });
+  }
+
+  openJob(job: Job){
+    this.job = job;
+    this.jobDialog = true;
   }
 
 }
@@ -284,6 +373,13 @@ export default class PayFailedJobs extends Vue {
   font-weight: 700;
   font-size: 12px;
   letter-spacing: 0.3px;
+}
+#jobStat{
+  display: flex;
+  justify-content: space-between;
+}
+#jobStat span{
+  line-height: 20px;
 }
 </style>
 

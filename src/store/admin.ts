@@ -6,7 +6,8 @@ type ActionContext = BaseActionContext<AdminState, AdminState>;
 export interface AdminState {
   user: AdminsData;
   token: string;
-  userName: string;
+  username: string;
+  role: string;
 }
 
 export default {
@@ -14,7 +15,8 @@ export default {
   state: {
     user: {} as AdminsData,
     token: "",
-    userName: "",
+    username: "",
+    role: ""
   },
   getters: {
     getInitial(state: AdminState) {
@@ -27,6 +29,9 @@ export default {
       // const user = await (new AdminService()).getCurrentUser();
       // return user;
     },
+    getUsername(state: AdminState) {
+      return () => state.username
+    },
    
   },
   mutations: {
@@ -36,14 +41,25 @@ export default {
     setToken(state: AdminState, token: string){
       state.token = token;
     },
+    setRole(state: AdminState, role: string){
+      state.role = role;
+    },
+    setUsername(state: AdminState, username: string){
+      state.username = username;
+    },
   },
   actions: {
-    async getUser(context: ActionContext){
-      const user = await (new AdminService()).getCurrentAdmin();
-      context.commit("setUser", user);
-      return user
+    // async getUser(context: ActionContext){
+    //   const user = await (new AdminService()).getCurrentAdmin();
+    //   context.commit("setUser", user);
+    //   return user
+    // },
+    getUser(context: ActionContext){
+      const admin = window.localStorage.getItem("admin");
+      if (admin) {
+        context.commit("setAdmin", admin);
+      }
     },
-
     async attempt (context: ActionContext, userName: any) {
       context.commit("setUserName", userName)
     },
@@ -53,6 +69,18 @@ export default {
       const token = window.localStorage.getItem("token");
       if (token) {
         context.commit("setToken", token);
+      }
+    },
+    getRole(context: ActionContext){
+      const role = window.localStorage.getItem("role");
+      if (role) {
+        context.commit("setRole", role);
+      }
+    },
+    getUsername(context: ActionContext){
+      const username = window.localStorage.getItem("username");
+      if (username) {
+        context.commit("setUsername", username);
       }
     },
      // getUser(context: ActionContext){

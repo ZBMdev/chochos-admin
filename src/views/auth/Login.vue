@@ -73,14 +73,27 @@ export default defineComponent({
         .then((loginData) => {
           window.localStorage.getItem("token");
           window.localStorage.setItem("token", loginData.token);
+          window.localStorage.getItem("role");
+          window.localStorage.setItem("role", loginData.token);
           // window.localStorage.setItem("user", JSON.stringify(loginData.admin));
+          localStorage.getItem("username");
+          localStorage.setItem("username", loginData.admin.username )
+          
+          localStorage.setItem("admin", JSON.stringify(loginData.admin));
+          localStorage.getItem('admin');
+          this.$store.commit('Admin/setAdmin', loginData.admin);
+          this.$store.commit('Admin/setToken', loginData.token);
+          this.$store.commit('Admin/setRole', loginData.token);
+          this.$store.commit('Admin/setUsername', loginData.admin.username);
           
           console.log(loginData)
           console.log(loginData.token)
+          console.log(loginData.admin)
+          console.log(loginData.admin.username)
           // redirect to previous link
-          const redirectTo = this.$route.query.redirect as string || '/';
-          this.$router.push(redirectTo);
-          // window.location.href = redirectTo;
+          // const redirectTo = this.$route.query.redirect as string || '/';
+          // this.$router.push(redirectTo);
+          // hash  window.location.href = redirectTo;
         })
         .finally(() => {
           this.isLoading = false;

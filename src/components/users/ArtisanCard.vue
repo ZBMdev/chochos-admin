@@ -1,89 +1,80 @@
 <template>
   <PageHeading :title="`${artisan.fullName}'s Profile`"  style="display:flex; justify-content: center; margin-bottom: 30px" />
   <ProgressSpinner style="display:flex; justify-content: center" v-if="loading" />
-  <div v-else>
-    <TabView :value="allArtisans">
+  <div v-else >
+    <TabView :value="allArtisans" class="p-tabview">      
       <TabPanel header="About">
         <div class="userCard">
-              <div
-                class="p-d-flex p-jc-center p-ai-center p-pt-4 p-pl-4 p-pr-4 p-pb-0"
-              >
-                <Avatar
-                  v-if="artisan.photoUrl === '' || artisan.photoUrl === null " 
-                  icon="pi pi-user"
-                  class="p-mr-2"
-                  style="background-color:#c8e6c9;color:#256029;width:8rem;height:8rem;font-size:4rem;"
-                  shape="circle"
-                />
-                <img v-else-if="artisan.photoUrl != '' || artisan.photoUrl != null "
-                  :src="artisan.photoUrl"
-                  :alt="artisan.photoUrl"
-                  style="width:8rem;height:8rem;font-size:4rem;"
-                />
-                <Avatar 
-                  v-else
-                  :label="artisan.fullName.charAt(0).toUpperCase()"
-                  class="p-mr-2"
-                  style="background-color:#c8e6c9;color:#256029;width:8rem;height:8rem;font-size:4rem;"
-                  shape="circle"
-                />
-                
+          <div
+            class="p-d-flex p-jc-center p-ai-center p-pt-4 p-pl-4 p-pr-4 p-pb-0"
+          >
+            <Avatar
+              v-if="artisan.photoUrl === '' || artisan.photoUrl === null " 
+              icon="pi pi-user"
+              class="p-mr-2"
+              id="avatar"
+              shape="circle"
+            />
+            <img v-else-if="artisan.photoUrl != '' || artisan.photoUrl != null "
+              :src="artisan.photoUrl"
+              :alt="artisan.photoUrl"
+              id="avatar"
+            />
+            <Avatar 
+              v-else
+              :label="artisan.fullName.charAt(0).toUpperCase()"
+              class="p-mr-2"
+              id="avatar"
+              shape="circle"
+            />        
+          </div>
+          <div class="p-text-left" id="details">
+            <h3 class="name">
+              {{ artisan?.fullName }}
+            </h3>
+            <p class="email">
+              {{ artisan?.email }}
+            </p>
+            <p class="mobile">
+              {{ artisan?.mobile }}
+            </p>
+            <span> <i class="pi pi-map-marker"></i> <p> {{ artisan?.address }} </p> </span>
+          </div>
+          <div class="details2">
+            <div class="jobs">
+              <p> Jobs completed </p>
+              <p class="jobNumber"> {{  }} 5 </p>
+            </div>    
+            <div class="rating">
+              <p> Average rating </p>
+              <Rating
+                :modelValue="artisan.rating"
+                :readonly="true"
+                :cancel="false"
+                :stars="5"
+                class="ratingNumber"
+              />
+            </div>
+            <div class="price">
+              <p> Average price </p>
+              <h4> {{ }} 2500</h4>
+            </div>
+            <div class="status">
+              <p> Status: </p>
+              <div v-if="artisan.isActive === true">
+                <p class="active"> Active </p>
               </div>
-              <div class="details1" >
-                <h3> {{ artisan.fullName }} </h3>
-                <jobName>
-                  <template #body="slotProps">
-                    {{ slotProps.data.userCategoryRecord.occupationName }}
-                  </template>
-                </jobName>
-                <h4> {{ allArtisan.jobName }} Electrician </h4>
-                <span> <i class="pi pi-map-marker"></i> <p> {{ artisan.address }} </p> </span>
+              <div v-else>
+                <p class="block"> Inactive </p>
               </div>
-              <div class="details2">
-                <div class="jobs">
-                  <p> Jobs completed </p>
-                  <p class="jobNumber"> {{  }} 5 </p>
-                </div>
-                <div class="rating">
-                  <p> Average rating </p>
-                  <Rating
-                    :modelValue="artisan.rating"
-                    :readonly="true"
-                    :cancel="false"
-                    :stars="5"
-                    class="ratingNumber"
-                  />
-                </div>
-                <div class="price">
-                  <p> Average price </p>
-                  <h4> {{ }} 2500</h4>
-                </div>
-              </div>
-              <div class="about">
-                <h4>About </h4>
-                <div class="about-card">
-                  {{ artisan.about}}
-                </div>
-              </div>
-              <div class="details3">                
-                <div class="status">
-                  <p> Status: </p>
-                  <div v-if="artisan.isActive === true">
-                    <p class="active"> Active </p>
-                  </div>
-                  <div v-else>
-                    <p class="block"> Inactive </p>
-                  </div>
-                </div>
-                <div class="dates">
-                  <p>
-                    Date registered: <b>{{ artisan?.created_on }}</b>
-                  </p>
-                  <p>
-                    Last login: <b>{{ artisan?.lastLogin }}</b>
-                  </p>
-                </div>
-              </div>  
+            </div>
+            <div class="about">
+              <h4>About </h4>
+              <p class="about-card">
+                {{ artisan.about}}
+              </p>
+            </div>
+          </div>
         </div>
       </TabPanel>
       <TabPanel header="Portfolio">
@@ -380,18 +371,100 @@ export default class ArtisanCard extends Vue {
       console.log(e);
     });
   }
+
 }
 </script>
 
 <style scoped>
+.p-tabview, .p-tabview-panels, .p-tabview-panel, .p-tabview-nav, .p-tabview-selected{
+  background: red;
+}
 .userCard{
-  width: 100%;
-  height: 100vh;
+  /* display: grid;
+  justify-content: center; */
+  margin-top: 150px;
+  width: 400px;
+  /* height: 100vh; */
+  background: white;
+  border-radius: 10px;
+  border: 2px solid violet;
+  box-shadow: violet;
+  margin-left: auto;
+  margin-right: auto;
 }
-.p-text-center{
+#avatar{
+  margin-top: -95px;
+  background: rgb(209, 202, 209);
+  color: purple;
+  width:8rem;
+  height:8rem;
+  font-size:4rem;
+  border-radius: 50%;
+}
+.name{
+  display: flex;
+  justify-content: center;
+}
+.email{
+  display: flex;
+  justify-content: center;
+  margin-top: -5px;
+  font-weight: 500;
+}
+.mobile{
+  display: flex;
+  justify-content: center;
+  margin-top: -5px;
+  font-size: 14px;
+}
+#details span{
+  display: flex;
+  justify-content: center;
+  font-size: 12px;
+}
+#details span i {
+  margin-right: 10px;
+}
+#details span p {
+  margin-top: 0;
+}
+.details2{
+  padding: 15px;
+}
+.rating, .status {
+  display: flex;
+  justify-content: space-between;
+}
+.ratingNumber {
+  margin-top: 10px;
+}
+.active {
+  background: rgb(178, 228, 178);
+  color: green;
+  padding: 5px 10px;
+  border-radius: 10px;
+}
+.block {
+  background: rgb(240, 202, 202);
+  color: red;
+  padding: 5px 10px;
+  border-radius: 10px;
+}
+.about {
+  display: grid;
+}
+.about-card {
+  background: rgb(209, 202, 209);
+  color: rgb(100, 87, 100);
+  padding: 10px;
+  border-radius: 5px;
+  margin-top: -5px;
+  margin-bottom: 10px;
+}
+/* .p-text-center{
   widows: 100%;
-}
-#userDetails {
+} */
+/* #userDetails {
   display: flex;
 }
 .details1{
@@ -432,8 +505,6 @@ export default class ArtisanCard extends Vue {
 }
 .ratingNumber{
   color: gold;
-  /*float: right;
-  align-items: flex-end; */
 }
 .price{
   display: flex;
@@ -460,7 +531,7 @@ export default class ArtisanCard extends Vue {
 }
 .block{
   color: black;
-}
+} */
 
 .details3 .dates p{
   display: flex;
