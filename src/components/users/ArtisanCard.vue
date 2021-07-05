@@ -304,17 +304,7 @@ section .content {
   } */
   .wrapper nav label {
     display: grid;
-    height: 60px;
-  }
-
-  #about:checked ~ nav label.about, 
-  #portfolio:checked ~ nav label.portfolio,
-  #reviews:checked ~ nav label.reviews {
-    color: #323c47;
-    background: #E7E7E7;
-    border-radius: 24px;
-    padding: 5px 10px;
-    line-height: 20px;
+    /* height: 60px; */
   }
 
   .about, .portfolios, .reviews {
