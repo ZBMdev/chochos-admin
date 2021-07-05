@@ -3,7 +3,7 @@
     <Sidebar class="hamburger-menu" v-model:visible="visibleLeft">
       <div class="brand p-text-bold p-d-flex p-ai-center">
         
-        <div class="ml-2">Chochos-List</div>
+        <div class="ml-2" id="brandName">Chochos-List</div>
       </div>
       <Navbar @click="closeSideBar" />
     </Sidebar>
@@ -17,7 +17,7 @@
         />
         <div class="brand p-text-bold p-d-flex p-ai-center">
           
-          <div class="ml-2">Chochos-List</div>
+          <div class="ml-2" id="brandName">Chochos-List</div>
         </div>
         <div class="p-ml-auto p-ai-center p-d-flex">
           <Menu
@@ -40,7 +40,7 @@
             @click="toggleUserMenu"
           >
             <Avatar
-              class=""
+              class="avatar"
               style="background-color:#9c27b0; color: #ffffff"
               :label="initial"
               shape="circle"
@@ -207,7 +207,8 @@ export default class MainLayout extends Vue {
   z-index: 999;
   padding: 0.1rem 0.8rem;
   margin: 0;
-  max-height: 4rem;
+  /* max-height: 4rem; */
+  height: 60px;
   top: 0;
   left: 0;
   right: 0;
@@ -242,8 +243,11 @@ export default class MainLayout extends Vue {
 }
 .menu-button {
   display: block;
+  margin-top: 15px;
 }
-
+.avatar{
+  margin-top: -5px;
+}
 @media only screen and (min-width: 768px) {
   .menu-button {
     display: none;
