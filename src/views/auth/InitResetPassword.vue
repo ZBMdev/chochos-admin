@@ -24,6 +24,7 @@
               loadingText="Submiting..."
               label="Submit"
               @click="handleInitResetPassword"
+              id="lbutton"
             />
           </div>
 
@@ -83,4 +84,7 @@ export default defineComponent({
 </script>
 
 <style>
+#lbutton{
+  background: green;
+}
 </style>

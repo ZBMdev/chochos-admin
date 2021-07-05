@@ -176,7 +176,7 @@ const routes: Array<RouteRecordRaw> = [
       {
         path: '/job-requests/:id',
         name: 'jobRequests_id',
-        component: () => import('../components/job/JobRequestCard.vue'),
+        component: () => import('../components/job/UserRequestCard.vue'),
         meta: {
           title: `Job Requests`,
         }

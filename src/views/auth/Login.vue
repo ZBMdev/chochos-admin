@@ -31,6 +31,7 @@
               loadingText="Signing in..."
               label="Sign in"
               @click="handleLogin"
+              id="lbutton"
             />
           </div>
           <AuthNav />
@@ -91,8 +92,8 @@ export default defineComponent({
           console.log(loginData.admin)
           console.log(loginData.admin.username)
           // redirect to previous link
-          // const redirectTo = this.$route.query.redirect as string || '/';
-          // this.$router.push(redirectTo);
+          const redirectTo = this.$route.query.redirect as string || '/';
+          this.$router.push(redirectTo);
           // hash  window.location.href = redirectTo;
         })
         .finally(() => {
@@ -104,4 +105,7 @@ export default defineComponent({
 </script>
 
 <style>
+#lbutton {
+  background: green;
+}
 </style>

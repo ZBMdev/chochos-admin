@@ -111,7 +111,7 @@ export default class Artisan extends Model {
             password: password,
             firstName: this.firstName,
             lastName: this.lastName,
-            fullName: this.fullName,
+            userCategory: this.userCategory,
             username: this.username,
             address: this.address
         } as ArtisanRegisterParams;

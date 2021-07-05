@@ -61,7 +61,7 @@ import TreeTable from 'primevue/treetable';
 import Toast from 'primevue/toast';
 import ToastService from 'primevue/toastservice';
 import Toolbar from 'primevue/toolbar';
-import 'primevue/resources/themes/saga-green/theme.css' // theme
+import 'primevue/resources/themes/mdc-light-deeppurple/theme.css' // theme
 import 'primevue/resources/primevue.min.css' // core css
 import 'primeicons/primeicons.css' // icons
 import 'primeflex/primeflex.css';

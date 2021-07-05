@@ -39,6 +39,7 @@ body {
   height: 100%;
   overflow-x: hidden;
   overflow-y: auto;
+  --primary-color: purple;
   background-color: var(--surface-a);
   font-family: var(--font-family) !important;
   font-weight: 400;

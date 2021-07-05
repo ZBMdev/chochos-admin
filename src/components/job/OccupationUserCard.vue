@@ -82,8 +82,8 @@
                 <p> No portfolio available </p>
               </div>
               <div v-else>
+                <h3>Portfolio</h3>
                 <div v-for="port in user.portfolios" :key="port"  class="singlePortfolio">
-                  <h3>Portfolio</h3>
                   <div class="portImg">
                     <img :src="port.url" alt="">
                   </div>

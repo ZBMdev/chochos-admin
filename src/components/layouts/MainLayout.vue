@@ -2,13 +2,7 @@
   <div class="main-layout p-grid p-ai-stretch vertical-container">
     <Sidebar class="hamburger-menu" v-model:visible="visibleLeft">
       <div class="brand p-text-bold p-d-flex p-ai-center">
-        <img
-          height="40"
-          width="40"
-          class="logo p-mr-2"
-          src="https://notion-emojis.s3-us-west-2.amazonaws.com/v0/svg-twitter/1f96c.svg"
-          alt="🥬"
-        />
+        
         <div class="ml-2">Chochos-List</div>
       </div>
       <Navbar @click="closeSideBar" />
@@ -22,13 +16,7 @@
           @click="visibleLeft = true"
         />
         <div class="brand p-text-bold p-d-flex p-ai-center">
-          <img
-            height="40"
-            width="40"
-            class="logo p-mr-2"
-            src="https://notion-emojis.s3-us-west-2.amazonaws.com/v0/svg-twitter/1f96c.svg"
-            alt="🥬"
-          />
+          
           <div class="ml-2">Chochos-List</div>
         </div>
         <div class="p-ml-auto p-ai-center p-d-flex">

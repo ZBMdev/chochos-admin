@@ -18,8 +18,10 @@ nav {
   justify-content: center;
 }
 a {
-  color: var(--primary-color);
+  /* color: var(--primary-color); */
+  color: #000;
   margin-right: 1rem;
+  text-decoration: none;
 }
 .router-link-exact-active {
   display: none;

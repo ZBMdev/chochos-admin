@@ -34,14 +34,14 @@
               </div>
               <!-- 
           @row-click="openArtisan($event.data.id)"
-              @row-click="openArtisan($event.data)"
+              @row-click="openArtisan($event.data)"-->
               <span class="p-input-icon-left">
                 <i class="pi pi-search" />
                 <InputText
                   v-model="filters['global'].value"
                   placeholder="Search..."
                 />
-              </span>-->
+              </span>
             </div>
           </template>
           <template #empty>
@@ -205,7 +205,7 @@
     <Dialog
       v-model:visible="newArtisanDialog"
       :breakpoints="{'960px': '75vw', '640px': '100vw'}"
-      :style="{width: '50vw'}"
+      :style="{width: '450px'}"
       header="New Artisan"
       :modal="true"
       class="p-fluid"
@@ -213,7 +213,7 @@
       <div>
         <div class="p-field p-fluid">
           <label>
-           Firstname
+           First name
           </label>
           <InputText
             v-model="newArtisan.firstName"
@@ -222,10 +222,19 @@
          </div>
         <div class="p-field p-fluid">
           <label>
-           Lastname
+           Last name
           </label>
           <InputText
             v-model="newArtisan.lastName"
+          >
+          </InputText>
+        </div>
+        <div class="p-field p-fluid">
+          <label>
+            Username
+          </label>
+          <InputText
+            v-model="newArtisan.username"
           >
           </InputText>
         </div>
@@ -240,10 +249,10 @@
         </div>
         <div class="p-field p-fluid">
           <label>
-            Username
+            Address
           </label>
           <InputText
-            v-model="newArtisan.username"
+            v-model="newArtisan.address"
           >
           </InputText>
         </div>
@@ -284,7 +293,7 @@
           />
           <small class="p-error" v-if="submitted && !newArtisan.userCategory">Selection required.</small>
         </div>
-        <Button @click="saveArtisan" label="Submit"></Button>
+        <Button @click="saveArtisan" label="Submit" id="lbutton"></Button>
       </div> 
     </Dialog>
 
@@ -354,7 +363,7 @@ import Artisan from '@/models/Artisan';
 import { ArtisanRegisterParams, ArtisanData } from '@/types/artisan'
 import ArtisanService from '@/services/ArtisanService';
 import { useToast } from 'primevue/usetoast';
-// import {FilterMatchMode} from 'primevue/api';
+import {FilterMatchMode} from 'primevue/api';
 import ArtisanCreate from "@/views/users/ArtisanCreate.vue";
 import qs from 'qs';
 
@@ -385,13 +394,13 @@ export default class Artisans extends Vue {
   service: ArtisanService = new ArtisanService();
   // userCat: 
   selectedArtisans: Artisan[] = [];
-  // filters = {
-  //   'global': {value: null, matchMode: FilterMatchMode.CONTAINS},
-  //   'name': {value: null, matchMode: FilterMatchMode.STARTS_WITH}
-  // };
-  // matchModeOptions =  [
-  //   {label: 'Starts With', value: FilterMatchMode.STARTS_WITH}
-  // ]
+  filters = {
+    'global': {value: null, matchMode: FilterMatchMode.CONTAINS},
+    'name': {value: null, matchMode: FilterMatchMode.STARTS_WITH}
+  };
+  matchModeOptions =  [
+    {label: 'Starts With', value: FilterMatchMode.STARTS_WITH}
+  ]
   submitted = false;
   toast = useToast();
   lazyParams: Partial<ArtisanLazyParameters> = {};
@@ -476,6 +485,8 @@ export default class Artisans extends Vue {
         // this.newArtisan = new Artisan({});
         // this.userCategory = 1;
         // this.artCat = 1;
+        // this.newArtisan.userCategory = 1;
+        // this.artisans.push(this.newArtisan);
         this.toast.add({
           severity:'success',
           summary: 'Successful',
@@ -507,5 +518,8 @@ export default class Artisans extends Vue {
 
 ::v-deep(.p-card-body) {
     padding: 2rem;
+}
+#lbutton {
+  background: green;
 }
 </style>

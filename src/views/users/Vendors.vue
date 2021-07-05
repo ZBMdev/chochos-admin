@@ -35,13 +35,13 @@
                   @click="openNew"
                 />
               </div>
-              <!--<span class="p-input-icon-left">
+              <span class="p-input-icon-left">
                 <i class="pi pi-search" />
                 <InputText
                   v-model="filters['global'].value"
                   placeholder="Search..."
                 />
-              </span>-->
+              </span>
             </div>
           </template> <template #empty>
             No vendor found.
@@ -67,7 +67,8 @@
             filterMode="contains"
           >
             <template #body="slotProps">
-              {{ slotProps.data.fullName }}
+              <span v-html="`${slotProps.data.fullName?.substr(0, 25)}`"
+              ></span>
             </template>
           </Column>
           <Column
@@ -78,7 +79,8 @@
             filterMode="contains"
           >
             <template #body="slotProps">
-              {{ slotProps.data.username }}
+              <span v-html="`${slotProps.data.username?.substr(0, 15)}`"
+              ></span>
             </template>
           </Column>
           <Column
@@ -89,7 +91,8 @@
             filterMode="contains"
           >
             <template #body="slotProps">
-              {{ slotProps.data.email }}
+              <span v-html="`${slotProps.data.email?.substr(0, 20)}`"
+              ></span>
             </template>
           </Column>
           <Column
@@ -154,7 +157,7 @@
       <div>
         <div class="p-field p-fluid">
           <label>
-           Firstname
+           First name
           </label>
           <InputText
             v-model="newVendor.firstName"
@@ -163,7 +166,7 @@
          </div>
         <div class="p-field p-fluid">
           <label>
-           Lastname
+           Last name
           </label>
           <InputText
             v-model="newVendor.lastName"
@@ -229,7 +232,7 @@
           <small class="p-error" v-if="submitted && !newVendor.userCategory">Selection required.</small>
         </div>
 
-        <Button @click="saveVendor" label="Submit"></Button>
+        <Button @click="saveVendor" label="Submit" id="lbutton"></Button>
       </div> 
     </Dialog>
 
@@ -352,7 +355,7 @@ import VendorService from '@/services/VendorService';
 import { VendorRegisterParams, VendorData } from '@/types/vendors'
 import VendorBox from "@/components/users/VendorBox.vue";
 import { useToast } from 'primevue/usetoast';
-// import {FilterMatchMode} from 'primevue/api';
+import {FilterMatchMode} from 'primevue/api';
 import qs from 'qs';
 import Dialog from 'primevue/dialog';
 import TrialVue from './Trial.vue';
@@ -378,13 +381,13 @@ export default class Vendors extends Vue {
   totalRecords = 0;
   service: VendorService = new VendorService();
   selectedVendors: Vendor[] = [];
-  // filters = {
-  //   'global': {value: null, matchMode: FilterMatchMode.CONTAINS},
-  //   'name': {value: null, matchMode: FilterMatchMode.STARTS_WITH}
-  // };
-  // matchModeOptions =  [
-  //   {label: 'Starts With', value: FilterMatchMode.STARTS_WITH}
-  // ]
+  filters = {
+    'global': {value: null, matchMode: FilterMatchMode.CONTAINS},
+    'name': {value: null, matchMode: FilterMatchMode.STARTS_WITH}
+  };
+  matchModeOptions =  [
+    {label: 'Starts With', value: FilterMatchMode.STARTS_WITH}
+  ]
   submitted = false;
   toast = useToast();
   lazyParams: Partial<VendorLazyParameters> = {};
@@ -487,7 +490,7 @@ export default class Vendors extends Vue {
         console.log(this.newVendor)
       });
 
-      this.newVendorDialog = true;
+      this.newVendorDialog = false;
   }
 
 }
@@ -497,5 +500,8 @@ export default class Vendors extends Vue {
 <style scoped>
 .filter-by {
   min-width: 300px;
+}
+#lbutton {
+  background: green;
 }
 </style>

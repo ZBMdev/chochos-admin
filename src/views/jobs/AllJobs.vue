@@ -138,6 +138,7 @@
                 :modelValue="slotProps.data.customerReview"
                 :readonly="true"
                 :cancel="false"
+                class="p-rating"
               />
             </template>
           </Column>
@@ -411,6 +412,9 @@ label {
 }
 #jobStat span{
   line-height: 20px;
+}
+.p-rating{
+  color: gold;
 }
 .ratingNumber{
   margin-top: 20px;

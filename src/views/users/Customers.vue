@@ -47,6 +47,7 @@
           <Column
             field="name"
             headerStyle="width: 3rem;"
+            style="width: 3rem;"
           >
             <template #body="{data}">
               <Avatar
@@ -60,6 +61,7 @@
           <Column
             ref="fullName"
             field="fullName"
+            headerStyle="min-width: 14rem"
             style="min-width: 14rem"
             header="Name"
             :sortable="true"
@@ -72,6 +74,7 @@
           <Column
             ref="username"
             field="username"
+            headerStyle="min-width: 14rem"
             style="min-width: 14rem"
             header="Username"
             :sortable="true"
@@ -84,6 +87,7 @@
           <Column
             ref="email"
             field="email"
+            headerStyle="min-width: 14rem"
             style="min-width: 14rem"
             header="Email"
             :sortable="true"
@@ -96,6 +100,7 @@
           <Column
             ref="address"
             field="address"
+            headerStyle="min-width: 14rem"
             style="min-width: 14rem"
             header="Address"
             :sortable="true"
@@ -108,7 +113,8 @@
           <Column
             ref="languages"
             field="languages"
-            style="min-width: 10rem"
+            headerStyle="min-width: 14rem"
+            style="min-width: 14rem"
             header="Languages"
             :sortable="true"
             filterMode="contains"

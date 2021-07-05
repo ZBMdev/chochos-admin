@@ -231,7 +231,7 @@ export default class ProductList extends Vue {
   }
 
   openRequest(id: number) {
-    this.$router.push({ path: `/jobRequests/${id}`});
+    this.$router.push({ path: `/job-requests/${id}`});
   }
 
 }

@@ -27,7 +27,8 @@
           :rowHover="true"
         >
           <template #header>
-            <!-- <div class="table-header"> -->
+            <!-- <div class="table-header"> 
+          @row-click="openProduct($event.data)"-->
             <div class="p-mb-4"> 
               <span class="p-input-icon-left">
                 <i class="pi pi-search" />
@@ -139,6 +140,74 @@
         </DataTable>
       </template>
     </Card>
+
+    <Dialog
+      v-model:visible="productDialog"
+      :style="{ width: '450px' }"
+      header="Product Details"
+      :modal="true"
+      class="p-fluid"
+    >
+
+    <div class="p-fluid">
+      <div class="p-fluid p-formgrid p-grid">
+        <div class="p-col-12 p-md-6">
+          <label for="productImg">Product Image</label>
+          <img
+            :src="product.mainImage"
+            :alt="name"
+            id="productImg"
+          />
+        </div>
+      </div>
+      <div class="p-field">
+        <label for="name">Name</label>
+        <InputText
+          id="name"
+          v-model="product.name"
+        />
+      </div>
+      <div class="p-field">
+        <label for="price">Price</label>
+        <InputNumber
+          id="price"
+          v-model="product.unitPrice"
+          mode="currency"
+          currency="NGN"
+          locale="en-NG"
+        >
+        </InputNumber>
+      </div>
+
+      <div class="p-field">
+        <label for="vendor">Vendor</label>
+        <InputNumber
+          id="vendor"
+          v-model="product.userId"
+        />
+      </div>
+
+      <div class="p-field">
+        <label for="rating">Reviews</label>
+        <Rating
+          :modelValue="product.rating"
+          :readonly="true"
+          :cancel="false"
+        />
+      </div>
+
+      <div class="p-field">
+        <label for="status"> Status</label>
+        <span
+          :class="
+          'product-badge status-' +
+          product.stockAvailability.toLowerCase()
+          "
+          >{{ product.stockAvailability }}</span
+        >
+      </div>
+    </div>
+    </Dialog>
   </div>
 </template>
 
@@ -166,10 +235,12 @@ interface ProductLazyParameters {
 
 export default class ProductList extends Vue {
   products: Product[] = [];
+  product!: Product;
   selectedProducts: Product[] = [];
   loading = false;
   generalLoading = false;
   totalRecords = 0;
+  productDialog = false;
   service: ProductService = new ProductService();
   statuses = [StockStatus.INSTOCK, StockStatus.LOWSTOCK, StockStatus.OUTOFSTOCK];
   // filters: Record<string, unknown> = {};
@@ -227,6 +298,13 @@ export default class ProductList extends Vue {
       this.toast.add({ severity: "error", summary: "There was an error fetching the all products", detail: "Please check your internet connection and refresh the page" })
       console.log(e);
     });
+  }
+
+  openProduct() {
+    this.product = new Product({});
+    // this.submitted = false;
+    this.productDialog = true;
+    console.log(this.product)
   }
 
 }
