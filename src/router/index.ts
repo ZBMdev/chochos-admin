@@ -222,6 +222,14 @@ const routes: Array<RouteRecordRaw> = [
         }
       },
       {
+        path: '/artisanProfile',
+        name: 'artisan-profile',
+        component: () => import('../components/users/ArtisanCard2.vue'),
+        meta: {
+          title: `Artisan Profile`,
+        }
+      },
+      {
         path: '/artisans/:id',
         name: 'artisan-profile',
         component: () => import('../components/users/ArtisanCard.vue'),

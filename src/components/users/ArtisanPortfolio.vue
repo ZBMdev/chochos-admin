@@ -1,13 +1,13 @@
 <template>
   <div class="portfolios">
-          <div v-for="port in portfolios" :key="port"  class="singlePortfolio">
-            <div class="portImg">
-              <img :src="port.url" alt="">
-            </div>
-            <h4> {{ port.name }} </h4>
-            <p> {{ port.description }} </p>
-          </div>
-        </div>
+    <div v-for="port in portfolios" :key="port"  class="singlePortfolio">
+      <div class="portImg">
+        <img :src="port.url" alt="">
+      </div>
+      <h4> {{ port.name }} </h4>
+      <p> {{ port.description }} </p>
+    </div>
+  </div>
 </template>
 
 <script lang="ts">
@@ -155,7 +155,13 @@ export default class ArtisanPortfolio extends Vue {
   padding: 0 10px;
 }
 .singlePortfolio p{
+  background: rgb(209, 202, 209);
+  color: rgb(100, 87, 100);
+  padding: 20px 20px 20px 10px;
+  border-radius: 5px;
+  /* margin-top: -5px; */
+  margin-bottom: 10px;
   text-align: left;
-  padding: 0 10px;
+  /* padding: 0 10px; */
 }
 </style>

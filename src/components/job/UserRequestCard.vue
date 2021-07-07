@@ -1,9 +1,53 @@
 <template>
   <!-- <PageHeading :title="`${.fullName} request`" style="display:flex; justify-content: center; margin-bottom: 30px" /> -->
   <ProgressSpinner style="display:flex; justify-content: center" v-if="loading" />
-  <div v-else class="p-d-flex p-jc-center p-ai-center">
-    <div id="card-holder">      
-      <h3>Products </h3>
+  <div v-else id="hero"> 
+    <div class="requestCard">
+      <div class="about">
+        <h4> Customer </h4>
+        <div class="customer-card">
+          <img :src="customerImg">
+          <p> {{ customerName}} </p>
+        </div>
+      </div>
+      <div class="about">
+        <h4> Executor </h4>
+        <div class="executor-card">
+          <img :src="executorImg">
+          <p> {{ executorName }} </p>
+        </div>
+      </div>
+      <div class="about">
+        <h4> Request title </h4>
+        <p class="about-card">
+          {{ requestTitle }}
+        </p>
+      </div>
+      <div class="about">
+        <h4> Location </h4>
+        <p class="about-card">
+          {{ location }}
+        </p>
+      </div>
+      <div class="about">
+        <h4> Workman Fee </h4>
+        <p class="about-card">
+          {{ formatCurrency( workmanFee) }}
+        </p>
+      </div>
+      <!-- <div class="about">
+        <h4> Cost of items </h4>
+        <p class="about-card">
+          {{ formatCurrency( sumAmount) }}
+        </p>
+      </div> -->
+      <p>Total Charge: <span> {{ formatCurrency( totalAmount) }} </span> </p> 
+      <!-- <div v-for="price in requests" :key="price">
+        <p> {{ price.totalPrice+ }} </p>
+      </div>12 -->
+    </div> 
+    <h3>Products </h3>
+    <div id="card-holder">
       <div v-for="user in requests" :key="user" id="userCard" class="p-col-12 p-md-6">
         <div
           class="p-text-center"
@@ -16,20 +60,69 @@
               </div> -->
               <div class="product-details">
                   <div class="productImg">
-                    <div v-for="product in requests.product" :key="product">
-                      <div v-for="productImg in user.product.productImages" :key="productImg" >
-                        <img :src="productImg" alt="">
+                    <!-- <div v-for="product in requests.product" :key="product"> -->
+                      <div v-for="productImg in user.product.productImages" :key="productImg" class="productImg">
+                        <img v-if="productImg.url != null && productImg.url" :src="productImg.url" alt="">
+                        <img v-else src="require(@/assets/images/default-placeholder-image.png)">
                       </div>
+                    <!-- </div> -->
+                    <!-- <div
+                      v-for="(productImg, index) in user.product.productImages"
+                      :key="index" class="productImg"
+                      :style="{ display: active_card.productImg.id != productImg.id ? 'none' : '' }"
+                    >
+                      <img :src="productImg.url" alt="">
                     </div>
+                    <div class="dots">
+                      <span
+                        :class="{ dot: true, active: dot.id == active_slide }"
+                        v-for="dot in user.product.productImages"
+                        :key="dot"
+                        @click="this.activate(dot.id)"
+                      >
+                      </span>
+                    </div> -->
                   </div>
-                  <h4> {{ user.productName }} </h4>
-                  <p> {{ user.product.description }} </p>
-                  <p> {{ user.quantity }} </p>
-                  <p> {{ user.unitPrice }} </p>
-                  <p> {{ user.totalPrice}} </p>
-                  <p> {{ user.description }} </p>
-                  <p> Reviews {{ user.product.rating }} </p>
-                  <p> {{ user.product.productImages.id }} </p>
+                  <h4 class="name"> {{ user.productName }} </h4>
+                  <div class="description">
+                    <h4>Description </h4>
+                    <p class="description-card">
+                      {{ user.product.description }}
+                    </p>
+                  </div>
+                  <div class="quantity">
+                    <h4> Quantity </h4>
+                    <p>
+                      {{ user.quantity }}
+                    </p>
+                  </div>
+                  <div class="price">
+                    <h4>Unit price</h4>
+                    <p>
+                      {{ formatCurrency(user.unitPrice) }}
+                    </p>
+                  </div>
+                  <div class="price">
+                    <h4>Total</h4>
+                    <p>
+                      {{ formatCurrency(user.totalPrice) }}
+                    </p>
+                  </div>
+                  
+                  <div class="rating">
+                    <h4> Product rating </h4>
+                    <Rating
+                      :modelValue="user.product.rating"
+                      :readonly="true"
+                      :cancel="false"
+                      :stars="5"
+                      class="ratingNumber"
+                    />
+                  </div>
+                  <img :src="user.product.productImages.url" alt="">
+                  <!-- <div v-for="(productImg, index) in user.product.productImages" :key="index" >
+                    <img v-show="index[1]" :src="productImg.url" alt="">
+                  </div> -->
                   <!-- <ul v-for="items in requests" :key="items"> 
                     {{ items.product.rating}} 
                     {{ items.product.updatedOn }}
@@ -74,10 +167,31 @@ export default class UserRequestCard extends Vue {
   imageLoading = false;
   // lazyParams: Partial<VendorLazyParameters> = {};
   firstRecordIndex = 0;
-  rowstoDisplay = 10;  
+  rowstoDisplay = 10;
+  requestTitle= '';
+  description = '';
+  location = '';
+  workmanFee = 0;
+  customerName = '';
+  executorName = '';
+  customerImg = '';
+  executorImg = '';
+  totalAmount = 0;
+  auto_animate= true;
+  interval = 0;
+  active_slide = 1;
 
 
   created() {
+    // console.log("here");
+    // if (this.auto_animate) {
+    //   this.interval = setInterval(() => {
+    //     this.active_slide =
+    //       this.active_slide == this. product.productImages.length
+    //         ? 1
+    //         : (this.active_slide + 1) % (this.cards.length + 1);
+    //   }, 5000);
+    // }
     // watch the params of the route to fetch the data again
     this.$watch(
       () => this.$route.params,
@@ -105,10 +219,16 @@ export default class UserRequestCard extends Vue {
     this.service.getUserRequest(+this.$route.params.id)
       .then((data) => {
         this.requests = data.jobRequest.billOfQuantities.map((prod) => new UserRequestModel(prod))
-        // this.productImg = data.jobRequest.billOfQuantities.filter((prod) => {
-        //   return prod.product.productImages
-        // })
-        // this.setRequest(new UserRequestModel(data));
+        this.requestTitle = data.jobRequest.name;
+        this.description = data.jobRequest.description;
+        this.location = data.jobRequest.jobLocation;
+        this.workmanFee = data.jobRequest.workManFee;
+        this.customerName = data.jobRequest.customer.fullName;
+        this.executorName = data.jobRequest.executor.fullName;
+        this.customerImg = data.jobRequest.customer.photoUrl;
+        this.executorImg = data.jobRequest.executor.photoUrl;
+        this.workmanFee = data.jobRequest.workManFee;
+
         this.isLoading = false;
       }).catch((e) => {
         this.toast.add({
@@ -120,24 +240,139 @@ export default class UserRequestCard extends Vue {
       });
   }
 
+  formatCurrency(value: number) {
+    return value.toLocaleString('en-NG', { style: 'currency', currency: 'NGN' });
+  }
+  
+  // getotalAmount() {
+  //       // return `${this.billOfQuantities.totalPrice}`
+  //       const sumAmount: number = this.billOfQuantities.reduce((acc, obj) => {
+  //           return acc += obj.totalPrice;
+  //       }, 0)
+  //       return sumAmount;
+  //   }
+  // activate(id: number) {
+  //   const active_slide = ;
+  // }
+
 }
 </script>
 
 <style scoped>
-#hero {
-  margin-top: 80px;
-}
 .p-card{
   border-radius: 20px;
 }
-/* #details p{
+
+.requestCard {
+  padding: 20px;
+  width: 400px;
+  background: white;
+  border-radius: 10px;
+  box-shadow: whitesmoke;
+  margin-top: 20px;
+  margin-bottom: 150px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.requestCard p {
+  font-weight: 600;
+}
+.requestCard p span {
+  font-weight: lighter;
+}
+.customer-card, .executor-card {
+  background: rgb(209, 202, 209);
+  color: rgb(100, 87, 100);
+  padding: 10px;
+  border-radius: 5px;
+  margin-top: -10px;
+  margin-bottom: -10px;
+  text-align: left;
   display: flex;
-  justify-content: space-between;
+}
+.customer-card img, .executor-card img{
+  border-radius: 50%;
+  height: 30px;
+  width: 30px;
+  margin-top: 10px;
+}
+.customer-card p, .executor-card p{
+  margin-left: 5px;
+}
+#hero h3{
+  display: flex;
+  justify-content: center;
+}
+
+#card-holder {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+#userCard{
+  display: flex;
+  justify-content: center;
+}
+.products {
+  display: flex;
+  justify-content: center;
+}
+
+.product-details{
+  width: 400px;
+  background: white;
+  border-radius: 10px;
+  box-shadow: whitesmoke;
+  margin-top: 15px;
+  /* margin-bottom: 150px; */
+  margin-left: auto;
+  margin-right: auto;
+}
+.productImg {
+  border-radius: 10px 10px 0 0;
+  height: 150px;
+  overflow: hidden;
+}
+.productImg .img{
+  border-radius: 10px 10px 0 0;
+}
+.name{
+  display: flex;
+  justify-content: center;
+  padding: 10px;
+}
+.description, .about {
+  display: grid;
+  padding: 10px;
+  margin-top: -10px;
+}
+.description h4, .about h4{
   text-align: left;
 }
-#details p span{
+.description-card, .about-card {
+  background: rgb(209, 202, 209);
+  color: rgb(100, 87, 100);
+  padding: 10px;
+  border-radius: 5px;
+  margin-top: -10px;
+  margin-bottom: -10px;
   text-align: left;
-} */
+}
+.price, .quantity{
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  margin-top: -10px;
+}
+.rating, .status {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  margin-top: -10px;
+}
+.ratingNumber {
+  margin-top: 10px;
+}
 #avatar{
   margin-top: -95px;
   background: rgb(209, 202, 209);
@@ -147,10 +382,7 @@ export default class UserRequestCard extends Vue {
   font-size:4rem;
   border-radius: 50%;
 }
-.name{
-  display: flex;
-  justify-content: center;
-}
+
 .email{
   display: flex;
   justify-content: center;
@@ -177,13 +409,6 @@ export default class UserRequestCard extends Vue {
 .details2{
   padding: 15px;
 }
-.rating, .status {
-  display: flex;
-  justify-content: space-between;
-}
-.ratingNumber {
-  margin-top: 10px;
-}
 .active {
   background: rgb(178, 228, 178);
   color: green;
@@ -196,26 +421,5 @@ export default class UserRequestCard extends Vue {
   padding: 5px 10px;
   border-radius: 10px;
 }
-.about {
-  display: grid;
-}
-.about-card {
-  background: rgb(209, 202, 209);
-  color: rgb(100, 87, 100);
-  padding: 10px;
-  border-radius: 5px;
-  margin-top: -5px;
-  margin-bottom: -10px;
-}
- #userCard{
-  display: flex;
-  justify-content: center;
-  flex-wrap: nowrap;
-  margin: auto;
 
-}
-.product-details{
-  width: 200px;
-  border: 1px solid purple;
-}
 </style>

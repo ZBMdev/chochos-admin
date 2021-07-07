@@ -1,20 +1,54 @@
 <template>
   <div>
-          <!--<div v-if="artisan.reviews.length >=1" class="review-card">
-            <Card style="width: 25em">
-              <template #content>
-                  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error repudiandae numquam deserunt
-                  quisquam repellat libero asperiores earum nam nobis, culpa ratione quam perferendis esse, cupiditate neque quas!</p>
-              </template>
-            </Card>
-          </div>
-          <div v-else class="review-card">
-            No reviews
-          </div>-->
-          <div class="review-card">
-            <p> No reviews </p>
-          </div>
+    <div>
+      <div v-for="review in reviews" :key="review" class="review-card">
+        <div>
+          <img :src="review.reviewer.photoUrl">
         </div>
+        <div>
+          <div class="review-header">
+            <div>
+              <h3> {{ review.reviewer.fullName }} </h3>
+              <p> {{ review.createdAt }} </p>
+            </div>
+            <!-- <div class="rating">
+            <Rating
+              :modelValue="review.rating"
+              :readonly="true"
+              :cancel="false"
+              :stars="5"
+              class="p-rating"
+              id="ratingNumber"
+            />
+          </div> -->
+          </div>
+          <div class="rating">
+            <Rating
+              :modelValue="review.rating"
+              :readonly="true"
+              :cancel="false"
+              :stars="5"
+              class="p-rating"
+              id="ratingNumber"
+            />
+          </div>
+          <p> {{ review.message}} </p>
+        </div>
+      </div>
+    </div>
+    
+    <!-- <div v-for="review in reviews" :key="review" >
+      <div v-if="review === []" class="review-card">
+        <p> No reviews </p>
+      </div>
+      <div v-else class="review-card">
+        <p> {{ review.rating }} </p>
+        <p> {{ review.message}} </p>
+        <img :src="review.reviewer.photoUrl" style="border-radius: 50%; width: 30px; height: 30px">
+        <p> {{ review.reviewer.fullName }} </p>
+      </div>
+    </div> -->
+  </div>
 </template>
 
 <script lang="ts">
@@ -24,6 +58,7 @@ import MainLayout from '@/components/layouts/MainLayout.vue';
 import Artisan from '@/models/Artisan';
 import ArtisanService from '@/services/ArtisanService';
 import { ArtisanData } from '@/types/artisan'
+import Reviews from '@/models/Reviews';
 import PortfolioModel from '@/models/Portfolio';
 import PortfolioService from '@/services/PortfolioService';
 import { Portfolio, Row } from '@/types/portfolio'
@@ -42,6 +77,8 @@ export default class ArtisanReview extends Vue {
   allArtisan = reactive(new Artisan({})) as Artisan;
   //artisan!: Artisan;
   datasource: Artisan[] = []; 
+  reviews: Reviews[] = [];
+  review!: Reviews;
   portfolios: PortfolioModel[] = [];
   portfolio!: PortfolioModel;
   totalRecords = 0;
@@ -80,6 +117,7 @@ export default class ArtisanReview extends Vue {
     this.getArtisan();
     this.getAllArtisans();
     this.getPortfolio();
+    this.getReview();
   }
 
   getArtisan() {
@@ -122,17 +160,59 @@ export default class ArtisanReview extends Vue {
       });
   }
 
+  getReview() {
+    this.isLoading = true;
+    this.service.getReviews(+this.$route.params.id)
+      .then((data) => {
+        this.reviews = data.ratings.map((prod) => new Reviews(prod))
+        this.isLoading = false;
+      }).catch((e) => {
+        this.toast.add({
+          severity: "error",
+          summary: "There was an error loading reviews",
+          detail: "Please check your internet connection and refresh the page"
+        })
+        console.log(e);
+      });
+  }
+
 }
 </script>
 
 <style>
 .review-card {
-    background: whitesmoke;
-    border-radius: 20px;
-    padding: 10px 0;
+  background: whitesmoke;
+  border-radius: 20px;
+  padding: 10px 0;
+  display: flex;
+}
+.review-card div img {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  margin: 20px ;
+}
+.review-header{
+  display: flex;
+  justify-content: space-between;
+}
+.review-header h3{
+  margin-left: 5px;
+}
+.review-header p {
+  font-size: 13px;
+  color: gray;
+  margin-top: -10px;
 }
 .review-card p {
-    text-align: left;
-    padding: 0 10px;
+  text-align: left;
+  padding: 0 10px;
+}
+.rating, #ratingNumber {
+  margin: 0 0 5px 5px;
+}
+.p-rating .p-rating-icon.pi-star  {
+  color: gold;
+  font-size: 14px;
 }
 </style>

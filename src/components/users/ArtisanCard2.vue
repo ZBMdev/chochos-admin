@@ -1,10 +1,6 @@
 <template>
-  <div>
-    <PageHeading
-      title="Artisans"
-      :subtitle="`${totalRecords} artisans in total`"/>
-    <ProgressSpinner style="display:flex; justify-content: center" v-if="isLoading" />
-    <Card v-else>
+  Artisan Card
+      <Card>
       <template #content>
         <DataTable
           class="p-datatable-responsive p-datatable-sm"
@@ -20,7 +16,7 @@
           :scrollable="true"
           :rowHover="true"
           responsiveLayout="scroll"
-          @row-click="openArtisan($event.data.id)"
+          @row-click="openArtisan($event.data)"
         >
           <template #header>
             <div class="table-header p-d-flex p-flex-column p-flex-md-row p-jc-md-between">
@@ -187,125 +183,14 @@
       </template>
     </Card>
 
-    <Dialog
+    <div>
+      <Dialog
       v-model:visible="categoryDialog"
       :style="{ width: '450px' }"
       header="Artisan Details"
       :modal="true"
       class="p-fluid"
     >
-      <ArtisanCreate
-        :artisan="artisan"
-        :artisans="artisans.filter(cat => cat.id !== artisan.id)"
-        @updated="afterUpdateCategory"
-        @created="afterCreateCategory"
-      />
-    </Dialog>
-        
-    <Dialog
-      v-model:visible="newArtisanDialog"
-      :breakpoints="{'960px': '75vw', '640px': '100vw'}"
-      :style="{width: '450px'}"
-      header="New Artisan"
-      :modal="true"
-      class="p-fluid"
-    >
-      <div>
-        <div class="p-field p-fluid">
-          <label>
-           First name
-          </label>
-          <InputText
-            v-model="newArtisan.firstName"
-          >
-          </InputText>
-         </div>
-        <div class="p-field p-fluid">
-          <label>
-           Last name
-          </label>
-          <InputText
-            v-model="newArtisan.lastName"
-          >
-          </InputText>
-        </div>
-        <div class="p-field p-fluid">
-          <label>
-            Username
-          </label>
-          <InputText
-            v-model="newArtisan.username"
-          >
-          </InputText>
-        </div>
-        <div class="p-field p-fluid">
-          <label>
-            Email
-          </label>
-          <InputText
-            v-model="newArtisan.email"
-          >
-          </InputText>
-        </div>
-        <div class="p-field p-fluid">
-          <label>
-            Address
-          </label>
-          <InputText
-            v-model="newArtisan.address"
-          >
-          </InputText>
-        </div>
-        <div class="p-field p-fluid">
-          <label>
-            Password
-          </label>
-          <Password
-            v-model="newArtisan.password"
-            toggleMask
-            :feedback="false"
-            placeholder="*******"
-          >
-          </Password>
-        </div>
-        <!-- <div class="p-field p-fluid">
-          <label>
-            User Category
-          </label>
-          <InputNumber id="integeronly"
-            v-model="newArtisan.userCategory"
-            aria-describedby="userCat"/>
-            <small id="userCat" >Type in 1.</small>
-        </div> -->
-
-        <div class="p-field p-fluid">
-          <label>
-            User Category
-          </label>
-          <Dropdown
-            v-model="newArtisan.userCategory"
-            :options="userCat"
-            optionLabel="name"
-            optionValue="code"
-            placeholder="Select Artisan"
-            required="true"
-            :class="{'p-invalid': submitted && !newArtisan.userCategory}"
-          />
-          <small class="p-error" v-if="submitted && !newArtisan.userCategory">Selection required.</small>
-        </div>
-        <Button @click="saveArtisan" label="Submit" id="lbutton"></Button>
-      </div> 
-    </Dialog>
-
-    <Dialog
-      v-model:visible="artisanDialog"
-      :breakpoints="{'960px': '75vw', '640px': '100vw'}"
-      :style="{width: '50vw'}"
-      header="Artisan Details"
-      :modal="true"
-      class="p-fluid"
-    >
-      <div>
         <div class="p-field p-fluid">
           <label>
            Job
@@ -369,16 +254,85 @@
           >
           </InputText>
         </div>
-      </div> 
     </Dialog>
-  </div> 
+    </div>
+
+    <div>
+      <div :value="artisan">
+        <div class="p-field p-fluid">
+          <label>
+           Job
+          </label>
+          <InputText
+            v-model="slotProps.data.userCategoryRecord.occupationName"
+          >
+          </InputText>
+        </div>
+        <div class="p-field p-fluid">
+          <label>
+           About
+          </label>
+          <InputText
+            v-model="artisan.userCategoryRecord.about"
+          >
+          </InputText>
+        </div>
+        <div class="p-field p-fluid">
+          <label>
+           Firstname
+          </label>
+          <InputText
+            v-model="artisan.firstName"
+          >
+          </InputText>
+        </div>
+        <div class="p-field p-fluid">
+          <label>
+           Lastname
+          </label>
+          <InputText
+            v-model="artisan.lastName"
+          >
+          </InputText>
+        </div>
+        <div class="p-field p-fluid">
+          <label>
+            Email
+          </label>
+          <InputText
+            v-model="artisan.email"
+          >
+          </InputText>
+        </div>
+        <div class="p-field p-fluid">
+          <label>
+            Username
+          </label>
+          <InputText
+            v-model="artisan.username"
+          >
+          </InputText>
+        </div>
+        <div class="p-field p-fluid">
+          <label>
+            Address
+          </label>
+          <InputText
+            v-model="artisan.address"
+          >
+          </InputText>
+        </div>
+    </div>
+    </div>
+
 </template>
+
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component';
 import MainLayout from '@/components/layouts/MainLayout.vue';
 import Artisan from '@/models/Artisan';
-import { ArtisanRegisterParams, ArtisanData } from '@/types/artisan'
+import { ArtisanRegisterParams, ArtisanData } from '@/types/artisan';
 import ArtisanService from '@/services/ArtisanService';
 import { useToast } from 'primevue/usetoast';
 import {FilterMatchMode} from 'primevue/api';
@@ -462,85 +416,9 @@ export default class Artisans extends Vue {
       console.log(e);
     });
   }
-
-  afterUpdateCategory(justUpdated: ArtisanData) {
-    this.artisans[this.findIndexById(justUpdated.id)] = new Artisan(justUpdated);
-  }
-
-  afterCreateCategory(justUpdated: ArtisanData) {
-    this.artisans.push(new Artisan(justUpdated));
-    this.categoryDialog = false;
-  }
-
-  openNew(artisan: Artisan) {
-    // this.artisan = new Artisan({});
-    // this.artisan = artisan;
-    this.newArtisanDialog = true;
-    this.submitted = false;
-  }
-
-  // openArtisan(artisan: Artisan) {
-  //   this.artisan = artisan;
-  //   this.artisanDialog = true;
-  // }
-  // openArtisan(artisan: Artisan) {
-  //   this.$router.push({ path: `/artisanProfile`});
-  // }
-  openArtisan(id: number) {
-    this.$router.push({ path: `/artisans/${id}?select=userCategoryRecord`});
-  }
-
-  hideDialog() {
-    this.artisanDialog = false;
-    this.submitted = false;
-  }
-
-  findIndexById(id: number): number {
-    return this.artisans.findIndex((cat) => cat.id === id)
-  }
-
-  saveArtisan() {
-    this.service.createArtisan(this.newArtisan)
-      .then((newArtisan) => {
-      // .then(() => {
-        // this.newArtisan = new Artisan({});
-        // this.userCategory = 1;
-        // this.artCat = 1;
-        // this.newArtisan.userCategory = 1;
-        // this.artisans.push(this.newArtisan);
-        this.toast.add({
-          severity:'success',
-          summary: 'Successful',
-          detail: 'Artisan Created',
-          life: 3000
-        });
-        this.newArtisanDialog = false;
-        this.$emit("Artisan created", newArtisan);
-      }).catch((e) => {
-        this.toast.add({ severity: 'error', summary: e, detail:"Sorry we could not create an artisan at the moment, please try again", life: 3000 });
-      }).finally(() => {
-        // this.newArtisanDialog = false;
-        this.submitted = true;
-        console.log(this.newArtisan)
-      });
-  }
 }
 </script>
 
+<style>
 
-<style scoped>
-.filter-by {
-  min-width: 300px;
-}
-
-::v-deep(b) {
-    display: block;
-}
-
-::v-deep(.p-card-body) {
-    padding: 2rem;
-}
-#lbutton {
-  background: green;
-}
 </style>

@@ -3,25 +3,6 @@ import { ArtisanData, ArtisanRegisterParams, Languages, UserCategoryRecord, Port
 import Model from "./Model";
 
 export default class Artisan extends Model {
-    // fullName!:         string;
-    // id!:               number;
-    // lastName!:         string;
-    // firstName!:        string;
-    // email!:            string;
-    // username!:         string;
-    // userCategory!:     number ;
-    // longitude!:        number ;
-    // latitude!:         number ;
-    // rating!:           number;
-    // totalRatingValue!: number ;
-    // address!:          string;
-    // mobile!:           string;
-    // photoUrl!:         string;
-    // last_login!:      Date;
-    // about!:            string;
-    // languages!:        Languages;
-    // categoryId!:       number ;
-
     fullName!:           string;
     id!:                 number;
     userCategory!:       number;
@@ -44,41 +25,11 @@ export default class Artisan extends Model {
     skills!:             any[];
     portfolios!:         Portfolio[];
 
-    // id!:                    number;
-    userId!:                number;
-    occupationId!:          number;
-    occupationName!:        string;
-    feeRate!:               number;
-    fee!:                   number;
-    jobsCompleted!:         number;
-    businessEmail!:         null;
-    // address!:               string;
-    state!:                 null;
-    city!:                  null;
-    // about!:                 string;
-    idImageUrl!:            null;
-    utilityBillImageUrl!:   null;
-    officialPhoneNumber!:   null;
-    // userCategory!:          number;
-    isValidated!:           null;
-    isActive!:              null;
-    isUtilityBillVerified!: null;
-    isIdVerified!:          null;
-    tools!:                 null;
-    updated_on!:            Date;
-    created_on!:            Date;
-    deletedAt!:             null;
-
     constructor(data?: Partial<ArtisanData>) {
         super();
         if (data) {
             Object.assign(this, data);
         }
-        // if (data && data.portfolios) {
-        //     this.portfolios = data.portfolios.map((port) => new Portfolio(port));
-        // }else {
-        //     this.portfolios = []
-        // }
     }
 
     get name() {
@@ -89,10 +40,6 @@ export default class Artisan extends Model {
         return this.about;
     }
 
-    /* get last_login_date() {
-        return this.toDaysAgo(this.last_login);
-    } */
-
     get lastLogin() {
         return this.formatDate(this.last_login)
     }
@@ -100,10 +47,6 @@ export default class Artisan extends Model {
     get jobName() {
         return `${this.userCategoryRecord?.occupationName }`;
     }
-
-    // get jobName() {
-    //     return this.userCategoryRecord.occupationName;
-    // }
 
     toCreateParam(password: string) {
         return {

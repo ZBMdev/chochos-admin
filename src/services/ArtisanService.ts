@@ -1,7 +1,8 @@
-import { APIResponse, PaginatedResponse } from '@/types/api';
+import { APIResponse, APIResponse2, PaginatedResponse } from '@/types/api';
 import { API } from '@/utils/api';
 import { AxiosResponse } from 'axios';
 import { ArtisanData, ArtisanRegisterParams, ArtisanSummary } from '@/types/artisan'
+import { ReviewData, Rating, Reviewer } from '@/types/reviews'
 import Service from './Service';
 import qs from 'qs';
 
@@ -23,6 +24,16 @@ export default class ArtisanService extends Service<ArtisanData, ArtisanRegister
             }).catch((error) => {
                 console.error("AdminService.ts >>>>>>>", error.message.error)
             })
+    }
+
+    public getReviews(id: number,  query?: string) {
+        return API.get(`${this.url}/${id}/ratings${query ? '?' + query : ''}`)
+            .then(({ data }: AxiosResponse<APIResponse2<ReviewData>>) => {
+                return data.data;
+            }).catch((error) => {
+                console.error("Service.ts >>>>>", error.message, error)
+                throw error;
+            });
     }
 
     async getSummary(query?: string) {
