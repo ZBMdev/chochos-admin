@@ -73,7 +73,7 @@
             title="Jobs"
             :loading="summaryLoading"
             :value="`${job.totalCount}`"
-            :action="() => {}"
+            :action="() => $router.push({ name: 'jobs' })"
             :stat="{}"
           />
         </div>
@@ -103,7 +103,7 @@
             title="Artisans"
             :loading="summaryLoading"
             :value="`${artisan.totalCount}`"
-            :action="() => $router.push({ name: 'customers' })"
+            :action="() => $router.push({ name: 'artisans' })"
             :stat="{}"
           />
         </div>
