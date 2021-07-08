@@ -36,7 +36,7 @@
         </div>
       </div>
     </div>
-    <div>
+    <!-- <div>
       <div v-for="review in reviews" :key="review" class="review-card">
         <div v-if="review in reviews != null">  
           <div>
@@ -55,7 +55,7 @@
           <p>No reviews </p>
         </div>
       </div>
-    </div>
+    </div> -->
     <!-- <div v-for="review in reviews" :key="review" >
       <div v-if="review === []" class="review-card">
         <p> No reviews </p>
