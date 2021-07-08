@@ -37,7 +37,7 @@ export default class Artisan extends Model {
     }
 
     get aboutArtisan() {
-        return this.about;
+        return `${this.userCategoryRecord?.about }`;
     }
 
     get lastLogin() {
@@ -46,6 +46,14 @@ export default class Artisan extends Model {
 
     get jobName() {
         return `${this.userCategoryRecord?.occupationName }`;
+    }
+
+    get jobNumber() {
+        return `${this.userCategoryRecord?.jobsCompleted }`;
+    }
+
+    get jobPrice() {
+        return `${this.userCategoryRecord?.fee }`;
     }
 
     toCreateParam(password: string) {

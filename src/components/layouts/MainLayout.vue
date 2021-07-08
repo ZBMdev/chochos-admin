@@ -42,7 +42,7 @@
             <Avatar
               class="avatar"
               style="background-color:#9c27b0; color: #ffffff"
-              :label="initial"
+              :label="adminInit"
               shape="circle"
             />
           </Button>
@@ -85,6 +85,13 @@ import { Ref } from 'vue'
       this.closeSideBar()
     }
   },
+  computed: {
+    adminInit() {
+      const initials = localStorage.getItem('username');
+      return initials?.charAt(0).toUpperCase();
+    }
+  }
+
 
 })
 export default class MainLayout extends Vue {

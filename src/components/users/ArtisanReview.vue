@@ -36,7 +36,26 @@
         </div>
       </div>
     </div>
-    
+    <div>
+      <div v-for="review in reviews" :key="review" class="review-card">
+        <div v-if="review in reviews != null">  
+          <div>
+            <img :src="review.reviewer.photoUrl">
+          </div>
+          <div>
+            <div class="review-header">
+              <div>
+                <h3> {{ review.reviewer.fullName }} </h3>
+                <p> {{ review.createdAt }} </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div v-else>
+          <p>No reviews </p>
+        </div>
+      </div>
+    </div>
     <!-- <div v-for="review in reviews" :key="review" >
       <div v-if="review === []" class="review-card">
         <p> No reviews </p>

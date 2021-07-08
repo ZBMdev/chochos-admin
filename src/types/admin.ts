@@ -67,7 +67,7 @@ export interface AdminChangePassword{
 
 export interface LoginData {
     token: string;
-    admin: AdminsData;
+    user: AdminsData;
     message: string;
     devMessage?: string;
 }
@@ -96,16 +96,49 @@ export interface Admins {
 }
 
 export interface AdminsData {
-    id: number;
-    firstName: string;
-    lastName: string;
+    // id: number;
+    // firstName: string;
+    // lastName: string;
+    // email: string;
+    // username: string;
+    // password: string;
+    // oldPassword: string;
+    // push_token:  string;
+    // updated_at: Date;
+    // created_at: Date;
+
+    about: string;
+    address: string;
+    categoryId: number;
+    created_on: Date;
+    deletionDate: Date;
     email: string;
-    username: string;
-    password: string;
+    firstName: string;
+    fullName: string;
+    id: number;
+    isActive: boolean;
+    isValidated: boolean;
+    languages: string;
+    lastName: string;
+    last_login: Date;
+    latitude: number;
+    loginType: string;
+    longitude: number;
+    mobile: string;
     oldPassword: string;
-    push_token:  string;
-    updated_at: Date;
-    created_at: Date;
+    password: string;
+    passwordUpdated_on: Date;
+    photoUrl: string;
+    push_token: string;
+    rating: number;
+    refreshToken: string;
+    skills: string;
+    totalRatingCount: number;
+    totalRatingValue: number;
+    updated_on: Date;
+    userCategory: number;
+    userIdentifier: number;
+    username: string;
 }
 
 /* export interface AdminsData {

@@ -38,11 +38,11 @@
           <div class="details2">
             <div class="occupation">
               <p> Occupation </p>
-              <p class="occName"> {{  }}  </p>
+              <p class="occName"> {{ artisan?.jobName  }}  </p>
             </div>
             <div class="jobs">
               <p> Jobs completed </p>
-              <p class="jobNumber"> {{  }} 5 </p>
+              <p class="jobNumber"> {{ formatCurrency(artisan?.jobNumber) }} </p>
             </div>    
             <div class="rating">
               <p> Average rating </p>
@@ -56,7 +56,7 @@
             </div>
             <div class="price">
               <p> Average price </p>
-              <h4> {{ }} 2500</h4>
+              <p> ₦ {{ formatCurrency(artisan?.jobPrice) }} </p>
             </div>
             <div class="status">
               <p> Status: </p>
@@ -70,7 +70,7 @@
             <div class="about">
               <h4>About </h4>
               <p class="about-card">
-                {{ artisan.about}}
+                {{ artisan.aboutArtisan }}
               </p>
             </div>
         </div>
@@ -100,7 +100,7 @@ export default class ArtisanAbout extends Vue {
   artisan = reactive(new Artisan({})) as Artisan;
   allArtisans: Artisan[] = [];
   allArtisan = reactive(new Artisan({})) as Artisan;
-  //artisan!: Artisan;
+  // artisan!: Artisan;
   datasource: Artisan[] = []; 
   portfolios: PortfolioModel[] = [];
   portfolio!: PortfolioModel;
@@ -182,6 +182,10 @@ export default class ArtisanAbout extends Vue {
       });
   }
 
+  formatCurrency(value: number) {
+    return value.toLocaleString('en-NG', { style: 'currency', currency: 'NGN' });
+  }
+
 }
 </script>
 
@@ -239,7 +243,7 @@ export default class ArtisanAbout extends Vue {
 .details2{
   padding: 15px;
 }
-.jobs, .price, .rating, .status {
+.occupation, .jobs, .price, .rating, .status {
   display: flex;
   justify-content: space-between;
 }

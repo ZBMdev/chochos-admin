@@ -140,6 +140,7 @@ export default class ArtisanPortfolio extends Vue {
   background: white;
   border-radius: 10px;
   width: 400px;
+  margin-top: 20px;
 }
 .portImg{
   width: 100%;
