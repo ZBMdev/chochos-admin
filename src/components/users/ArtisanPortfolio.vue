@@ -5,7 +5,9 @@
         <img :src="port.url" alt="">
       </div>
       <h4> {{ port.name }} </h4>
-      <p> {{ port.description }} </p>
+      <div class="portDescription">
+        <p> {{ port.description }} </p>
+      </div>
     </div>
   </div>
 </template>
@@ -138,6 +140,8 @@ export default class ArtisanPortfolio extends Vue {
 }
 .singlePortfolio{
   background: white;
+  box-shadow: 0 2px 1px -1px rgb(0 0 0 / 20%), 0 1px 1px 0 rgb(0 0 0 / 14%),
+    0 1px 3px 0 rgb(0 0 0 / 12%);
   border-radius: 10px;
   width: 400px;
   margin-top: 20px;
@@ -153,6 +157,9 @@ export default class ArtisanPortfolio extends Vue {
 }
 .singlePortfolio h4{
   text-align: left;
+  padding: 0 10px;
+}
+.portDescription {
   padding: 0 10px;
 }
 .singlePortfolio p{

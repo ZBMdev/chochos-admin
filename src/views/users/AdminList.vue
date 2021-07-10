@@ -14,7 +14,6 @@
           filterDisplay="row" 
           :globalFilterFields="['firstName','lastName','username','email', 'languages', 'address']"
           :paginator="true"
-          paginatorPosition="both"
           paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
           :rowsPerPageOptions="[10,20, 50, 100, 200]"
           currentPageReportTemplate="Showing {first} to {last} of {totalRecords} admins"
@@ -34,10 +33,10 @@
               </div>
               <span class="p-input-icon-left">
                 <i class="pi pi-search" />
-                <!-- <InputText
+                <InputText
                   v-model="filters['global'].value"
                   placeholder="Search..."
-                /> -->
+                />
               </span>
             </div>
           </template> <template #empty>
@@ -46,7 +45,7 @@
           <template #loading>
             Loading admins data. Please wait.
           </template>
-          <Column headerStyle="width: 3rem;">
+          <Column headerStyle="width: 3rem; height: 50px; font-weight: bold;">
             <template #body={data}>
               <Avatar
                 :label="`${data.firstName.charAt(0).toUpperCase()}${data.lastName.charAt(0).toUpperCase()}`"
@@ -61,6 +60,7 @@
             field="firstName"
             header="First Name"
             style="min-width: 250px"
+            headerStyle="height: 50px; font-weight: bold;"
             :sortable="true"
             filterMode="contains"
           ></Column>
@@ -68,6 +68,7 @@
             field="lastName"
             header="Surname"
             style="min-width: 250px"
+            headerStyle="height: 50px; font-weight: bold;"
             :sortable="true"
             filterMode="contains"
           ></Column>
@@ -75,6 +76,7 @@
             field="email"
             header="Email"
             style="min-width: 250px"
+            headerStyle="height: 50px; font-weight: bold;"
             :sortable="true"
             filterMode="contains"
           ></Column>
@@ -82,10 +84,11 @@
             field="username"
             header="Username"
             style="min-width: 150px"
+            headerStyle="height: 50px; font-weight: bold;"
             :sortable="true"
             filterMode="contains"
           ></Column>
-          <Column headerStyle="width: 100px;">
+          <Column headerStyle="width: 100px;height: 50px; font-weight: bold;">
             <template #body="slotProps">
               <Button
                 icon="pi pi-pencil"
@@ -267,6 +270,7 @@ import { AdminData, AdminsData, AdminCreateParam } from '@/types/admin'
 // import AdminCreate from "@/components/users/AdminCreate.vue";
 // import AdminEdit from "@/components/users/AdminEdit.vue";
 import { useToast } from 'primevue/usetoast';
+import {FilterMatchMode} from 'primevue/api';
 
 export default defineComponent({
   // components: { AdminCreate, AdminEdit },
@@ -286,7 +290,14 @@ export default defineComponent({
         lastName: '',
         email: '',
         username: ''
-      }
+      },
+      filters: {
+        'global': {value: null, matchMode: FilterMatchMode.CONTAINS},
+        'name': {value: null, matchMode: FilterMatchMode.STARTS_WITH}
+      },
+      matchModeOptions:  [
+        {label: 'Starts With', value: FilterMatchMode.STARTS_WITH}
+      ]
     }
   },
   mounted() {

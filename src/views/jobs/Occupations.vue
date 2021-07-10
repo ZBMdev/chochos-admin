@@ -21,6 +21,7 @@
           responsiveLayout="scroll"
           :scrollable="true"
           :rowHover="true"
+          @row-click="openOccupation($event.data)"
         >
           <template #header>
             <div class="table-header">
@@ -36,6 +37,7 @@
           <Column
             field="name"
             style="min-width: 14rem"
+            headerStyle="height: 50px; font-weight: bold;"
             header="Name"
             sortable
           >
@@ -45,7 +47,9 @@
           </Column>
           <Column
             header="Image"
-            style="min-width: 14rem">
+            style="min-width: 14rem"
+            headerStyle="height: 50px; font-weight: bold;"
+          >
             <template #body="slotProps">
               <span class="p-column-title">Image</span>
               <img
@@ -57,6 +61,7 @@
           <Column
             field="description"
             style="min-width: 14rem"
+            headerStyle="height: 50px; font-weight: bold;"
             header="Description"
             filterField="description"
             filterMatchMode="contains"
@@ -69,6 +74,43 @@
         </DataTable>
       </template>
     </Card>
+
+    <Dialog
+      v-model:visible="occupationDialog"
+      :style="{ width: '450px' }"
+      header="Occupation Details"
+      :modal="true"
+      class="p-fluid"
+    >
+
+    <div class="p-fluid">
+      <div class="p-fluid p-formgrid p-grid">
+        <div class="p-col-12 p-md-6">
+          <label for="occupationImg">Image</label>
+          <img
+            :src="occupation.image"
+            :alt="name"
+            id="occupationImg"
+            style="width: 200px; height: 160px; border-radius: 10px;"
+          />
+        </div>
+      </div>
+      <div class="p-field">
+        <label for="name">Name</label>
+        <InputText
+          id="name"
+          v-model="occupation.name"
+        />
+      </div>
+      <div class="p-field">
+        <label for="description">Description</label>
+        <InputText
+          id="description"
+          v-model="occupation.description"
+        />
+      </div>
+    </div>
+    </Dialog>
   </div>
 </template>
 
@@ -89,6 +131,8 @@ interface OccupationLazyParameters {
 
 export default class OccupationList extends Vue {
   occupations: Occupation[] = [];
+  occupation!: Occupation;
+  occupationDialog = false;
   selectedCategories: Occupation[] = [];
   filterValue = '';
   loading = false;
@@ -139,8 +183,12 @@ export default class OccupationList extends Vue {
       });
   }
 
-  openOccupation(id: number) {
-    this.$router.push({ path: `/occupations/${id}`});
+  // openOccupation(id: number) {
+  //   this.$router.push({ path: `/occupations/${id}`});
+  // }
+  openOccupation(occupation: Occupation) {
+    this.occupation = occupation;
+    this.occupationDialog = true;
   }
 
 }

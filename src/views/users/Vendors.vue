@@ -49,7 +49,7 @@
           <template #loading>
             Loading vendors data. Please wait.
           </template>
-          <Column headerStyle="width: 3rem;">
+          <Column headerStyle="width: 3rem; height: 50px; font-weight: bold;">
             <template #body="slotProps">
               <Avatar
                 :label="slotProps.data.fullName.charAt(0).toUpperCase()"
@@ -62,6 +62,7 @@
           <Column
             field="name"
             style="min-width: 12rem"
+            headerStyle="height: 50px; font-weight: bold;"
             header="Name"
             :sortable="true"
             filterMode="contains"
@@ -74,6 +75,7 @@
           <Column
             field="username"
             style="min-width: 12rem"
+            headerStyle="height: 50px; font-weight: bold;"
             header="Username"
             :sortable="true"
             filterMode="contains"
@@ -86,6 +88,7 @@
           <Column
             field="email"
             style="min-width: 12rem"
+            headerStyle="height: 50px; font-weight: bold;"
             header="Email"
             :sortable="true"
             filterMode="contains"
@@ -98,6 +101,7 @@
           <Column
             field="last_login"
             style="min-width: 10rem"
+            headerStyle="height: 50px; font-weight: bold;"
             header="Last active"
             sortField="last_login_date"
             :sortable="true"
@@ -109,6 +113,7 @@
           <Column
             field="rating"
             style="min-width: 12rem"
+            headerStyle="height: 50px; font-weight: bold;"
             header="Reviews"
             filterField="rating"
             filterMatchMode="contains"
@@ -125,6 +130,7 @@
           <Column
             field="languages"
             style="min-width: 10rem"
+            headerStyle="height: 50px; font-weight: bold;"
             header="Languages"
             :sortable="true"
           >
@@ -135,6 +141,7 @@
           <Column
             field="address"
             style="min-width: 12rem"
+            headerStyle="height: 50px; font-weight: bold;"
             header="Address"
             :sortable="true"
           >

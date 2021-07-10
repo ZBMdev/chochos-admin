@@ -43,7 +43,7 @@
           <Column
             field="CustomerName"
             style="min-width: 14rem"
-            headerStyle="min-width: 14rem"
+            headerStyle="min-width: 14rem; height: 50px; font-weight: bold;"
             header="Customer"
             filterMode="contains"
           >
@@ -54,7 +54,7 @@
           <Column
             field="name"
             style="min-width: 14rem"
-            headerStyle="min-width: 14rem"
+            headerStyle="min-width: 14rem; height: 50px; font-weight: bold;"
             header="Executor"
             filterMode="contains"
           >
@@ -65,7 +65,7 @@
           <Column
             field="address"
             style="min-width: 14rem"
-            headerStyle="min-width: 14rem"
+            headerStyle="min-width: 14rem; height: 50px; font-weight: bold;"
             header="Address"
             filterMode="contains"
           >
@@ -76,7 +76,7 @@
           <Column
             ref="price"
             field="totalAmount"
-            headerStyle="min-width: 14rem"
+            headerStyle="min-width: 14rem; height: 50px; font-weight: bold;"
             style="min-width: 14rem"
             header="Amount"
             filterField="price"
@@ -91,7 +91,7 @@
             ref="date"
             field="date"
             style="min-width: 14rem"
-            headerStyle="min-width: 14rem"
+            headerStyle="min-width: 14rem; height: 50px; font-weight: bold;"
             header="Start Date"
             filterField="date"
             filterMatchMode="contains"
@@ -104,7 +104,7 @@
           <Column
             field="rating"
             style="min-width: 14rem"
-            headerStyle="min-width: 14rem"
+            headerStyle="min-width: 14rem; height: 50px; font-weight: bold;"
             header="Job Reviews"
             filterField="rating"
             filterMatchMode="contains"
@@ -378,11 +378,12 @@ label {
   font-size: 14px;
 }
 #jobStat{
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  justify-content: start;
 }
 #jobStat span{
   line-height: 20px;
+  border-radius: 10px;
 }
 </style>
 

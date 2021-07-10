@@ -190,15 +190,22 @@ export default class ArtisanAbout extends Vue {
 </script>
 
 <style>
-
+.fancy-card {
+  box-shadow: 0 2px 1px -1px rgb(0 0 0 / 20%), 0 1px 1px 0 rgb(0 0 0 / 14%),
+    0 1px 3px 0 rgb(0 0 0 / 12%);
+  border-radius: 3px;
+}
+.fancy-card:hover {
+  box-shadow: 0 3px 5px -1px rgb(0 0 0 / 20%), 0 5px 8px 0 rgb(0 0 0 / 14%),
+    0 1px 14px 0 rgb(0 0 0 / 12%);
+}
 .userCard{
-  /* display: grid;
-  justify-content: center; */
   width: 400px;
-  /* height: 100vh; */
   background: white;
   border-radius: 10px;
-  box-shadow: whitesmoke;
+  /* box-shadow: whitesmoke; */
+  box-shadow: 0 2px 1px -1px rgb(0 0 0 / 20%), 0 1px 1px 0 rgb(0 0 0 / 14%),
+    0 1px 3px 0 rgb(0 0 0 / 12%);
   margin-top: 150px;
   margin-bottom: 150px;
   margin-left: auto;

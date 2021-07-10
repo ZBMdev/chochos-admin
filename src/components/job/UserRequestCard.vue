@@ -62,8 +62,9 @@
                   <div class="productImg">
                     <!-- <div v-for="product in requests.product" :key="product"> -->
                       <div v-for="productImg in user.product.productImages" :key="productImg" class="productImg">
-                        <img v-if="productImg.url != null && productImg.url" :src="productImg.url" alt="">
-                        <img v-else src="require(@/assets/images/default-placeholder-image.png)">
+                        <img v-if="productImg.url != null && productImg.url" :src="productImg.url" alt="image">
+                        <!-- <img v-else src="require(@/assets/images/default-placeholder-image.png)"> -->
+                        <img v-else src="../../assets/images/default-placeholder-image.png" >
                       </div>
                     <!-- </div> -->
                     <!-- <div
@@ -268,7 +269,9 @@ export default class UserRequestCard extends Vue {
   width: 400px;
   background: white;
   border-radius: 10px;
-  box-shadow: whitesmoke;
+  /* box-shadow: whitesmoke; */
+  box-shadow: 0 2px 1px -1px rgb(0 0 0 / 20%), 0 1px 1px 0 rgb(0 0 0 / 14%),
+    0 1px 3px 0 rgb(0 0 0 / 12%);
   margin-top: 20px;
   margin-bottom: 150px;
   margin-left: auto;
@@ -322,7 +325,9 @@ export default class UserRequestCard extends Vue {
   width: 400px;
   background: white;
   border-radius: 10px;
-  box-shadow: whitesmoke;
+  /* box-shadow: whitesmoke; */
+  box-shadow: 0 2px 1px -1px rgb(0 0 0 / 20%), 0 1px 1px 0 rgb(0 0 0 / 14%),
+    0 1px 3px 0 rgb(0 0 0 / 12%);
   margin-top: 15px;
   /* margin-bottom: 150px; */
   margin-left: auto;

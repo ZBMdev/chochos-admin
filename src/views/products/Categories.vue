@@ -32,19 +32,19 @@
                   @click="openNew"
                 />
               </div>   
-              <!--<span class="p-input-icon-left">
+              <span class="p-input-icon-left">
                 <i class="pi pi-search" />
                 <InputText
                   v-model="filters['global'].value"
                   placeholder="Search..."
                 />
-              </span>-->
+              </span>
             </div>
           </template>
           <Column
             field="name"
             style="min-width: 14rem"
-            headerStyle="min-width: 14rem"
+            headerStyle="min-width: 14rem; height: 50px; font-weight: bold;"
             header="Name"
             sortable
           >
@@ -56,7 +56,7 @@
             field="categories"
             header="Date"
             style="min-width: 14rem"
-            headerStyle="min-width: 14rem"
+            headerStyle="min-width: 14rem; height: 50px; font-weight: bold;"
             filterField="categories"
             filterMatchMode="contains"
           >
@@ -83,31 +83,43 @@
       </template>
     </Card>
     
-    <Dialog v-model:visible="categoryDialog" :style="{width: '450px'}" header="New Category Details" :modal="true" class="p-fluid">
-            <div class="p-field">
-                <label for="name">Name</label>
-                <InputText id="name" v-model.trim="category.name" required="true" autofocus :class="{'p-invalid': submitted && !category.name}" />
-                <small class="p-error" v-if="submitted && !category.name">Name is required.</small>
-            </div>
+    <Dialog
+      v-model:visible="categoryDialog"
+      :style="{width: '450px'}"
+      header="New Category Details"
+      :modal="true"
+      class="p-fluid"
+    >
+      <div class="p-field">
+        <label for="name">Name</label>
+        <InputText
+          id="name"
+          v-model.trim="category.name"
+          required="true"
+          autofocus
+          :class="{'p-invalid': submitted && !category.name}"
+        />
+        <small class="p-error" v-if="submitted && !category.name">Name is required.</small>
+      </div>
 
-            <template #footer>
-                <Button label="Cancel" icon="pi pi-times" class="p-button-text" @click="hideDialog"/>
-                <Button label="Save" icon="pi pi-check" class="p-button-text" @click="saveCategory" loadingText="Saving" />
-            </template>
-        </Dialog>
+      <template #footer>
+        <Button label="Cancel" icon="pi pi-times" class="p-button-text" @click="hideDialog"/>
+        <Button label="Save" icon="pi pi-check" class="p-button-text" @click="saveCategory" loadingText="Saving" />
+      </template>
+    </Dialog>
 
-        <Dialog v-model:visible="categoryEditDialog" :style="{width: '450px'}" header="Category Details" :modal="true" class="p-fluid">
-            <div class="p-field">
-                <label for="name">Name</label>
-                <InputText id="name" v-model="category.name" required="true" autofocus :class="{'p-invalid': submitted && !category.name}" />
-                <small class="p-error" v-if="submitted && !category.name">Name is required.</small>
-            </div>
+    <Dialog v-model:visible="categoryEditDialog" :style="{width: '450px'}" header="Category Details" :modal="true" class="p-fluid">
+      <div class="p-field">
+        <label for="name">Name</label>
+        <InputText id="name" v-model="category.name" required="true" autofocus :class="{'p-invalid': submitted && !category.name}" />
+        <small class="p-error" v-if="submitted && !category.name">Name is required.</small>
+      </div>
 
-            <template #footer>
-                <Button label="Cancel" icon="pi pi-times" class="p-button-text" @click="hideDialog"/>
-                <Button label="Save" icon="pi pi-check" class="p-button-text" @click="updateCategory" loadingText="Saving" />
-            </template>
-        </Dialog>
+      <template #footer>
+        <Button label="Cancel" icon="pi pi-times" class="p-button-text" @click="hideDialog"/>
+        <Button label="Save" icon="pi pi-check" class="p-button-text" @click="updateCategory" loadingText="Saving" />
+      </template>
+    </Dialog>
 
 
     <Dialog
@@ -180,92 +192,93 @@ import { useToast } from 'primevue/usetoast';
 import BombsightService from '@/services/BombsightService';
 import CategoryEdit from "@/components/products/CategoryEdit.vue";
 import qs from 'qs';
-// import {FilterMatchMode} from 'primevue/api';
+import {FilterMatchMode} from 'primevue/api';
 
 
 export default {
-    setup() {   
-        const toast = useToast();
-        const dt = ref();
-        const isLoading = ref(false);
-        const categories = ref();
-        const categoryDialog = ref(false);
-        const deleteCategoryDialog = ref(false);
-        const deleteCategoriesDialog = ref(false);
-        const category = ref();
-        const service = ref(new CategoryService());
-        const selectedCategories = ref();
-        // const filters = ref({
-        //     'global': {value: null, matchMode: FilterMatchMode.CONTAINS},
-        // });
-        const submitted = ref(false);
-        const lazyParams = ref({});
-        const totalRecords = ref(0);
-        const firstRecordIndex = ref(0);
-        const rowstoDisplay = ref(10);
-        const categoryEditDialog = ref(false);
+  setup() {   
+    const toast = useToast();
+    const dt = ref();
+    const isLoading = ref(false);
+    const categories = ref();
+    const categoryDialog = ref(false);
+    const deleteCategoryDialog = ref(false);
+    const deleteCategoriesDialog = ref(false);
+    const category = ref();
+    const service = ref(new CategoryService());
+    const selectedCategories = ref();
+    const filters = ref({
+      'global': {value: null, matchMode: FilterMatchMode.CONTAINS},
+    });
+    const submitted = ref(false);
+    const lazyParams = ref({});
+    const totalRecords = ref(0);
+    const firstRecordIndex = ref(0);
+    const rowstoDisplay = ref(10);
+    const categoryEditDialog = ref(false);
 
-        const loadLazyData = () => {
-            isLoading.value = true;
-            service.value.getAllPaginated(service.value.allCategories)
-            .then(data => {
-                categories.value = data.items.map((prod) => new Category(prod));
-                totalRecords.value = data.totalCount;
-                firstRecordIndex.value = data.page > 1 ? data.pageSize * data.page - 1 : 0;
-                rowstoDisplay.value = data.pageSize;
-                isLoading.value = false;
-            }).catch((e) => {
-            toast.add({ severity: "error", summary: "There was an error fetching the products categories", detail: "Please check your internet connection and refresh the page" })
-            console.log(e);
-            });
-        };
+    const loadLazyData = () => {
+      isLoading.value = true;
+      service.value.getAllPaginated(service.value.allCategories)
+      .then(data => {
+        categories.value = data.items.map((prod) => new Category(prod));
+        totalRecords.value = data.totalCount;
+        firstRecordIndex.value = data.page > 1 ? data.pageSize * data.page - 1 : 0;
+        rowstoDisplay.value = data.pageSize;
+        isLoading.value = false;
+      }).catch((e) => {
+        toast.add({ severity: "error", summary: "There was an error fetching the products categories", detail: "Please check your internet connection and refresh the page" })
+        console.log(e);
+      });
+    };
 
-        const findIndexById = (id: number) => {
-            return categories.value.findIndex((cat: { id: number }) => cat.id === id)
-        }
+    const findIndexById = (id: number) => {
+      return categories.value.findIndex((cat: { id: number }) => cat.id === id)
+    }
 
-        const openNew = () => {
-            category.value = {};
-            submitted.value = false;
-            categoryDialog.value = true;
-        };
-        const hideDialog = () => {
-            categoryDialog.value = false;
-            submitted.value = false;
-        };
+    const openNew = () => {
+      category.value = {};
+      submitted.value = false;
+        categoryDialog.value = true;
+      };
+  
+    const hideDialog = () => {
+      categoryDialog.value = false;
+      submitted.value = false;
+    };
 
-        const saveCategory = () => {
-            submitted.value = true;
-            
-            service.value.create(category.value)
-              .then(() => {
-                categories.value.push(category.value);
-                toast.add({
-                  severity: "success",
-                  summary: "Successful",
-                  detail: "Product Category was created successfully",
-                  life: 3000
-                });
-              }).finally(() => {
-                categoryDialog.value = false;
-              });
-        }
+    const saveCategory = () => {
+      submitted.value = true;
+           
+      service.value.create(category.value)
+      .then(() => {
+        categories.value.push(category.value);
+        toast.add({
+          severity: "success",
+          summary: "Successful",
+          detail: "Product Category was created successfully",
+          life: 3000
+        });
+      }).finally(() => {
+        categoryDialog.value = false;
+      });
+    }
 
-        const updateCategory = () => {
-            submitted.value = true;
-            service.value.update(category.value.id, category.value)
-              .then(() => {
-                toast.add({
-                  severity: "success",
-                  summary: "Successful",
-                  detail: "Product Category was updated successfully",
-                  life: 3000
-                });
+    const updateCategory = () => {
+      submitted.value = true;
+      service.value.update(category.value.id, category.value)
+      .then(() => {
+        toast.add({
+          severity: "success",
+          summary: "Successful",
+          detail: "Product Category was updated successfully",
+          life: 3000
+        });
                   //console.log(category.value)
-              }).finally(() => {
-                  categoryEditDialog.value = false;
-                });
-        }
+      }).finally(() => {
+        categoryEditDialog.value = false;
+        });
+    }
 
         const editCategory = (cat: Category) => {
             category.value = cat;
@@ -320,7 +333,7 @@ export default {
         return {
             dt, categories, categoryDialog, category, isLoading, deleteCategoryDialog,
             // selectedCategories, filters, submitted, deleteCategoriesDialog, deleteSelectedCategories,
-            selectedCategories, submitted, deleteCategoriesDialog, deleteSelectedCategories,
+            selectedCategories, filters, submitted, deleteCategoriesDialog, deleteSelectedCategories,
             service,openNew, hideDialog, saveCategory, editCategory, findIndexById, updateCategory, categoryEditDialog, confirmDeleteCategory, confirmDeleteSelected, deleteCategory,
         }
     }

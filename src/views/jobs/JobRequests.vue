@@ -45,7 +45,7 @@
           </template>
           <Column
             field="customerName"
-            headerStyle="min-width: 14rem"
+            headerStyle="min-width: 14rem; height: 50px; font-weight: bold;"
             style="min-width: 14rem"
             header="Customer"
             :sortable="true"
@@ -57,7 +57,7 @@
           </Column>
           <Column
             field="executorName"
-            headerStyle="min-width: 14rem"
+            headerStyle="min-width: 14rem; height: 50px; font-weight: bold;"
             style="min-width: 14rem"
             header="Executor"
             :sortable="true"
@@ -71,6 +71,7 @@
             ref="quantity"
             header="Products"
             style="min-width: 14rem"
+            headerStyle="height: 50px; font-weight: bold;"
           >
             <template #body="slotProps">
               <span v-if="slotProps.data.productsName != null" v-html="`${slotProps.data.productsName?.substr(0, 15)}...`"
@@ -82,6 +83,7 @@
             field="billOfQuantities.quantity"
             header="Quantity"
             style="min-width: 14rem"
+            headerStyle="height: 50px; font-weight: bold;"
           >
             <template #body="slotProps">
               <span class="p-column-title">Quantity</span>
@@ -93,6 +95,7 @@
             field="totalAmount"
             header="Amount"
             style="min-width: 14rem"
+            headerStyle="height: 50px; font-weight: bold;"
             filterField="price"
             filterMatchMode="contains"
           >
@@ -106,6 +109,7 @@
             field="date"
             header="Start Date"
             style="min-width: 14rem"
+            headerStyle="height: 50px; font-weight: bold;"
             filterField="date"
             filterMatchMode="contains"
           >
@@ -119,6 +123,7 @@
             field="status"
             header="Job Status"
             style="min-width: 14rem"
+            headerStyle="height: 50px; font-weight: bold;"
             filterField="status"
             filterMatchMode="contains"
           >
@@ -139,6 +144,7 @@
             filterField="rating"
             filterMatchMode="contains"
             style="min-width: 14rem"
+            headerStyle="height: 50px; font-weight: bold;"
           >
             <template #body="slotProps">
               <span class="p-column-title">Job Reviews</span>

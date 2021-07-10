@@ -25,10 +25,10 @@
           responsiveLayout="scroll"
           :scrollable="true"
           :rowHover="true"
+          @row-click="openProduct($event.data)"
         >
           <template #header>
-            <!-- <div class="table-header"> 
-          @row-click="openProduct($event.data)"-->
+            <!-- <div class="table-header"> -->
             <div class="p-mb-4"> 
               <span class="p-input-icon-left">
                 <i class="pi pi-search" />
@@ -48,7 +48,7 @@
           <Column
             field="name"
             style="min-width: 16rem"
-            headerStyle="min-width:16rem;"
+            headerStyle="min-width:16rem; height: 50px; font-weight: bold;"
             header="Name"
             filterField="name"
             :filterMatchModeOptions="matchModeOptions"
@@ -62,7 +62,7 @@
           <Column
             header="Image"
             style="min-width: 6rem"
-            headerStyle="min-width:6rem;"
+            headerStyle="min-width:6rem; height: 50px; font-weight: bold;"
           >
             <template #body="slotProps">
               <span class="p-column-title">Image</span>
@@ -81,7 +81,7 @@
             filterMatchMode="contains"
             filterMode="contains"
             style="min-width: 12rem"
-            headerStyle="min-width:12rem;"
+            headerStyle="min-width:12rem; height: 50px; font-weight: bold;"
           >
             <template #body="slotProps">
               <span class="p-column-title">Price</span>
@@ -94,7 +94,7 @@
             filterField="userId"
             filterMatchMode="contains"
             style="min-width: 12rem"
-            headerStyle="min-width:12rem;"
+            headerStyle="min-width:12rem; height: 50px; font-weight: bold;"
           >
             <template #body="slotProps">
               <span class="p-column-title">Vendor</span>
@@ -107,7 +107,7 @@
             filterField="rating"
             filterMatchMode="contains"
             style="min-width: 10rem"
-            headerStyle="min-width:10rem;"
+            headerStyle="min-width:10rem; height: 50px; font-weight: bold;"
           >
             <template #body="slotProps">
               <span class="p-column-title">Reviews</span>
@@ -124,7 +124,7 @@
             filterMatchMode="contains"
             filterMode="contains"
             style="min-width: 8rem"
-            headerStyle="min-width:8rem;"
+            headerStyle="min-width:8rem; height: 50px; font-weight: bold;"
           >
             <template #body="slotProps">
               <span class="p-column-title">Status</span>
@@ -157,6 +157,7 @@
             :src="product.mainImage"
             :alt="name"
             id="productImg"
+            style="width: 200px; height: 160px; border-radius: 10px;"
           />
         </div>
       </div>
@@ -180,7 +181,7 @@
       </div>
 
       <div class="p-field">
-        <label for="vendor">Vendor</label>
+        <label for="vendor">Vendor ID</label>
         <InputNumber
           id="vendor"
           v-model="product.userId"
@@ -196,7 +197,7 @@
         />
       </div>
 
-      <div class="p-field">
+      <div class="p-field" id="productStat">
         <label for="status"> Status</label>
         <span
           :class="
@@ -243,7 +244,6 @@ export default class ProductList extends Vue {
   productDialog = false;
   service: ProductService = new ProductService();
   statuses = [StockStatus.INSTOCK, StockStatus.LOWSTOCK, StockStatus.OUTOFSTOCK];
-  // filters: Record<string, unknown> = {};
   lazyParams: Partial<ProductLazyParameters> = {};
   firstRecordIndex = 0;
   rowstoDisplay = 10;
@@ -300,11 +300,17 @@ export default class ProductList extends Vue {
     });
   }
 
-  openProduct() {
-    this.product = new Product({});
+  // openProduct() {
+  //   this.product = new Product({});
+  //   // this.submitted = false;
+  //   this.productDialog = true;
+  //   console.log(this.product)
+  // }
+
+  openProduct(product: Product) {
+    this.product = product;
     // this.submitted = false;
     this.productDialog = true;
-    console.log(this.product)
   }
 
 }
@@ -374,5 +380,9 @@ export default class ProductList extends Vue {
   font-weight: 700;
   font-size: 12px;
   letter-spacing: 0.3px;
+}
+#productStat {
+  display: grid;
+  justify-content: start;
 }
 </style>

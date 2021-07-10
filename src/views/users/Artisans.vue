@@ -32,9 +32,6 @@
                   @click="openNew"
                 />
               </div>
-              <!-- 
-          @row-click="openArtisan($event.data.id)"
-              @row-click="openArtisan($event.data)"-->
               <span class="p-input-icon-left">
                 <i class="pi pi-search" />
                 <InputText
@@ -55,13 +52,8 @@
             selectionMode="multiple"
             style="width: 3rem"
             :exportable="false">
-            <!--<template #body="slotProps">
-              <Button
-                @click="$router.push('/artisans/' + slotProps.data.id)"
-              />
-            </template>-->
           </Column>
-          <Column field="name" headerStyle="width: 3rem;">
+          <Column field="name" headerStyle="width: 3rem; height: 50px; font-weight: bold;">
             <template #body="slotProps">
               <Avatar
                 :label="slotProps.data.name.charAt(0).toUpperCase()"
@@ -71,22 +63,10 @@
               />
             </template>
           </Column>
-          <!--<Column
-            field="userCategoryRecord.occupationNmae"
-            style="min-width: 14rem"
-            headerStyle="min-width: 14rem"
-            header="Job Name"
-            sortable
-            filterMatchMode="contains"
-          >
-            <template #body="slotProps">
-              {{ slotProps.data.jobName }}
-            </template>
-          </Column>-->
           <Column
             field="name"
             style="min-width: 14rem"
-            headerStyle="min-width: 14rem"
+            headerStyle="min-width: 14rem; height: 50px; font-weight: bold;"
             header="Name"
             sortable
             filterMatchMode="contains"
@@ -98,7 +78,7 @@
           <Column
             field="username"
             style="min-width: 14rem"
-            headerStyle="min-width: 14rem"
+            headerStyle="min-width: 14rem; height: 50px; font-weight: bold;"
             header="Username"
             sortable
             filterMode="contains"
@@ -110,7 +90,7 @@
           <Column
             field="email"
             style="min-width: 14rem"
-            headerStyle="min-width: 14rem"
+            headerStyle="min-width: 14rem; height: 50px; font-weight: bold;"
             header="Email"
             sortable
             filterMode="contains"
@@ -122,7 +102,7 @@
           <Column
             field="about"
             style="min-width: 14rem"
-            headerStyle="min-width: 14rem"
+            headerStyle="min-width: 14rem; height: 50px; font-weight: bold;"
             header="About"
             sortable
             filterMode="contains"
@@ -135,7 +115,7 @@
           <Column
             field="last_login"
             style="min-width: 10rem"
-            headerStyle="min-width: 10rem"
+            headerStyle="min-width: 10rem; height: 50px; font-weight: bold;"
             header="Last active"
             sortField="last_login_date"
             sortable
@@ -148,7 +128,7 @@
             field="rating"
             header="Reviews"
             style="min-width: 10rem"
-            headerStyle="min-width: 10rem"
+            headerStyle="min-width: 10rem; height: 50px; font-weight: bold;"
             filterField="rating"
             filterMatchMode="contains"
           >
@@ -164,7 +144,7 @@
           <Column
             field="languages"
             style="min-width: 10rem"
-            headerStyle="min-width: 10rem"
+            headerStyle="min-width: 10rem; height: 50px; font-weight: bold;"
             header="Languages"
             sortable
           >
@@ -175,7 +155,7 @@
           <Column
             field="address"
             style="min-width: 14rem"
-            headerStyle="min-width: 14rem"
+            headerStyle="min-width: 14rem; height: 50px; font-weight: bold;"
             header="Address"
             sortable
           >
