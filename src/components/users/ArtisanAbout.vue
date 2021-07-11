@@ -280,4 +280,9 @@ export default class ArtisanAbout extends Vue {
   margin-top: -5px;
   margin-bottom: 10px;
 }
+@media only screen and (max-width: 768px){
+  .userCard {
+    width: 340px;
+  }
+}
 </style>

@@ -74,11 +74,15 @@ export default defineComponent({
         .then((loginData) => {
           window.localStorage.getItem("token");
           window.localStorage.setItem("token", loginData.token);
-          window.localStorage.getItem("firstName");
-          window.localStorage.setItem("firstName", loginData.user.firstName,);
+          window.localStorage.getItem("fullName");
+          window.localStorage.setItem("fullName", loginData.user.fullName,);
           // window.localStorage.setItem("user", JSON.stringify(loginData.admin));
           localStorage.getItem("username");
-          localStorage.setItem("username", loginData.user.username )
+          localStorage.setItem("username", loginData.user.username );
+          localStorage.getItem("email");
+          localStorage.setItem("email", loginData.user.email );
+          localStorage.getItem("languages");
+          localStorage.setItem("languages", loginData.user.languages )
           
           localStorage.setItem("admin", JSON.stringify(loginData.user));
           localStorage.getItem('admin');
@@ -97,8 +101,8 @@ export default defineComponent({
           // this.$router.push(redirectTo);
           // hash  window.location.href = redirectTo;
           
-          // const redirectTo = this.$route.query.redirect as string || '/';
-          // window.location.href = redirectTo;
+          const redirectTo = this.$route.query.redirect as string || '/';
+          window.location.href = redirectTo;
         })
         .finally(() => {
           this.isLoading = false;

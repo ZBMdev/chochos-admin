@@ -41,7 +41,7 @@
           {{ formatCurrency( sumAmount) }}
         </p>
       </div> -->
-      <p>Total Charge: <span> {{ formatCurrency( totalAmount) }} </span> </p> 
+      <!-- <p>Total Charge: <span> {{ formatCurrency( totalAmount) }} </span> </p>  -->
       <!-- <div v-for="price in requests" :key="price">
         <p> {{ price.totalPrice+ }} </p>
       </div>12 -->
@@ -59,12 +59,12 @@
                 <p> No portfolio available </p>
               </div> -->
               <div class="product-details">
-                  <div class="productImg">
+                  <div class="productImgs">
                     <!-- <div v-for="product in requests.product" :key="product"> -->
-                      <div v-for="productImg in user.product.productImages" :key="productImg" class="productImg">
-                        <img v-if="productImg.url != null && productImg.url" :src="productImg.url" alt="image">
+                      <div v-for="productImg in user.product.productImages.slice(0,1)" :key="productImg" class="productImg">
+                        <img v-if="productImg.url != null && productImg.url" :src="productImg.url" alt="image" id="BigImg">
                         <!-- <img v-else src="require(@/assets/images/default-placeholder-image.png)"> -->
-                        <img v-else src="../../assets/images/default-placeholder-image.png" >
+                        <img v-else src="assets/images/default-placeholder-image.png" >
                       </div>
                     <!-- </div> -->
                     <!-- <div
@@ -84,6 +84,11 @@
                       </span>
                     </div> -->
                   </div>
+                  <!-- <div class="small">             
+                    <div v-for="allImg in user.product.productImages" :key="allImg" class="smallImg" >
+                      <img :src="allImg.url" alt="allImage" @click="thisImage($event.data)">
+                    </div>
+                  </div> -->
                   <h4 class="name"> {{ user.productName }} </h4>
                   <div class="description">
                     <h4>Description </h4>
@@ -244,6 +249,11 @@ export default class UserRequestCard extends Vue {
   formatCurrency(value: number) {
     return value.toLocaleString('en-NG', { style: 'currency', currency: 'NGN' });
   }
+
+  thisImage(smallImg: any) {
+    let fullImg = document.getElementById("BigImg");
+    fullImg = smallImg;
+  }
   
   // getotalAmount() {
   //       // return `${this.billOfQuantities.totalPrice}`
@@ -333,13 +343,30 @@ export default class UserRequestCard extends Vue {
   margin-left: auto;
   margin-right: auto;
 }
-.productImg {
+
+.productImg, .productImgs {
   border-radius: 10px 10px 0 0;
   height: 150px;
   overflow: hidden;
 }
 .productImg .img{
   border-radius: 10px 10px 0 0;
+}
+.small{
+  display: flex;
+  justify-content: center;
+}
+.smallImg{
+  /* display: flex;
+  justify-content: center; */
+  /* margin-top: -260px; */
+}
+.smallImg img {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  /* display: flex;
+  justify-content: center; */
 }
 .name{
   display: flex;
@@ -426,5 +453,9 @@ export default class UserRequestCard extends Vue {
   padding: 5px 10px;
   border-radius: 10px;
 }
-
+@media only screen and (max-width: 768px){
+  .requestCard, .product-details {
+    width: 340px;
+  }
+}
 </style>

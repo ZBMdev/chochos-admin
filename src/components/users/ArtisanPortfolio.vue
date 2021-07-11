@@ -1,12 +1,20 @@
 <template>
-  <div class="portfolios">
-    <div v-for="port in portfolios" :key="port"  class="singlePortfolio">
-      <div class="portImg">
-        <img :src="port.url" alt="">
-      </div>
-      <h4> {{ port.name }} </h4>
-      <div class="portDescription">
-        <p> {{ port.description }} </p>
+  <div>
+    <div v-if="!portfolios" >
+      <p class="noPortfolio" >No available portfolio </p>
+    </div>
+    <div v-else-if="!portfolios.length" >
+      <p class="noPortfolio">No available portfolio </p>
+    </div>
+    <div v-else class="portfolios">
+      <div  v-for="port in portfolios" :key="port" class="singlePortfolio">
+        <div class="portImg">
+          <img :src="port.url" alt="">
+        </div>
+        <h4> {{ port.name }} </h4>
+        <div class="portDescription">
+          <p> {{ port.description }} </p>
+        </div>
       </div>
     </div>
   </div>
@@ -138,14 +146,35 @@ export default class ArtisanPortfolio extends Vue {
   float: right;
   margin-right: 350px;
 }
+.noPortfolio {
+  background: white;
+  padding: 20px 20px 20px 10px;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  text-align: left;
+  box-shadow: 0 2px 1px -1px rgb(0 0 0 / 20%), 0 1px 1px 0 rgb(0 0 0 / 14%),
+    0 1px 3px 0 rgb(0 0 0 / 12%);
+}
 .singlePortfolio{
   background: white;
   box-shadow: 0 2px 1px -1px rgb(0 0 0 / 20%), 0 1px 1px 0 rgb(0 0 0 / 14%),
     0 1px 3px 0 rgb(0 0 0 / 12%);
   border-radius: 10px;
   width: 400px;
-  margin-top: 20px;
+  margin: 20px;
 }
+/* .singlePortfolio {
+  display: flex;
+  justify-content: center;
+} */
+/* .singlePortfolioCard{
+  background: white;
+  box-shadow: 0 2px 1px -1px rgb(0 0 0 / 20%), 0 1px 1px 0 rgb(0 0 0 / 14%),
+    0 1px 3px 0 rgb(0 0 0 / 12%);
+  border-radius: 10px;
+  width: 400px;
+  margin: 20px;
+} */
 .portImg{
   width: 100%;
   height: 200px;
@@ -171,5 +200,14 @@ export default class ArtisanPortfolio extends Vue {
   margin-bottom: 10px;
   text-align: left;
   /* padding: 0 10px; */
+}
+
+@media only screen and (max-width: 768px){
+  .singlePortfolio{
+    display: grid;
+  }
+  .singlePortfolioCard {
+    width: 300px;
+  }
 }
 </style>

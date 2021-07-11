@@ -7,69 +7,9 @@
       <h4 class="p-mb-2">Summary</h4>
       <p>Click to see more details</p>
       <div class="p-grid">
-        <!-- <div class="p-col-12 p-md-4">
-          <FancyCard
-            class="fancy-card-1"
-            title="New orders"
-            :loading="summaryLoading"
-            :value="`${summary.newOrders}`"
-            :action="() => $router.push({ name: 'orders' })"
-            :stat="{}"
-          />
-        </div>
         <div class="p-col-12 p-md-4">
           <FancyCard
             class="fancy-card-1"
-            title="Orders Completed"
-            :loading="summaryLoading"
-            :value="`${summary.ordersCompleted}`"
-            :action="() => $router.push({ name: 'orders' })"
-            :stat="{}"
-          />
-        </div>
-        <div class="p-col-12 p-md-4">
-          <FancyCard
-            class="fancy-card-2"
-            title="Transactions"
-            :loading="summaryLoading"
-            :value="`&#8358; ${summary.transactions}`"
-            :action="() => {}"
-            :stat="{}"
-          />
-        </div>
-        <div class="p-col-12 p-md-4">
-          <FancyCard
-            class="fancy-card-4"
-            title="Products Uploaded"
-            :loading="summaryLoading"
-            :value="`${summary.uploadedProducts}`"
-            :action="() => {}"
-            :stat="{}"
-          />
-        </div>      
-        <div class="p-col-12 p-md-4">
-          <FancyCard
-            class="fancy-card-4"
-            title="Products sold"
-            :loading="summaryLoading"
-            :value="`${summary.soldProducts}`"
-            :action="() => {}"
-            :stat="{}"
-          />
-        </div>
-        <div class="p-col-12 p-md-4">
-          <FancyCard
-            class="fancy-card-1"
-            title="Products in low stock"
-            :loading="summaryLoading"
-            :value="`${summary.lowStockProduct}`"
-            :action="() => {}"
-            :stat="undefined"
-          />
-        </div> -->
-        <div class="p-col-12 p-md-4">
-          <FancyCard
-            class="fancy-card-4"
             title="Jobs"
             :loading="summaryLoading"
             :value="`${job.totalCount}`"
@@ -77,19 +17,19 @@
             :stat="{}"
           />
         </div>
-        <!-- <div class="p-col-12 p-md-4">
-          <FancyCard
-            class="fancy-card-4"
-            title="Jobs Requested"
-            :loading="summaryLoading"
-            :value="`${summary.requestedJobs}`"
-            :action="() => {}"
-            :stat="{}"
-          />
-        </div> -->
         <div class="p-col-12 p-md-4">
           <FancyCard
-            class="fancy-card-3"
+            class="fancy-card-1"
+            title="Jobs Requested"
+            :loading="summaryLoading"
+            :value="`${jobRequests.totalCount}`"
+            :action="() => $router.push({ name: 'jobRequests' })"
+            :stat="{}"
+          />
+        </div>
+        <div class="p-col-12 p-md-4">
+          <FancyCard
+            class="fancy-card-1"
             title="Customers"
             :loading="summaryLoading"
             :value="`${customer.totalCount}`"
@@ -99,7 +39,7 @@
         </div>
         <div class="p-col-12 p-md-4">
           <FancyCard
-            class="fancy-card-3"
+            class="fancy-card-1"
             title="Artisans"
             :loading="summaryLoading"
             :value="`${artisan.totalCount}`"
@@ -109,7 +49,7 @@
         </div>
         <div class="p-col-12 p-md-4">
           <FancyCard
-            class="fancy-card-3"
+            class="fancy-card-1"
             title="Vendors"
             :loading="summaryLoading"
             :value="`${vendor.totalCount}`"
@@ -119,7 +59,7 @@
         </div>
         <!-- <div class="p-col-12 p-md-4">
           <FancyCard
-            class="fancy-card-4"
+            class="fancy-card-1"
             title="Monthly Earnings"
             :loading="summaryLoading"
             :value="`&#8358; ${summary.monthlyEarning}`"
@@ -142,12 +82,15 @@ import ArtisanService from '@/services/ArtisanService';
 import CustomerService from '@/services/CustomerService';
 import VendorService from '@/services/VendorService';
 import JobService from '@/services/JobService';
+import JobRequestService from '@/services/JobRequestService';
+import JobRequest from '@/models/JobRequest'
 // import Artisans from '@/views/users/ArtisanList.vue'
 // import Vendors from '@/views/users/VendorList.vue'
 import { VendorSummary } from '@/types/vendors'
 import { ArtisanSummary } from '@/types/artisan'
 import { CustomerSummary } from '@/types/customer'
 import { JobsSummary } from '@/types/jobs';
+import { JobRequestSummary } from '@/types/jobRequest';
 
 export default defineComponent({
   components: { FancyCard },
@@ -188,7 +131,12 @@ export default defineComponent({
         this.job = data;
       }).finally(() => {
         this.summaryLoading = false;
-      });  
+      });
+
+     (new JobRequestService()).getSummary()
+      .then((data) => {
+        this.jobRequests = data;
+      })
 
     /* this.timeLoading = true;
     (new DashboardService()).getTime()
@@ -206,6 +154,7 @@ export default defineComponent({
       artisan: {} as ArtisanSummary,
       customer: {} as CustomerSummary,
       job: {} as JobsSummary,
+      jobRequests: {} as JobRequestSummary,
       timeLoading: false,
       // time: {} as TimeSummary,
     }

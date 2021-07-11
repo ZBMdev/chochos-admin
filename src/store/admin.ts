@@ -1,10 +1,11 @@
 import axios from 'axios'
 import AdminService from '@/services/AdminService';
-import { AdminsData } from '@/types/admin';
+import { AdminData, AdminsData } from '@/types/admin';
 import { ActionContext as BaseActionContext, } from 'vuex';
 
 type ActionContext = BaseActionContext<AdminState, AdminState>;
 export interface AdminState {
+  admin: AdminsData;
   user: AdminsData;
   token: string;
   username: string;
@@ -14,6 +15,7 @@ export interface AdminState {
 export default {
   namespaced: true,
   state: {
+    admin: {} as AdminsData,
     user: {} as AdminsData,
     token: "",
     username: "",
@@ -30,6 +32,9 @@ export default {
       // const user = await (new AdminService()).getCurrentUser();
       // return user;
     },
+    async getAdmin(state: AdminState) {
+      return state.user.fullName;
+    },
     getUsername(state: AdminState) {
       return () => state.username
     },
@@ -38,6 +43,9 @@ export default {
   mutations: {
     setUser(state: AdminState, user: AdminsData){
       state.user = user
+    },
+    setAdmin(state: AdminState, admin: AdminsData){
+      state.admin = admin
     },
     setToken(state: AdminState, token: string){
       state.token = token;
@@ -50,12 +58,13 @@ export default {
     },
   },
   actions: {
-    // async getUser(context: ActionContext){
-    //   const user = await (new AdminService()).getCurrentAdmin();
-    //   context.commit("setUser", user);
-    //   return user
-    // },
     getUser(context: ActionContext){
+      const admin = window.localStorage.getItem("admin");
+      if (admin) {
+        context.commit("setAdmin", admin);
+      }
+    },
+    getAdmin(context: ActionContext){
       const admin = window.localStorage.getItem("admin");
       if (admin) {
         context.commit("setAdmin", admin);
@@ -84,79 +93,5 @@ export default {
         context.commit("setUsername", username);
       }
     },
-     // getUser(context: ActionContext){
-    //   const user = window.localStorage.getItem("user.fullName");
-    //   if (user) {
-    //     context.commit("setUser", user);
-    //   }
-    // },
-
-    // async getUser(context: ActionContext){
-    //   const user = await (new AdminService()).getCurrentAdmin();
-    //   context.commit("setUser", user);
-    //   return user
-    // },
-
-    // getter
-     // async getUser(state: AdminState) {
-    //   // if (state.user) {
-    //     return state.user;
-    //   // }
-    //   // const user = await (new AdminService()).getCurrentUser();
-    //   // return user;
-    // },
   },
 };
-
-// import { AdminData } from '@/types/admin';
-// import { ActionContext as BaseActionContext, } from 'vuex';
-
-// type ActionContext = BaseActionContext<AdminState, AdminState>;
-// export interface AdminState {
-//   user: AdminData;
-//   token: string;
-// }
-
-// export default {
-//   namespaced: true,
-//   state: {
-//     user: {} as AdminData,
-//     token: "",
-//   },
-//   getters: {
-//     getInitial(state: AdminState) {
-//       return () => state.user.firstName ? state.user.firstName.charAt(0).toUpperCase(): "";
-//     },
-//     getUser(state: AdminState) {
-//       const userString = window.localStorage.getItem("user");
-//       if (userString) {
-//         state.user = JSON.parse(userString) as AdminData;
-//         return state.user
-//       }
-//       return state.user;
-//     },
-//   },
-//   mutations: {
-//     setUser(state: AdminState, user: AdminData){
-//       state.user = user
-//     },
-//     setToken(state: AdminState, token: string){
-//       state.token = token;
-//     },
-//   },
-//   actions: {
-//     getUser(context: ActionContext){
-//       const userString = window.localStorage.getItem("user");
-//       if (userString) {
-//         const user = JSON.parse(userString);
-//         context.commit("setUser", user);
-//       }
-//     },
-//     getToken(context: ActionContext){
-//       const token = window.localStorage.getItem("token");
-//       if (token) {
-//         context.commit("setToken", token);
-//       }
-//     },
-//   },
-// };

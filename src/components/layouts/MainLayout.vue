@@ -126,6 +126,11 @@ export default class MainLayout extends Vue {
   logout() {
     window.localStorage.setItem("token", "");
     window.localStorage.setItem("user", "");
+    window.localStorage.setItem("fullName", "");
+    window.localStorage.setItem("email", "");
+    window.localStorage.setItem("languages", "");
+    window.localStorage.setItem("username", "");
+    window.localStorage.setItem("admin", "");
     window.location.href = `/login?redirect=${window.location.pathname}`
     // this.$router.push({ name: "login", query: { redirect: this.$route.path } });
 

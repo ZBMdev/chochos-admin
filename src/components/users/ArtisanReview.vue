@@ -1,6 +1,12 @@
 <template>
   <div>
-    <div>
+    <div v-if="!reviews" >
+      <p class="noReview" >No available review </p>
+    </div>
+    <div v-else-if="!reviews.length" >
+      <p class="noReview">No available review </p>
+    </div>
+    <div v-else>
       <div v-for="review in reviews" :key="review" class="review-card">
         <div>
           <img :src="review.reviewer.photoUrl">
@@ -199,6 +205,15 @@ export default class ArtisanReview extends Vue {
 </script>
 
 <style>
+.noReview {
+  background: white;
+  padding: 20px 20px 20px 10px;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  text-align: left;
+  box-shadow: 0 2px 1px -1px rgb(0 0 0 / 20%), 0 1px 1px 0 rgb(0 0 0 / 14%),
+    0 1px 3px 0 rgb(0 0 0 / 12%);
+}
 .review-card {
   background: whitesmoke;
   box-shadow: 0 2px 1px -1px rgb(0 0 0 / 20%), 0 1px 1px 0 rgb(0 0 0 / 14%),
@@ -206,6 +221,7 @@ export default class ArtisanReview extends Vue {
   border-radius: 20px;
   padding: 10px 0;
   display: flex;
+  margin: 20px 0;
 }
 .review-card div img {
   width: 80px;

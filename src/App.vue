@@ -142,7 +142,7 @@ img {
 }
 
 .fancy-card-1 {
-  border-top: 3px solid #c8e6c9 !important;
+  border-top: 3px solid rgb(150, 120, 150) !important;
 }
 .fancy-card-1 .p-card-title {
   color: #256029 !important;

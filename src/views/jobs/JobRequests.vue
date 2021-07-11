@@ -334,5 +334,11 @@ export default class ProductList extends Vue {
   background: #ffe1cd;
   color: #ff8c00;
 }
+
+@media only screen and (max-width: 768px){
+  .p-card {
+    width: 350px;
+  }
+}
 </style>
 

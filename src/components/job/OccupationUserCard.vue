@@ -78,8 +78,13 @@
               <!-- <div v-if="user.portfolios === null">
                 <p> No portfolio available </p>
               </div> -->
-              <div v-if="user === null">
-                <p> No portfolio available </p>
+              <div v-if="!user.portfolios">
+                <h3>Portfolio</h3>
+                <p> No available portfolio  </p>
+              </div>
+              <div v-else-if="!user.portfolios.length">
+                <h3>Portfolio</h3>
+                <p> No available portfolio  </p>
               </div>
               <div v-else>
                 <h3>Portfolio</h3>
@@ -354,5 +359,14 @@ export default class OccupationCard extends Vue {
 }
 .singlePortfolio p{
   text-align: left;
+}
+@media only screen and (max-width: 768px){
+  #userCard {
+    width: 350px;
+    margin-bottom: 100px;
+  }
+  #card-holder{
+    display: grid;
+  }
 }
 </style>
