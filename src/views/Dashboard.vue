@@ -66,8 +66,18 @@
             :action="() => {}"
             :stat="{}"
           />
-        </div> -->
+        </div> -->        
       </div>
+    </div>
+    <div class="payments">
+      <!-- <div class="p-col-12 p-md-6">
+        <ArtisansPayment />
+      </div>
+      <div class="p-col-12 p-md-6">
+        <VendorsPayment />
+      </div> -->
+      <ArtisansPayment />
+      <VendorsPayment />
     </div>
   </div>
 </template>
@@ -91,9 +101,11 @@ import { ArtisanSummary } from '@/types/artisan'
 import { CustomerSummary } from '@/types/customer'
 import { JobsSummary } from '@/types/jobs';
 import { JobRequestSummary } from '@/types/jobRequest';
+import ArtisansPayment from '@/views/transactions/ArtisansPayment.vue'
+import VendorsPayment from '@/views/transactions/VendorsPayment.vue'
 
 export default defineComponent({
-  components: { FancyCard },
+  components: { FancyCard, ArtisansPayment, VendorsPayment },
   name: "Dashboard",
   
   mounted() {
@@ -169,6 +181,15 @@ export default defineComponent({
 #pie {
   width: 50px;
   height: 50px;
+}
+.payments {
+  display: flex;
+  justify-content: center;
+}
+@media screen and (max-width: 768px) {
+  .payments {
+    display: grid;
+  }
 }
 </style>
 

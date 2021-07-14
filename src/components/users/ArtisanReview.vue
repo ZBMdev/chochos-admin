@@ -6,7 +6,7 @@
     <div v-else-if="!reviews.length" >
       <p class="noReview">No available review </p>
     </div>
-    <div v-else>
+    <div v-else class="reviews">
       <div v-for="review in reviews" :key="review" class="review-card">
         <div>
           <img :src="review.reviewer.photoUrl">
@@ -17,16 +17,6 @@
               <h3> {{ review.reviewer.fullName }} </h3>
               <p> {{ review.createdAt }} </p>
             </div>
-            <!-- <div class="rating">
-            <Rating
-              :modelValue="review.rating"
-              :readonly="true"
-              :cancel="false"
-              :stars="5"
-              class="p-rating"
-              id="ratingNumber"
-            />
-          </div> -->
           </div>
           <div class="rating">
             <Rating
@@ -42,37 +32,6 @@
         </div>
       </div>
     </div>
-    <!-- <div>
-      <div v-for="review in reviews" :key="review" class="review-card">
-        <div v-if="review in reviews != null">  
-          <div>
-            <img :src="review.reviewer.photoUrl">
-          </div>
-          <div>
-            <div class="review-header">
-              <div>
-                <h3> {{ review.reviewer.fullName }} </h3>
-                <p> {{ review.createdAt }} </p>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div v-else>
-          <p>No reviews </p>
-        </div>
-      </div>
-    </div> -->
-    <!-- <div v-for="review in reviews" :key="review" >
-      <div v-if="review === []" class="review-card">
-        <p> No reviews </p>
-      </div>
-      <div v-else class="review-card">
-        <p> {{ review.rating }} </p>
-        <p> {{ review.message}} </p>
-        <img :src="review.reviewer.photoUrl" style="border-radius: 50%; width: 30px; height: 30px">
-        <p> {{ review.reviewer.fullName }} </p>
-      </div>
-    </div> -->
   </div>
 </template>
 
@@ -214,6 +173,11 @@ export default class ArtisanReview extends Vue {
   box-shadow: 0 2px 1px -1px rgb(0 0 0 / 20%), 0 1px 1px 0 rgb(0 0 0 / 14%),
     0 1px 3px 0 rgb(0 0 0 / 12%);
 }
+.reviews{
+  display: flex;
+  justify-content: center;
+  /* margin: auto; */
+}
 .review-card {
   background: whitesmoke;
   box-shadow: 0 2px 1px -1px rgb(0 0 0 / 20%), 0 1px 1px 0 rgb(0 0 0 / 14%),
@@ -221,7 +185,9 @@ export default class ArtisanReview extends Vue {
   border-radius: 20px;
   padding: 10px 0;
   display: flex;
-  margin: 20px 0;
+  /* margin: 20px 0; */
+  margin: auto;
+  width: 450px;
 }
 .review-card div img {
   width: 80px;
@@ -251,5 +217,14 @@ export default class ArtisanReview extends Vue {
 .p-rating .p-rating-icon.pi-star  {
   color: gold;
   font-size: 14px;
+}
+@media screen and (max-width: 450px) {
+  .reviews {
+    display: grid;
+  }
+  .review-card {
+    width: 300px;
+    margin: 15px 0;
+  }
 }
 </style>

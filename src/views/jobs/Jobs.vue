@@ -4,7 +4,7 @@
       title="Jobs"
       :subtitle="`${totalRecords} jobs in total`"
     />
-    <ProgressSpinner style="display:flex; justify-content: center" v-if="isLoading" />
+    <ProgressSpinner style="display:flex; justify-content: center; margin-top: 200px" v-if="isLoading" />
     <div v-else>
       <TabView :value="vendor">
         <TabPanel header="All Jobs">

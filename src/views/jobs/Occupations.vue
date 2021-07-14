@@ -34,6 +34,12 @@
               </span>
             </div>
           </template>
+          <template #empty>
+            No occupation found.
+          </template>
+          <template #loading>
+            Loading occupations data. Please wait.
+          </template>
           <Column
             field="name"
             style="min-width: 14rem"

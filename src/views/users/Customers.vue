@@ -4,7 +4,7 @@
       title="Customers" 
       :subtitle="`${totalRecords} customers in total`"
     />
-    <ProgressSpinner style="display:flex; justify-content: center" v-if="isLoading" />
+    <ProgressSpinner style="display:flex; justify-content: center; margin-top: 200px; " v-if="isLoading" />
     <Card v-else>
       <template #content>
         <DataTable

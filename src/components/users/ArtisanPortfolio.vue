@@ -203,8 +203,15 @@ export default class ArtisanPortfolio extends Vue {
 }
 
 @media only screen and (max-width: 768px){
+  .portfolios {    
+    /* margin-left: -50px;
+    margin-right: 0; */
+    margin-left: -20px;
+  }
   .singlePortfolio{
     display: grid;
+    width: 280px;
+    margin: 20px 0;
   }
   .singlePortfolioCard {
     width: 300px;

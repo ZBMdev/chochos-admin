@@ -3,7 +3,7 @@
     <PageHeading
       title="Products Category"
     />
-    <ProgressSpinner style="display:flex; justify-content: center" v-if="isLoading" />
+    <ProgressSpinner style="display:flex; justify-content: center; margin-top: 200px" v-if="isLoading" />
     <Card v-else>
       <template #content>
         <DataTable
@@ -40,6 +40,12 @@
                 />
               </span>
             </div>
+          </template>
+          <template #empty>
+            No category found.
+          </template>
+          <template #loading>
+            Loading categories data. Please wait.
           </template>
           <Column
             field="name"
