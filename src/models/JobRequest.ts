@@ -62,8 +62,6 @@ export default class JobRequest extends Model {
         return names;
     }
 
-
-
     // get quantity() {
     // get productQuantity() {
     //     return `${this.billOfQuantities}`

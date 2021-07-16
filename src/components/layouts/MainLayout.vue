@@ -203,6 +203,9 @@ export default class MainLayout extends Vue {
   position: relative;
   width: 100%;
 }
+#brandName{
+  color: purple;
+}
 .brand img {
   height: 1.5rem;
   width: 1.5rem;

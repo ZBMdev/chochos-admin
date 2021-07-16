@@ -310,7 +310,20 @@ export default class CompletedJobs extends Vue {
 .p-datatable-responsive-demo .p-datatable-tbody > tr > td .p-column-title {
   display: none;
 }
-
+#jobStat{
+  display: grid;
+  /* hash justify-content: space-between; */
+  justify-content: start;
+}
+#jobStat span{
+  /* hash line-height: 20px; */
+  border-radius: 5px;
+  margin: 0;
+}
+#jobStat span p{
+  margin: 0;
+  padding: 0;
+}
 @media screen and (max-width: 40em) {
   .p-datatable.p-datatable-responsive-demo .p-datatable-thead > tr > th,
   .p-datatable.p-datatable-responsive-demo .p-datatable-tfoot > tr > td {

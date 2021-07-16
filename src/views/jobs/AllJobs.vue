@@ -148,7 +148,7 @@
 
     <Dialog
       v-model:visible="jobDialog"
-      :breakpoints="{'960px': '75vw', '640px': '100vw'}"
+      :breakpoints="{'960px': '75vw', '640px': '90vw'}"
       :style="{width: '450px'}"
       header="Job Details"
       :modal="true"
@@ -406,15 +406,24 @@ label {
 #details span {
   margin-top: 20px;
 }
+/* #jobStat{
+  display: flex;
+  justify-content: space-between;
+  justify-content: start;
+} */
 #jobStat{
   display: grid;
-  /* justify-content: space-between; */
+  /* hash justify-content: space-between; */
   justify-content: start;
 }
 #jobStat span{
-  /* line-height: 20px; */
-  border-radius: 10px;
+  /* hash line-height: 20px; */
+  border-radius: 5px;
   margin: 0;
+}
+#jobStat span p{
+  margin: 0;
+  padding: 0;
 }
 .p-rating{
   color: gold;

@@ -8,8 +8,10 @@
     </div>
     <div v-else class="reviews">
       <div v-for="review in reviews" :key="review" class="review-card">
-        <div>
-          <img :src="review.reviewer.photoUrl">
+        <div >
+          <img
+            :src="review.reviewer.photoUrl"
+          >
         </div>
         <div>
           <div class="review-header">

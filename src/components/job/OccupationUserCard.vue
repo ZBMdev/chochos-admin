@@ -6,7 +6,7 @@
       <p class="NoArtisan">No available artisan</p>
     </div>
     <div v-else id="card-holder">
-      <div v-for="user in occupationArtisans" :key="user" id="userCard" class="p-col-12 p-md-6">
+      <div v-for="user in occupationArtisans" :key="user" class="p-col-12 p-md-6">
         <!-- <div v-if="user === null">
           <p>No available artisan</p>
         </div> -->
@@ -247,6 +247,8 @@ export default class OccupationCard extends Vue {
 #userCard{
   display: grid;
   background: white;
+  box-shadow: 0 2px 1px -1px rgb(0 0 0 / 20%), 0 1px 1px 0 rgb(0 0 0 / 14%),
+    0 1px 3px 0 rgb(0 0 0 / 12%);
   width: 400px;
   border-radius: 10px;
   margin: auto;

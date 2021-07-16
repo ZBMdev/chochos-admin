@@ -189,7 +189,7 @@ export default class ArtisanAbout extends Vue {
 }
 </script>
 
-<style>
+<style scoped>
 .fancy-card {
   box-shadow: 0 2px 1px -1px rgb(0 0 0 / 20%), 0 1px 1px 0 rgb(0 0 0 / 14%),
     0 1px 3px 0 rgb(0 0 0 / 12%);
@@ -283,8 +283,12 @@ export default class ArtisanAbout extends Vue {
 @media only screen and (max-width: 768px){
   .userCard {
     width: 300px;
-    margin-left: 0;
-    margin-right: 0;
+    /* margin-left: 0;
+    margin-right: 0; */
+    margin-top: 150px;
+    margin-bottom: 150px;
+    margin-left: auto;
+    margin-right: auto;
   }
 }
 </style>

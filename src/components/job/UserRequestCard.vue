@@ -35,19 +35,124 @@
           {{ formatCurrency( workmanFee) }}
         </p>
       </div>
-      <!-- <div class="about">
-        <h4> Cost of items </h4>
-        <p class="about-card">
-          {{ formatCurrency( sumAmount) }}
-        </p>
-      </div> -->
-      <!-- <p>Total Charge: <span> {{ formatCurrency( totalAmount) }} </span> </p>  -->
-      <!-- <div v-for="price in requests" :key="price">
-        <p> {{ price.totalPrice+ }} </p>
-      </div>12 -->
     </div> 
-    <h3>Products </h3>
-    <div id="card-holder">
+      <h3>Products </h3>
+      <div class="products-table">
+        <DataTable
+            class="p-datatable-responsive p-datatable-sm"
+            :value="requests"
+            :paginator="true"
+            :rows="10"
+            v-model:filters="filters"
+            filterDisplay="row" 
+            :globalFilterFields="['productName','product.description','quantity','unitPrice', 'totalPrice']"
+            paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
+            :rowsPerPageOptions="[10,20,50, 100, 200]"
+            currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
+            :scrollable="true"
+            :rowHover="true"
+            responsiveLayout="scroll"
+            @row-click="openProduct($event.data)"
+          >
+            <!-- <template #header>
+              <div class="table-header p-d-flex p-flex-column p-flex-md-row p-jc-md-between">
+                <span class="p-input-icon-left">
+                  <i class="pi pi-search" />
+                  <InputText
+                    v-model="filters['global'].value"
+                    placeholder="Search..."
+                  />
+                </span>
+              </div>
+            </template> -->
+            <template #empty>
+              No product found.
+            </template>
+            <template #loading>
+              Loading products. Please wait.
+            </template>
+
+            <Column
+              field="productName"
+              style="min-width: 14rem; height: 48px;"
+              headerStyle="min-width: 14rem; height: 50px; font-weight: bold;"
+              header="Name"
+              sortable
+              filterMatchMode="contains"
+            >
+            </Column>
+            <Column
+              field="product.description"
+              style="min-width: 14rem; height: 48px;"
+              headerStyle="min-width: 14rem; height: 50px; font-weight: bold;"
+              header="Description"
+              sortable
+              filterMode="contains"
+            >
+              <template #body="slotProps">
+                <span v-if="slotProps.data.product.description != null" v-html="`${slotProps.data.product.description?.substr(0, 15)}...`"
+                ></span>
+              </template>
+            </Column>
+            <Column
+              field="quantity"
+              style="min-width: 10rem"
+              headerStyle="min-width: 10rem; height: 50px; font-weight: bold;"
+              header="Quantity"
+              sortable
+            >
+              <template #body="slotProps">
+                {{ slotProps.data.quantity }}
+              </template>
+            </Column>
+            <Column
+              field="unitPrice"
+              style="min-width: 14rem; height: 48px;"
+              headerStyle="min-width: 14rem; height: 50px; font-weight: bold;"
+              header="Price"
+              sortable
+            >
+              <template #body="slotProps">
+                {{ formatCurrency(slotProps.data.unitPrice) }}
+            </template>
+          </Column>
+          <Column
+              field="totalPrice"
+              style="min-width: 14rem; height: 48px;"
+              headerStyle="min-width: 14rem; height: 50px; font-weight: bold;"
+              header="Total"
+              sortable
+            >
+              <template #body="slotProps">
+                {{ formatCurrency(slotProps.data.totalPrice) }}
+            </template>
+          </Column>
+
+          <template #footer>
+            <div class="p-d-flex p-jc-between" id="amount">
+              <span class="p-column-title">Amount Due</span>
+              <span>
+                {{ formatCurrency( grandSum ) }}
+              </span>
+            </div>
+            <div class="p-d-flex p-jc-between" id="amount">
+              <span class="p-column-title">Workman Fee</span>
+              <span>
+                {{ formatCurrency( workmanFee) }}
+              </span>
+            </div>
+            <div class="p-d-flex p-jc-between" id="amount">
+              <span class="p-column-title">Total Amount</span>
+              <span>
+                <!-- {{ formatCurrency( grandSum + workmanFee) }} -->
+                {{ formatCurrency( grandTotal) }}
+              </span>
+            </div>
+          </template>
+        </DataTable>
+      </div>
+    
+    <!-- <div id="card-holder">
       <div v-for="user in requests" :key="user" id="userCard" class="p-col-12 p-md-6">
         <div
           class="p-text-center"
@@ -55,40 +160,13 @@
           id="userCard2"
         >
           <div class="products">
-              <!-- <div v-if="user.portfolios === null">
-                <p> No portfolio available </p>
-              </div> -->
               <div class="product-details">
                   <div class="productImgs">
-                    <!-- <div v-for="product in requests.product" :key="product"> -->
                       <div v-for="productImg in user.product.productImages.slice(0,1)" :key="productImg" class="productImg">
                         <img v-if="productImg.url != null && productImg.url" :src="productImg.url" alt="image" id="BigImg">
-                        <!-- <img v-else src="require(@/assets/images/default-placeholder-image.png)"> -->
                         <img v-else src="assets/images/default-placeholder-image.png" >
                       </div>
-                    <!-- </div> -->
-                    <!-- <div
-                      v-for="(productImg, index) in user.product.productImages"
-                      :key="index" class="productImg"
-                      :style="{ display: active_card.productImg.id != productImg.id ? 'none' : '' }"
-                    >
-                      <img :src="productImg.url" alt="">
-                    </div>
-                    <div class="dots">
-                      <span
-                        :class="{ dot: true, active: dot.id == active_slide }"
-                        v-for="dot in user.product.productImages"
-                        :key="dot"
-                        @click="this.activate(dot.id)"
-                      >
-                      </span>
-                    </div> -->
                   </div>
-                  <!-- <div class="small">             
-                    <div v-for="allImg in user.product.productImages" :key="allImg" class="smallImg" >
-                      <img :src="allImg.url" alt="allImage" @click="thisImage($event.data)">
-                    </div>
-                  </div> -->
                   <h4 class="name"> {{ user.productName }} </h4>
                   <div class="description">
                     <h4>Description </h4>
@@ -126,19 +204,111 @@
                     />
                   </div>
                   <img :src="user.product.productImages.url" alt="">
-                  <!-- <div v-for="(productImg, index) in user.product.productImages" :key="index" >
-                    <img v-show="index[1]" :src="productImg.url" alt="">
-                  </div> -->
-                  <!-- <ul v-for="items in requests" :key="items"> 
-                    {{ items.product.rating}} 
-                    {{ items.product.updatedOn }}
-                    {{ items.product.productImages[0] }} 
-                  </ul> -->
                 </div>
               </div>
             </div>
         </div>
-    </div>
+    </div> -->
+
+    <Dialog
+      v-model:visible="productDialog"
+      :breakpoints="{'960px': '75vw', '640px': '100vw'}"
+      :style="{width: '450px'}"
+      header="Product Details"
+      :modal="true"
+      class="p-fluid"
+    >
+      <div>
+        <div class="p-field p-fluid">
+          <label>
+           Name
+          </label>
+          <InputText
+            v-model="request.productName"
+          >
+          </InputText>
+         </div>
+        <div class="p-field p-fluid">
+          <label>
+           Description
+          </label>
+          <InputText
+            v-model="request.product.description"
+          >
+          </InputText>
+        </div>
+        <div class="p-field p-fluid">
+          <label>
+            Quantity
+          </label>
+          <InputText
+            v-model="request.quantity"
+          >
+          </InputText>
+        </div>
+        <div class="p-field p-fluid">
+          <label>
+            Price
+          </label>
+         <InputNumber
+            v-model="request.unitPrice"
+            mode="currency"
+            currency="NGN"
+            locale="en-NG"
+          >
+          </InputNumber>
+        </div>
+        <div class="p-field p-fluid">
+          <label>
+            Total
+          </label>
+          <InputNumber
+            v-model="request.totalPrice"
+            mode="currency"
+            currency="NGN"
+            locale="en-NG"
+          >
+          </InputNumber>
+        </div>
+        <div class="p-field p-fluid">
+          <label>
+            Amount Due
+          </label>
+          <InputNumber
+            v-model="grandSum"
+            mode="currency"
+            currency="NGN"
+            locale="en-NG"
+          >
+          </InputNumber>
+        </div>
+        <div class="p-field p-fluid">
+          <label>
+            Workman Fee
+          </label>
+          <InputNumber
+            v-model="workmanFee"
+            mode="currency"
+            currency="NGN"
+            locale="en-NG"
+          >
+          </InputNumber>
+        </div>
+        <div class="p-field p-fluid">
+          <label>
+            Total Amount
+          </label>
+          <InputNumber
+            v-model="grandTotal"
+            mode="currency"
+            currency="NGN"
+            locale="en-NG"
+          >
+          </InputNumber>
+        </div>
+      </div> 
+    </Dialog>
+
   </div>
 </template>
 
@@ -154,20 +324,29 @@ import BombsightService from '@/services/BombsightService';
 import { useToast } from 'primevue/usetoast';
 import qs from 'qs';
 import { reactive } from 'vue';
+import {FilterMatchMode} from 'primevue/api';
 
 
 export default class UserRequestCard extends Vue {
 
   isLoading = false;
   requests: UserRequestModel[] = [];
-  request = reactive(new UserRequestModel({})) as UserRequestModel;
+  request!: UserRequestModel;
+  // request = reactive(new UserRequestModel({})) as UserRequestModel;
   productImg: [] = [];
   datasource: UserRequestModel[] = [];
   totalRecords = 0;
   service: JobRequestService = new JobRequestService();
   selectedrequests: UserRequestModel[] = [];
-  filters: Record<string, unknown> = {};
+  filters = {
+    'global': {value: null, matchMode: FilterMatchMode.CONTAINS},
+    'name': {value: null, matchMode: FilterMatchMode.STARTS_WITH}
+  };
+  matchModeOptions =  [
+    {label: 'Starts With', value: FilterMatchMode.STARTS_WITH}
+  ]
   submitted = false;
+  productDialog = false;
   toast = useToast();
   imageService = new BombsightService();
   imageLoading = false;
@@ -182,11 +361,12 @@ export default class UserRequestCard extends Vue {
   executorName = '';
   customerImg = '';
   executorImg = '';
-  totalAmount = 0;
+  grandSum = 0;
+  grandTotal = 0;
   auto_animate= true;
   interval = 0;
   active_slide = 1;
-
+  productDesc = '';
 
   created() {
     // console.log("here");
@@ -234,7 +414,13 @@ export default class UserRequestCard extends Vue {
         this.customerImg = data.jobRequest.customer.photoUrl;
         this.executorImg = data.jobRequest.executor.photoUrl;
         this.workmanFee = data.jobRequest.workManFee;
-
+        this.grandSum = data.jobRequest.billOfQuantities.reduce((acc, obj) => {
+          return acc += obj.totalPrice;
+          }, 0);
+        this.grandTotal = this.grandSum + this.workmanFee;
+        // this.productDesc = data.jobRequest.billOfQuantities.reduce((acc, obj) => {
+        //   return acc = obj.product.description;
+        // }, 0)
         this.isLoading = false;
       }).catch((e) => {
         this.toast.add({
@@ -253,6 +439,11 @@ export default class UserRequestCard extends Vue {
   thisImage(smallImg: any) {
     let fullImg = document.getElementById("BigImg");
     fullImg = smallImg;
+  }
+
+  openProduct(request: UserRequestModel) {
+    this.request = request;
+    this.productDialog = true;
   }
   
   // getotalAmount() {
@@ -273,9 +464,18 @@ export default class UserRequestCard extends Vue {
 .p-card{
   border-radius: 20px;
 }
-
+/* #hero{
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  width: 100%;
+} */
+.allProducts{
+  width: 70%;
+}
 .requestCard {
   padding: 20px;
+  /* width: 20%; */
   width: 400px;
   background: white;
   border-radius: 10px;
@@ -312,6 +512,7 @@ export default class UserRequestCard extends Vue {
 .customer-card p, .executor-card p{
   margin-left: 5px;
 }
+
 #hero h3{
   display: flex;
   justify-content: center;
@@ -330,7 +531,26 @@ export default class UserRequestCard extends Vue {
   display: flex;
   justify-content: center;
 }
+.products-table {
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 1px -1px rgb(0 0 0 / 20%), 0 1px 1px 0 rgb(0 0 0 / 14%),
+    0 1px 3px 0 rgb(0 0 0 / 12%);
+  margin-bottom: 100px;
+  width: 100%;
+}
 
+.p-datatable-responsive  { 
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 1px -1px rgb(0 0 0 / 20%), 0 1px 1px 0 rgb(0 0 0 / 14%),
+    0 1px 3px 0 rgb(0 0 0 / 12%);
+  padding: 10px;
+}
+#amount{
+  font-weight: bold;
+  margin: 10px;
+}
 .product-details{
   width: 400px;
   background: white;
@@ -356,11 +576,11 @@ export default class UserRequestCard extends Vue {
   display: flex;
   justify-content: center;
 }
-.smallImg{
-  /* display: flex;
-  justify-content: center; */
-  /* margin-top: -260px; */
-}
+/* .smallImg{
+  display: flex;
+  justify-content: center;
+  margin-top: -260px;
+} */
 .smallImg img {
   width: 20px;
   height: 20px;
@@ -453,8 +673,12 @@ export default class UserRequestCard extends Vue {
   padding: 5px 10px;
   border-radius: 10px;
 }
-@media only screen and (max-width: 768px){
-  .requestCard, .product-details {
+@media only screen and (max-width: 766px){
+  .requestCard {
+    width: 340px;
+    margin: auto;
+  }
+  .product-details {
     width: 340px;
   }
 }

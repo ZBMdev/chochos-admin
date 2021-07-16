@@ -165,7 +165,9 @@ img {
 .fancy-card-4 .p-card-title {
   color: #c63737 !important;
 }
-
+/* .p-sidebar-mask{
+  color: red;
+} */
 .p-toast-detail {
   white-space: pre-wrap !important;
 }

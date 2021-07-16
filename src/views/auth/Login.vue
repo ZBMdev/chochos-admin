@@ -114,7 +114,8 @@ export default defineComponent({
 
 <style>
 #lbutton {
-  background: purple;
+  /* background: purple; */
+  background-color:#9c27b0;
   color: white;
 }
 </style>
