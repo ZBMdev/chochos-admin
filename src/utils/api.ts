@@ -7,7 +7,8 @@ const API = { ...Axios }
 
 store.dispatch("Admin/getToken");
 
-API.defaults.baseURL = "https://chochos-list.herokuapp.com/api";
+API.defaults.baseURL = "http://chochoslist-env.eba-midvb3y2.us-east-2.elasticbeanstalk.com/api"
+// "https://chochos-list.herokuapp.com/api";
 // API.defaults.baseURL = "http://localhost:8083/api";
 API.defaults.headers.post["Content-Type"] = "application/json";
 API.defaults.headers["Authorization"] = `Bearer ${store.state.Admin.token}`;
