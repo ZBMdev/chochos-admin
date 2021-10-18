@@ -7,7 +7,7 @@ const API = { ...Axios }
 
 store.dispatch("Admin/getToken");
 
-API.defaults.baseURL = "http://chochoslist-env.eba-hatafux3.us-east-2.elasticbeanstalk.com/api"
+API.defaults.baseURL = "https://cho-api.herokuapp.com/api"
 // "https://chochos-list.herokuapp.com/api";
 // API.defaults.baseURL = "http://localhost:8083/api";
 API.defaults.headers.post["Content-Type"] = "application/json";
