@@ -29,7 +29,7 @@ module.exports = {
   configureWebpack: { 
     devServer: {
       port: 8080,
-      proxy: 'https://chochos-list.herokuapp.com/api',
+      proxy: 'https://cho-api.herokuapp.com/api',
       headers: { 'Access-Control-Allow-Origin': '*' }
     }
   }  
